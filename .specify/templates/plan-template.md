@@ -31,7 +31,17 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify against `.specify/memory/constitution.md` (Sitio App):
+
+- **Spec-first**: Scope and acceptance criteria in `spec.md`; no silent scope creep.
+- **Independent stories**: User stories ordered P1+; each independently testable.
+- **Testing**: If the spec requests tests, plan names types/locations (unit, contract,
+  integration, E2E) and ordering; no deleting tests to pass without spec change.
+- **Security & secrets**: No committed secrets; env/approved secret store; prod-safe
+  errors; authn/z and PII match spec—exceptions only via Complexity Tracking.
+- **Simplicity & observability**: New deps/patterns justified or in Complexity
+  Tracking; logging/errors sufficient for production diagnosis.
+- **Stack**: **Technical Context** filled or unknowns marked `NEEDS CLARIFICATION`.
 
 ## Project Structure
 

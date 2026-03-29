@@ -80,6 +80,7 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
+  Constitution: requirements MUST be testable; prefer MUST/SHOULD over vague language.
 -->
 
 ### Functional Requirements
