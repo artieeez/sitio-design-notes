@@ -1,15 +1,15 @@
 <!--
 Sync Impact Report
-- Version: template (unversioned placeholders) → 1.0.0
-- Principles: [PRINCIPLE_1_NAME]…[PRINCIPLE_5_NAME] → I–V (Spec-First; Independent
-  Stories; Testing Discipline; Security & Secrets; Simplicity & Observability)
-- Added sections: Technology Stack & Constraints; Workflow & Quality Gates (replaced
-  SECTION_2_NAME / SECTION_3_NAME placeholders)
-- Removed: none (template structure retained)
-- Templates: .specify/templates/plan-template.md ✅ | .specify/templates/spec-template.md ✅ |
-  .specify/templates/tasks-template.md ✅ |
-  .specify/templates/commands/*.md ⚠ N/A (directory not present)
-- Follow-up: Add README.md when application code exists; restate stack in first plan.md
+- Version: 1.0.0 → 1.1.0
+- Principles: tightened to bare minimum for CSR; I–V retitled/refocused (Spec-First;
+  CSR Delivery & Client-Safe Config; Independent Stories; Tests When Spec Says So;
+  Small Changes & Safe Errors)
+- Added sections: none
+- Removed sections: none
+- Templates: .specify/templates/plan-template.md ✅ | .specify/templates/spec-template.md ⚠
+  unchanged (still aligned) | .specify/templates/tasks-template.md ✅ |
+  .specify/templates/commands/*.md ⚠ N/A
+- Follow-up: none
 -->
 
 # Sitio App Constitution
@@ -18,89 +18,69 @@ Sync Impact Report
 
 ### I. Spec-First Delivery
 
-Feature work MUST trace to documented artifacts: `spec.md` and `plan.md` under
-`/specs/<branch-feature>/`. Scope changes MUST update those documents before code
-changes land. Underspecified areas MUST be marked `NEEDS CLARIFICATION` in the spec
-or plan rather than silently guessed.
+Feature work MUST trace to `spec.md` and `plan.md` under `/specs/<branch-feature>/`.
+Scope changes MUST update those documents first. Unknowns MUST be marked
+`NEEDS CLARIFICATION`, not guessed.
 
-**Rationale**: Prevents drift between intent and implementation and keeps the Spec Kit
-workflow the single source of truth.
+**Rationale**: Keeps the Spec Kit workflow the contract for what ships.
 
-### II. Independent User Stories
+### II. CSR Delivery & Client-Safe Configuration
 
-User stories MUST be prioritized (P1, P2, …), independently testable, and deliverable
-as incremental MVPs. Implementation and task ordering SHOULD default to completing P1
-before expanding scope unless the plan documents a parallel or risk-driven exception.
+This product is a **client-side rendered (CSR)** web app: meaningful UI and data
+fetching run in the browser after load. Plans MUST state that rendering model and
+how client env/config is supplied (e.g. build-time `import.meta.env`, `NEXT_PUBLIC_*`,
+or equivalent).
 
-**Rationale**: Enables incremental delivery, clearer testing, and predictable demos.
+Anything sent to the browser is public. Server-only secrets and private API keys MUST
+NOT appear in client source, bundled assets, or client-exposed env. If a key is
+intentionally public (e.g. anon client id), the plan MUST say so.
 
-### III. Testing Discipline
+**Rationale**: CSR makes the bundle and public env the trust boundary; mistakes here
+are common and severe.
 
-When the feature specification requests tests, contributors MUST follow the agreed
-order (failing tests first where TDD applies), keep tests close to the structure in
-`plan.md` and `tasks.md`, and add contract or integration coverage for boundaries
-called out in the plan (e.g., external HTTP APIs, auth). Tests MUST NOT be removed to
-“green” the build without product or spec agreement.
+### III. Independent User Stories
 
-**Rationale**: Protects regressions and documents behavior at system edges.
+User stories MUST stay prioritized (P1, P2, …) and independently testable so each
+slice can ship and be verified on its own.
 
-### IV. Security & Secrets Hygiene
+**Rationale**: Matches incremental CSR feature work without prescribing ceremony.
 
-Secrets and long-lived credentials MUST NOT be committed. Configuration MUST use
-environment variables or the project’s approved secret mechanism once introduced.
-User-visible errors MUST avoid leaking internal stack traces or tokens in production
-builds. Authentication, authorization, and PII handling MUST match what the spec and
-plan require—no “temporary” open endpoints without an explicit, time-bounded
-exception in the plan’s Complexity Tracking.
+### IV. Tests When the Spec Says So
 
-**Rationale**: Web apps are high-risk surfaces; defaults must favor least exposure.
+If `spec.md` calls for automated tests, implementation MUST follow the plan’s
+testing shape (what to run, where files live). Tests MUST NOT be dropped to pass CI
+without updating the spec.
 
-### V. Simplicity, Observability & Stack Consistency
+**Rationale**: Bare minimum testing rule—no mandatory TDD unless the spec asks.
 
-Prefer the smallest change that satisfies the spec. New dependencies, frameworks, or
-patterns MUST be justified in the plan; unjustified complexity MUST be listed under
-Complexity Tracking with a simpler alternative noted. Operational signals (structured
-logging, actionable error messages, and—where applicable—client-side error reporting)
-MUST be sufficient to diagnose production issues without reproducing locally.
+### V. Small Changes & Safe Errors
 
-**Rationale**: Keeps the codebase maintainable and incidents diagnosable.
+Prefer the smallest change that meets the spec. New dependencies or patterns MUST be
+justified in the plan or listed under Complexity Tracking. Production-facing error UI
+MUST NOT expose stack traces, tokens, or internal paths.
+
+**Rationale**: Limits bundle and cognitive growth; avoids leaking internals in CSR
+error surfaces.
 
 ## Technology Stack & Constraints
 
-The concrete language, framework, and tooling stack MUST be recorded in each feature’s
-`plan.md` under **Technical Context** once the repository contains application code.
-Until a stack is fixed, plans MUST use `NEEDS CLARIFICATION` instead of assuming
-(e.g.) a specific UI framework or host. Cross-cutting constraints (browser support,
-accessibility target, performance budget) SHOULD appear in the plan when known.
-
-**Rationale**: This repository may bootstrap incrementally; the constitution still
-requires explicit stack decisions per feature.
+Each `plan.md` **Technical Context** MUST record the CSR stack (framework, bundler,
+TypeScript/version if used) and target browsers or “evergreen only” when known. SEO,
+first-contentful paint, or offline needs MUST be called out in the plan if they matter
+for the feature—CSR does not fix them by default.
 
 ## Workflow & Quality Gates
 
-Branches and specs MUST follow the Spec Kit conventions already configured for this
-repo (e.g., `specs/[###-feature-name]/`). Every implementation plan MUST complete the
-**Constitution Check** before Phase 0 research and re-validate after Phase 1 design.
-Pull requests SHOULD verify alignment with this constitution; intentional deviations
-MUST reference the plan’s Complexity Tracking table.
-
-**Rationale**: Connects day-to-day work to documented governance without blocking
-progress when exceptions are explicit.
+Use Spec Kit paths (`specs/[###-feature-name]/`). Complete **Constitution Check** in
+the plan before Phase 0 and again after Phase 1 design. Deviations MUST be explicit in
+Complexity Tracking.
 
 ## Governance
 
-This constitution supersedes ad-hoc conventions when they conflict. Amendments MUST:
+This constitution supersedes conflicting ad-hoc rules. Amendments MUST update this
+file’s **Version** (semver: MAJOR = breaking governance; MINOR = new obligations;
+PATCH = clarifications), set **Last Amended** to the change date, and sync
+`.specify/templates/` when gates change. Reviews SHOULD confirm Constitution Check and
+CSR/client-secret rules for each feature.
 
-1. Update `.specify/memory/constitution.md` with a new **Version** and **Last
-   Amended** date (ISO `YYYY-MM-DD`).
-2. Follow semantic versioning for the constitution: **MAJOR** for breaking governance
-   or removed/redefined principles; **MINOR** for new principles or materially new
-   obligations; **PATCH** for clarifications and non-semantic edits.
-3. Propagate material requirement changes to `.specify/templates/` (plan, spec,
-   tasks) and any agent command docs that reference obsolete rules.
-
-Compliance: Feature planning and code review SHOULD confirm Constitution Check gates
-and security/testing expectations for the feature at hand. Runtime developer hints
-MAY live in `README.md` or `AGENTS.md` when added; they MUST NOT contradict this file.
-
-**Version**: 1.0.0 | **Ratified**: 2026-03-29 | **Last Amended**: 2026-03-29
+**Version**: 1.1.0 | **Ratified**: 2026-03-29 | **Last Amended**: 2026-03-29

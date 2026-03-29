@@ -22,7 +22,7 @@
 **Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
 **Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
+**Project Type**: CSR web app (client-rendered UI in the browser) unless this plan documents otherwise  
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
 **Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
@@ -31,17 +31,19 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Verify against `.specify/memory/constitution.md` (Sitio App):
+Verify against `.specify/memory/constitution.md` (Sitio App, CSR bare minimum):
 
-- **Spec-first**: Scope and acceptance criteria in `spec.md`; no silent scope creep.
-- **Independent stories**: User stories ordered P1+; each independently testable.
-- **Testing**: If the spec requests tests, plan names types/locations (unit, contract,
-  integration, E2E) and ordering; no deleting tests to pass without spec change.
-- **Security & secrets**: No committed secrets; env/approved secret store; prod-safe
-  errors; authn/z and PII match spec—exceptions only via Complexity Tracking.
-- **Simplicity & observability**: New deps/patterns justified or in Complexity
-  Tracking; logging/errors sufficient for production diagnosis.
-- **Stack**: **Technical Context** filled or unknowns marked `NEEDS CLARIFICATION`.
+- **Spec-first**: `spec.md` + `plan.md` in sync; unknowns `NEEDS CLARIFICATION`.
+- **CSR & client-safe config**: Rendering model and client env mechanism stated; no
+  server secrets or private API keys in client bundle or client-exposed env; public
+  keys only if the plan explicitly allows.
+- **Stories**: P1+ ordering; each story independently testable.
+- **Tests**: If the spec requests tests, plan says what runs where; no dropping tests
+  without spec update.
+- **Small & safe**: New deps/patterns justified or in Complexity Tracking; production
+  error UI does not leak stacks/tokens/paths.
+- **Stack**: **Technical Context** names CSR stack and browser targets (or marks
+  `NEEDS CLARIFICATION`).
 
 ## Project Structure
 
