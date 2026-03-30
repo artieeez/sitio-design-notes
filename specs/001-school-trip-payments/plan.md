@@ -13,7 +13,7 @@ Deliver a multi-repo implementation where `sitio-dashboard` (CSR React app) allo
 **Primary Dependencies**:  
 - Frontend (`sitio-dashboard`): React (CSR with Vite), TanStack Router, TanStack Query, Zustand, Mantine, TanStack Form, Zod  
 - Backend (`sitio-backend`): Nest.js, Prisma ORM, PostgreSQL driver, CQRS module (`@nestjs/cqrs`), class-validator/class-transformer as needed  
-**Storage**: PostgreSQL (local dev assumption: `localhost:3000`), managed PostgreSQL in cluster environments  
+**Storage**: PostgreSQL (local dev assumption: `localhost:5432`), managed PostgreSQL in cluster environments  
 **Testing**:  
 - Frontend: Vitest + React Testing Library (unit/component), minimal integration tests for routing/state interactions  
 - Backend: Jest (unit/integration), Supertest for HTTP integration  

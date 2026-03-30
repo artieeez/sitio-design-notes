@@ -31,7 +31,7 @@
 
 1. Create Nest.js app with Prisma and PostgreSQL.
 2. Configure Prisma datasource for local development:
-   - `DATABASE_URL=postgresql://<user>:<pass>@localhost:3000/<db>`
+   - `DATABASE_URL=postgresql://<user>:<pass>@localhost:5432/<db>`
 3. Implement modules:
    - `schools`, `trips`, `passengers`, `payments`, `reconciliation`, `share-links`
 4. Add CQRS for reconciliation:
