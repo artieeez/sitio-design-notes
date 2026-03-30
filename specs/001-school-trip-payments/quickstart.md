@@ -41,7 +41,13 @@
    - Validate forwarded internal user headers for internal routes
    - Validate `x-share-link-authenticated: true` and share-link token for share-link routes
 
-## 3) API contracts and endpoint testing
+## 3) Automated test suites *(required)*
+
+1. **Frontend** (`sitio-dashboard`): run `pnpm test` (Vitest + React Testing Library) after `tasks.md` T046 and story tests (e.g. T049, T051, T053) exist; keep green before merging feature work.
+2. **Backend** (`sitio-backend`): run `pnpm test` (Jest + Supertest) after T047 and story integration tests (e.g. T048, T050, T052) exist; use a test database or mocks as documented in the backend repo.
+3. **CI**: enable PR workflows that execute the same test commands (`tasks.md` T054).
+
+## 4) API contracts and endpoint testing
 
 1. Use `/contracts/backend-api.openapi.yaml` as implementation contract.
 2. Create Bruno collection under `sitio-backend/bruno/school-trip-payments`.
@@ -51,7 +57,9 @@
    - share-link create/revoke/access flows
    - invalid/expired link behavior (`401` or `410`)
 
-## 4) Deployment workflows (ARM / Oracle OKE)
+Bruno does **not** replace automated suites; it complements them.
+
+## 5) Deployment workflows (ARM / Oracle OKE)
 
 Add GitHub Actions workflows in both implementation repositories:
 
@@ -67,8 +75,9 @@ Minimal required steps per workflow:
 4. `docker/login-action` (if pushing)
 5. `docker/build-push-action` with `platforms: linux/arm64`
 
-## 5) Done criteria for first implementation slice
+## 6) Done criteria for first implementation slice
 
-- P1: internal staff can navigate school -> trip -> passenger statuses.
-- P2: share links created and read-only status-only views enforced per scope.
-- P3: reconciliation flows support match/reassign/verify/flag with immutable audit records.
+- P1: internal staff can navigate school -> trip -> passenger statuses; corresponding automated tests (T048–T049) pass.
+- P2: share links created and read-only status-only views enforced per scope; T050–T051 pass.
+- P3: reconciliation flows support match/reassign/verify/flag with immutable audit records; T052–T053 pass.
+- Automated test runs are wired in CI (T054) or explicitly scheduled as a follow-up with Complexity Tracking.

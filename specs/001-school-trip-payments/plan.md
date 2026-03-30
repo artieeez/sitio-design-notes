@@ -14,10 +14,11 @@ Deliver a multi-repo implementation where `sitio-dashboard` (CSR React app) allo
 - Frontend (`sitio-dashboard`): React (CSR with Vite), TanStack Router, TanStack Query, Zustand, Mantine, TanStack Form, Zod  
 - Backend (`sitio-backend`): Nest.js, Prisma ORM, PostgreSQL driver, CQRS module (`@nestjs/cqrs`), class-validator/class-transformer as needed  
 **Storage**: PostgreSQL (local dev assumption: `localhost:5432`), managed PostgreSQL in cluster environments  
-**Testing**:  
+**Testing** *(mandatory deliverables)*:  
 - Frontend: Vitest + React Testing Library (unit/component), minimal integration tests for routing/state interactions  
 - Backend: Jest (unit/integration), Supertest for HTTP integration  
-- API endpoint collections: Bruno for manual/automated endpoint verification  
+- API endpoint collections: Bruno for manual/exploratory checks alongside—not instead of—automated tests  
+- **Requirement**: Each phase’s test tasks in `tasks.md` MUST be implemented; PRs keep the repo test command green (`pnpm test` or equivalent). Incomplete automated coverage for a story requires an explicit deferral in Complexity Tracking with an agreed substitute (e.g. time-boxed follow-up issue).  
 **Target Platform**: Browser clients (evergreen desktop/mobile browsers) + Linux ARM64 containers on Oracle OKE  
 **Project Type**: Web application with separate frontend and backend repositories; frontend is CSR  
 **Performance Goals**:  
@@ -43,7 +44,7 @@ Verify against `.specify/memory/constitution.md` (Sitio App, CSR bare minimum):
 - **Spec-first**: PASS. `spec.md` and this `plan.md` are aligned to branch `001-school-trip-payments`; clarifications resolved by user input and spec clarifications session.
 - **CSR & client-safe config**: PASS. Frontend is explicitly CSR with Vite; only public client config via `import.meta.env` with `VITE_` keys. Secrets remain backend-only.
 - **Stories**: PASS. P1 (trip/passenger status), P2 (share links), P3 (reconciliation/verification/flagging) remain independent and testable.
-- **Tests**: PASS. Plan defines frontend/backend automated testing plus Bruno endpoint checks from spec expectations.
+- **Tests**: PASS. `spec.md` requires automated verification; this plan defines Vitest/RTL + Jest/Supertest plus Bruno; `tasks.md` lists mandatory test tasks per phase.
 - **Small & safe**: PASS with justified patterns (CQRS for backend reconciliation complexity, TanStack stack for frontend state/routing/forms). Production error views return sanitized messages only.
 - **Stack**: PASS. Technical Context names CSR stack and evergreen browsers.
 
@@ -124,7 +125,7 @@ Verify against `.specify/memory/constitution.md` (Sitio App, CSR bare minimum):
 - **Spec-first**: PASS. `research.md`, `data-model.md`, `quickstart.md`, and `contracts/` reflect FR-001..FR-015 and clarifications.
 - **CSR & client-safe config**: PASS. Frontend remains CSR; client config restricted to public `VITE_` vars; sensitive logic remains backend side.
 - **Independent stories**: PASS. Design keeps internal trip management, share-link access, and reconciliation workflows independently testable.
-- **Tests when spec says so**: PASS. Automated frontend/backend testing plus Bruno endpoint validation are defined in quickstart.
+- **Tests when spec says so**: PASS. Spec mandates automated suites; quickstart covers how to run them with Bruno as adjunct.
 - **Small changes & safe errors**: PASS. Chosen patterns are requirement-driven; error contract avoids exposing internals in production-facing responses.
 
 ## Complexity Tracking

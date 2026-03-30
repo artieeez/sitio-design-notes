@@ -8,7 +8,7 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 
 **Prerequisites**: `plan.md`, `spec.md`, `data-model.md`, `research.md`, `quickstart.md`, `contracts/backend-api.openapi.yaml`, `contracts/share-link-auth-header.md`
 
-**Tests**: Automated test tasks are **not** included; the specification defines mandatory acceptance scenarios but not a TDD requirement. Add Vitest/Jest tasks in-repo if you adopt TDD later.
+**Tests**: **Required.** `spec.md` mandates automated verification; this file lists Vitest/RTL and Jest/Supertest tasks per phase. Bruno remains supplementary. Story checkpoints are not met until the corresponding test tasks pass.
 
 **Organization**: Tasks follow user stories P1–P3 from `spec.md`, across `sitio-dashboard` and `sitio-backend`.
 
@@ -48,8 +48,10 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T013 Configure Mantine + TanStack Query providers and pt-BR locale defaults in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/app/` (or `src/main.tsx` entry per existing structure)
 - [ ] T014 Define TanStack Router route tree with separate branches for internal staff vs share-link screens in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/routes/` per `plan.md`
 - [ ] T015 Add typed HTTP/API client using `import.meta.env.VITE_*` only in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/api/client.ts` (no secrets in bundle)
+- [ ] T046 [P] Configure Vitest + React Testing Library in `/Users/arturwebber/Documents/sitio/sitio-dashboard/` (`vitest.config`, test setup, `pnpm test` script) and add a minimal smoke test (e.g. app shell or providers mount) per `plan.md`
+- [ ] T047 [P] Configure Jest + Supertest in `/Users/arturwebber/Documents/sitio/sitio-backend/` for HTTP integration tests (`pnpm test` script), with a minimal app bootstrap or guard/middleware test per `plan.md`
 
-**Checkpoint**: Foundation ready — internal and share-link routing boundaries exist; schema matches `data-model.md`.
+**Checkpoint**: Foundation ready — internal and share-link routing boundaries exist; schema matches `data-model.md`; automated test harness runs in both repos (T046–T047).
 
 ---
 
@@ -68,8 +70,10 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T020 [US1] Implement trip list for selected school and trip detail page with Mantine passenger table showing `paymentStatus`, `documentStatus`, and flagged state in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/trips/`
 - [ ] T021 [P] [US1] Add Zustand store for selected school/trip UI context only in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/stores/`
 - [ ] T022 [US1] Add Bruno requests for `GET /v1/schools`, `GET /v1/schools/{schoolId}/trips`, `GET /v1/trips/{tripId}/passengers/status` under `/Users/arturwebber/Documents/sitio/sitio-backend/bruno/school-trip-payments/`
+- [ ] T048 [US1] Add Supertest integration tests in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (or `src/**/*.spec.ts`) for `GET /v1/schools`, `GET /v1/schools/{schoolId}/trips`, and `GET /v1/trips/{tripId}/passengers/status` (use test DB or approved mocks per repo conventions)
+- [ ] T049 [P] [US1] Add React Testing Library tests in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` (or colocated `*.test.tsx`) for staff school → trip → passenger status flow with mocked API clients / TanStack Query
 
-**Checkpoint**: US1 acceptance scenarios 1–3 from `spec.md` are demonstrable.
+**Checkpoint**: US1 acceptance scenarios 1–3 from `spec.md` are demonstrable; T048–T049 pass.
 
 ---
 
@@ -90,8 +94,10 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T029 [P] [US2] Build share-link creation form with TanStack Form + Zod (expiration choices, scope, trip/school fields) in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/share-links/` with pt-BR strings
 - [ ] T030 [P] [US2] Implement public CSR routes that set `Authorization: Bearer` and `x-share-link-authenticated: true` on API calls and render read-only views in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/routes/` (trip flow and school trip-first navigation)
 - [ ] T031 [US2] Add Bruno requests for share-link create, revoke, access trip/school, and negative cases in `/Users/arturwebber/Documents/sitio/sitio-backend/bruno/school-trip-payments/`
+- [ ] T050 [US2] Add Supertest tests for share-link create, revoke, `GET` access (trip + school), and negative cases (`401`/`410` without leaking passenger bodies) in `/Users/arturwebber/Documents/sitio/sitio-backend/test/`
+- [ ] T051 [P] [US2] Add RTL tests for share-link creation UI and public read-only routes in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` (mock API; assert headers or route behavior per `share-link-auth-header.md`)
 
-**Checkpoint**: US2 acceptance scenarios 1–6 from `spec.md` are demonstrable.
+**Checkpoint**: US2 acceptance scenarios 1–6 from `spec.md` are demonstrable; T050–T051 pass.
 
 ---
 
@@ -113,8 +119,10 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T039 [US3] Build staff reconciliation UI (queue list, match/reassign/verify/flag actions) in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/reconciliation/` consuming internal APIs; pt-BR copy
 - [ ] T040 [US3] Add Bruno requests for reconciliation list, match, reassign, verify, flags, and conflict responses in `/Users/arturwebber/Documents/sitio/sitio-backend/bruno/school-trip-payments/`
 - [ ] T041 [US3] Provide dev seed or admin script to insert sample `PaymentRecord` rows for `integrationSource`/`externalPaymentId` in `/Users/arturwebber/Documents/sitio/sitio-backend/` (supports FR-005 demo without live integration)
+- [ ] T052 [US3] Add Supertest tests for reconciliation list, match, reassign, verify, flags, and `409` conflict path in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (assert audit events where applicable)
+- [ ] T053 [P] [US3] Add RTL tests for reconciliation staff UI (queue, primary actions) in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` with mocked internal APIs
 
-**Checkpoint**: US3 acceptance scenarios 1–5 from `spec.md` are demonstrable.
+**Checkpoint**: US3 acceptance scenarios 1–5 from `spec.md` are demonstrable; T052–T053 pass.
 
 ---
 
@@ -124,8 +132,9 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 
 - [ ] T042 [P] Sweep new dashboard strings into `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/i18n/` (pt-BR for all user-visible text)
 - [ ] T043 [P] Align error message shapes with OpenAPI `401`/`400`/`409` and optional `410` for share links in `/Users/arturwebber/Documents/sitio/sitio-backend/src/common/filters/`
-- [ ] T044 Run manual checklist in `/Users/arturwebber/Documents/sitio/sitio-design-notes/specs/001-school-trip-payments/quickstart.md` (bootstrap, Bruno flows, ARM workflows)
+- [ ] T044 Run manual checklist in `/Users/arturwebber/Documents/sitio/sitio-design-notes/specs/001-school-trip-payments/quickstart.md` (bootstrap, Bruno flows, ARM workflows) and confirm full automated suites pass locally or in CI
 - [ ] T045 Verify API implementation against `/Users/arturwebber/Documents/sitio/sitio-design-notes/specs/001-school-trip-payments/contracts/backend-api.openapi.yaml` and update the YAML if implementation discovers necessary additive fields (document deltas in spec folder)
+- [ ] T054 [P] Wire automated test runs into CI for both repos: extend or add GitHub Actions workflow(s) so `pnpm test` (or each repo’s test script) runs on pull requests for `/Users/arturwebber/Documents/sitio/sitio-dashboard/` and `/Users/arturwebber/Documents/sitio/sitio-backend/`
 
 ---
 
@@ -136,11 +145,11 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 | Phase | Depends on | Notes |
 |--------|------------|--------|
 | Phase 1 Setup | — | Can start immediately |
-| Phase 2 Foundational | Phase 1 | Blocks all user stories |
-| Phase 3 US1 | Phase 2 | MVP slice |
+| Phase 2 Foundational | Phase 1 | Blocks all user stories; includes T046–T047 test harness |
+| Phase 3 US1 | Phase 2 | MVP slice; T048–T049 after T016–T017 (and T020 for full UI assertions on T049) |
 | Phase 4 US2 | Phase 2 | Uses `ShareLink` + passengers/trips from schema; functionally stacks on US1 data model |
 | Phase 5 US3 | Phase 2 | Uses `PaymentRecord`, passengers, audit; overlaps US1 passenger display when matched |
-| Phase 6 Polish | Phases 3–5 as needed | Can run partial polish after each story |
+| Phase 6 Polish | Phases 3–5 as needed | Can run partial polish after each story; T054 can follow once test scripts exist |
 
 ### User Story Dependencies
 
@@ -151,10 +160,11 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 ### Parallel Opportunities
 
 - **Phase 1**: T003, T004, T005 in parallel.
-- **Phase 2**: T009 and T010 in parallel after T008; T013 and T014 parallel with backend tasks if staffed separately.
-- **Phase 3**: T018, T019, T021 in parallel after T016–T017 exist.
-- **Phase 4**: T029 and T030 in parallel after backend share endpoints exist.
-- **Phase 6**: T042 and T043 in parallel.
+- **Phase 2**: T009 and T010 in parallel after T008; T013 and T014 parallel with backend tasks if staffed separately; **T046 and T047 in parallel** after T001–T002 (tooling present).
+- **Phase 3**: T018, T019, T021 in parallel after T016–T017 exist; **T048 after T016–T017**; **T049 in parallel** with T018–T021 once trip UI exists (typically after T020).
+- **Phase 4**: T029 and T030 in parallel after backend share endpoints exist; **T051 in parallel** with T029–T030 after routes exist.
+- **Phase 5**: **T053 in parallel** with T039 after reconciliation UI skeleton exists.
+- **Phase 6**: T042, T043, and **T054 in parallel**.
 
 ---
 
@@ -185,9 +195,9 @@ Task T030: Public share routes in sitio-dashboard/src/routes/
 
 ### MVP First (User Story 1 only)
 
-1. Complete Phase 1 and Phase 2.
-2. Complete Phase 3 (US1).
-3. Stop and validate `spec.md` US1 independent test and SC-001.
+1. Complete Phase 1 and Phase 2 (including T046–T047).
+2. Complete Phase 3 (US1), including **T048–T049**.
+3. Stop and validate `spec.md` US1 independent test, SC-001, and green automated suites for US1.
 
 ### Incremental Delivery
 
@@ -207,3 +217,4 @@ After Foundational: one developer on `sitio-dashboard` US1 routes/UI, another on
 - **Prisma migrations**: If `sitio-backend` follows a “human runs migrate” policy, T007 remains a human-gated step; do not hand-edit SQL migrations unless your repo allows it.
 - **Contract source of truth**: `contracts/backend-api.openapi.yaml` lives under `sitio-design-notes`; implementation tasks reference both repos—keep OpenAPI in sync when endpoints change (T045).
 - **[P]** tasks must not edit the same file concurrently.
+- **Task count**: T001–T054 (54 tasks), including mandatory automated test tasks T046–T054.

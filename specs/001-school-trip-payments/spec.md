@@ -17,6 +17,10 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
+### Automated verification *(required)*
+
+Delivery MUST include automated tests as defined in `plan.md`: **Vitest** and **React Testing Library** for `sitio-dashboard`; **Jest** and **Supertest** for `sitio-backend`. Bruno collections supplement manual and contract checks but do not replace automated suites. A user story is not complete until its listed automated test tasks in `tasks.md` pass in local runs or CI per `quickstart.md`.
+
 ### User Story 1 - View trips by school and passenger payment status (Priority: P1)
 
 Tourism company staff open the application, see trips organized by school, open a trip, and see every passenger on that trip with a clear indication of whether each passenger has completed payment and whether any other required action (such as document submission) is still pending.
