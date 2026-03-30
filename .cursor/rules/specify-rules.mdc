@@ -1,0 +1,35 @@
+---
+description: Project Development Guidelines
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# sitio-design-notes Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-03-30
+
+## Active Technologies
+
+- TypeScript (frontend + backend), Node.js 22 LTS runtime targe (001-school-trip-payments)
+
+## Project Structure
+
+```text
+src/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+TypeScript (frontend + backend), Node.js 22 LTS runtime targe: Follow standard conventions
+
+## Recent Changes
+
+- 001-school-trip-payments: Added TypeScript (frontend + backend), Node.js 22 LTS runtime targe
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

@@ -1,0 +1,402 @@
+openapi: 3.0.3
+info:
+  title: School Trip Payments API
+  version: 0.1.0
+  description: |
+    API contract for school trip passenger status, share-link visibility, and payment reconciliation.
+servers:
+  - url: https://api.example.com
+tags:
+  - name: Trips
+  - name: Reconciliation
+  - name: ShareLinks
+paths:
+  /v1/schools/{schoolId}/trips:
+    get:
+      tags: [Trips]
+      summary: List trips by school for internal staff
+      parameters:
+        - in: path
+          name: schoolId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Trips for school
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Trip"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/trips/{tripId}/passengers/status:
+    get:
+      tags: [Trips]
+      summary: Passenger status list for a trip (internal staff)
+      parameters:
+        - in: path
+          name: tripId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Trip passenger statuses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trip:
+                    $ref: "#/components/schemas/Trip"
+                  passengers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InternalPassengerStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/reconciliation/payments:
+    get:
+      tags: [Reconciliation]
+      summary: List payment records for reconciliation
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [UNMATCHED, MATCHED, VERIFIED, FLAGGED]
+      responses:
+        "200":
+          description: Reconciliation queue
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PaymentRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/reconciliation/payments/{paymentId}/match:
+    post:
+      tags: [Reconciliation]
+      summary: Match unmatched payment to passenger
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [passengerId, reason]
+              properties:
+                passengerId:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+      responses:
+        "200":
+          description: Payment matched
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Conflict (duplicate or inconsistent assignment)
+  /v1/reconciliation/payments/{paymentId}/reassign:
+    post:
+      tags: [Reconciliation]
+      summary: Reassign payment from one passenger to another with immutable audit
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [toPassengerId, reason]
+              properties:
+                toPassengerId:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+      responses:
+        "200":
+          description: Payment reassigned
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Conflict (invalid reassignment)
+  /v1/reconciliation/payments/{paymentId}/verify:
+    post:
+      tags: [Reconciliation]
+      summary: Mark payment as verified
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Payment verified
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/flags:
+    post:
+      tags: [Reconciliation]
+      summary: Flag passenger or payment for follow-up
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [targetType, targetId, reason]
+              properties:
+                targetType:
+                  type: string
+                  enum: [PASSENGER, PAYMENT_RECORD]
+                targetId:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+      responses:
+        "201":
+          description: Flag created
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/share-links:
+    post:
+      tags: [ShareLinks]
+      summary: Create share link for trip or school scope
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateShareLinkRequest"
+      responses:
+        "201":
+          description: Share link created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShareLinkCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/share-links/{linkId}/revoke:
+    post:
+      tags: [ShareLinks]
+      summary: Revoke existing share link
+      parameters:
+        - in: path
+          name: linkId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Link revoked
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/share-links/access/trip:
+    get:
+      tags: [ShareLinks]
+      summary: Read-only status-only trip view via share link
+      parameters:
+        - in: header
+          name: x-share-link-authenticated
+          schema:
+            type: string
+            enum: ["true"]
+          required: true
+      responses:
+        "200":
+          description: Trip status-only payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trip:
+                    $ref: "#/components/schemas/Trip"
+                  passengers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SharePassengerStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "410":
+          description: Link expired or revoked
+  /v1/share-links/access/school:
+    get:
+      tags: [ShareLinks]
+      summary: Read-only status-only school view via share link (trip-first grouping)
+      parameters:
+        - in: header
+          name: x-share-link-authenticated
+          schema:
+            type: string
+            enum: ["true"]
+          required: true
+      responses:
+        "200":
+          description: School scoped trip-first status payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schoolId:
+                    type: string
+                    format: uuid
+                  trips:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        trip:
+                          $ref: "#/components/schemas/Trip"
+                        passengers:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/SharePassengerStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "410":
+          description: Link expired or revoked
+components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+    BadRequest:
+      description: Bad request
+  schemas:
+    Trip:
+      type: object
+      required: [id, schoolId, title]
+      properties:
+        id:
+          type: string
+          format: uuid
+        schoolId:
+          type: string
+          format: uuid
+        title:
+          type: string
+    InternalPassengerStatus:
+      type: object
+      required: [id, fullName, paymentStatus, documentStatus]
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        paymentStatus:
+          type: string
+          enum: [PAID, PENDING, UNDER_REVIEW]
+        documentStatus:
+          type: string
+          enum: [NOT_REQUIRED, PENDING, SUBMITTED, VERIFIED]
+        flagged:
+          type: boolean
+    SharePassengerStatus:
+      type: object
+      required: [id, fullName, paymentStatus, documentStatus, flagged]
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        paymentStatus:
+          type: string
+          enum: [PAID, PENDING, UNDER_REVIEW]
+        documentStatus:
+          type: string
+          enum: [NOT_REQUIRED, PENDING, SUBMITTED, VERIFIED]
+        flagged:
+          type: boolean
+      description: Status-only view; no amounts, methods, transaction ids, or reconciliation internals.
+    PaymentRecord:
+      type: object
+      required: [id, status, integrationSource, externalPaymentId]
+      properties:
+        id:
+          type: string
+          format: uuid
+        integrationSource:
+          type: string
+        externalPaymentId:
+          type: string
+        status:
+          type: string
+          enum: [UNMATCHED, MATCHED, VERIFIED, FLAGGED]
+        matchedPassengerId:
+          type: string
+          format: uuid
+          nullable: true
+    CreateShareLinkRequest:
+      type: object
+      required: [scopeType, expiresAt]
+      properties:
+        scopeType:
+          type: string
+          enum: [TRIP, SCHOOL]
+        tripId:
+          type: string
+          format: uuid
+        schoolId:
+          type: string
+          format: uuid
+        expiresAt:
+          type: string
+          format: date-time
+    ShareLinkCreated:
+      type: object
+      required: [id, url, expiresAt, scopeType]
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+        scopeType:
+          type: string
+          enum: [TRIP, SCHOOL]
+        expiresAt:
+          type: string
+          format: date-time
