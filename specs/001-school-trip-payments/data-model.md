@@ -13,6 +13,18 @@
 - **Validation Rules**
   - `name` non-empty, max 200 chars
 
+## Entity: Staff
+
+- **Fields**
+  - `id` (string, required; from `x-auth-user-id`)
+  - `username` (string, required; from `x-auth-user-name`)
+  - `createdAt` (timestamp)
+  - `updatedAt` (timestamp)
+- **Relationships**
+  - Referenced by audit/created-by identity fields (direct FK optional in v1).
+- **Validation Rules**
+  - Upserted automatically from trusted auth-proxy headers on internal requests.
+
 ## Entity: Trip
 
 - **Fields**

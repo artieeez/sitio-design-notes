@@ -7,7 +7,7 @@ Define how `sitio-backend` distinguishes auth-proxy internal user requests from 
 ## Request Header Rules
 
 - Internal staff requests:
-  - Auth proxy forwards user headers (example: `x-auth-user-id`, `x-auth-user-email`, `x-auth-user-roles`)
+  - Auth proxy forwards user headers (minimum required: `x-auth-user-id`, `x-auth-user-name`)
   - `x-share-link-authenticated` must be absent or `false`
 - Share-link requests:
   - `x-share-link-authenticated: true`
@@ -22,7 +22,8 @@ Define how `sitio-backend` distinguishes auth-proxy internal user requests from 
   - Reject if revoked/expired/unknown with `401`
   - Attach share-link auth context to request (`scopeType`, `tripId|schoolId`, `shareLinkId`)
 - If `x-share-link-authenticated` absent/false:
-  - Require auth-proxy user headers for protected internal endpoints
+  - Require auth-proxy user headers (`x-auth-user-id`, `x-auth-user-name`) for protected internal endpoints
+  - Upsert `Staff` entity from those headers before continuing
   - Reject missing identity with `401`
 
 ## Security Constraints

@@ -7,10 +7,29 @@ info:
 servers:
   - url: https://api.example.com
 tags:
+  - name: Schools
   - name: Trips
   - name: Reconciliation
   - name: ShareLinks
 paths:
+  /v1/schools:
+    get:
+      tags: [Schools]
+      summary: List schools for internal staff navigation
+      responses:
+        "200":
+          description: Schools
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/School"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
   /v1/schools/{schoolId}/trips:
     get:
       tags: [Trips]
@@ -304,6 +323,18 @@ components:
     BadRequest:
       description: Bad request
   schemas:
+    School:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        externalRef:
+          type: string
+          nullable: true
     Trip:
       type: object
       required: [id, schoolId, title]

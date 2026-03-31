@@ -90,16 +90,16 @@ This section documents **human-in-the-loop** checks for success criteria that ar
 
 | Field | Record here |
 |-------|-------------|
-| Scripted steps (school staff persona, status-only link) | *e.g. open link → identify one passenger with pending payment or document action* |
-| Pass/fail definition | *e.g. participant names correct passenger from list* |
-| Target | *e.g. ≥90% success across **n** participants, or pilot note if **n** is small* |
-| Date / participants / outcome | *short log for sign-off* |
+| Scripted steps (school staff persona, status-only link) | Open issued `/share/trip?token=…` or `/share/school?token=…` → identify one passenger row that still shows pending payment or document status vs completed rows. |
+| Pass/fail definition | Participant names the correct passenger (pending) from the status-only list without internal fields. |
+| Target | ≥90% success across **n** ≥ 5 participants, or document pilot sample size and outcome. |
+| Date / participants / outcome | *Record at release sign-off.* |
 
 ### SC-004 — Flagged-item findability (≤1 minute)
 
 | Field | Record here |
 |-------|-------------|
-| **Entry screen** (where the timer starts) | *e.g. home, reconciliation queue, trips list* |
-| **Labeled test data** (flag IDs or names in seed/fixtures) | *identifiers staff use to search* |
-| Success | *staff locates flagged payment/passenger within 60 seconds from entry* |
-| Date / runner / outcome | *short log for sign-off* |
+| **Entry screen** (where the timer starts) | `/staff/reconciliation` (queue list) after landing from `/staff/schools`. |
+| **Labeled test data** (flag IDs or names in seed/fixtures) | Use seed flag labels from `pnpm exec prisma db seed` fixtures (e.g. payment `externalPaymentId` / passenger `fullName` documented in runbook). |
+| Success | Staff locates the flagged payment or passenger within 60 seconds from entry. |
+| Date / runner / outcome | *Record at release sign-off.* |

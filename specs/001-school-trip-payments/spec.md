@@ -114,6 +114,8 @@ Tourism company staff see payment information arriving from the external integra
 - **FR-017**: Tourism company staff MUST be able to **manually register a single passenger** on a trip without using a file import.
 - **FR-018**: Tourism company staff MUST be able to **manually register a single payment record** (e.g. when no integration row exists yet), with the same reconciliation lifecycle as integration-sourced payments and **audit metadata** indicating manual entry.
 - **FR-019**: When automatic matching to an existing passenger is **not** possible—because the roster is incomplete, identifiers are insufficient, or the payment is unmatched—staff MUST be able, while **verifying or accepting a payment as valid**, to **create a new passenger on the chosen trip** using payment-derived fields (plus any required staff input), and **link that payment** to the new passenger in one flow, with **immutable audit** for passenger creation and linkage.
+- **FR-020**: The system MUST maintain a `Staff` entity keyed by auth-proxy headers (`x-auth-user-id`, `x-auth-user-name`) and MUST auto-create/update this entity on authenticated internal requests.
+- **FR-021**: On localhost development, the backend MUST be able to simulate auth-proxy internal headers with a default staff user for non-share-link routes, and this simulation MUST be disableable via environment variable for share-link testing.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -124,6 +126,7 @@ Tourism company staff see payment information arriving from the external integra
 - **Payment reconciliation audit event**: Immutable log entry for verification, merge, unmerge/reassignment actions including who performed the action, when, affected records, and reason.
 - **Share link**: A revocable or expirable access grant for school staff with one of two scopes: **trip-scoped** (single trip) or **school-scoped** (school-wide trips).
 - **Flag / follow-up**: A marker on a payment or passenger that requires later staff attention.
+- **Staff**: Internal tourism operator identity derived from trusted auth-proxy headers, used for audit actor attribution.
 
 ## Success Criteria *(mandatory)*
 
@@ -143,3 +146,4 @@ Tourism company staff see payment information arriving from the external integra
 - **CSV/Excel import**: Accepted file types (e.g. `.csv`, `.xlsx`), maximum size, and column template are defined at implementation time; **validation is all-or-nothing** (see FR-016). Operator-facing **help copy** in the UI supplements downloadable templates.
 - **Manual payment entry**: Required fields (minimum to satisfy reconciliation and audit) are defined at implementation time and may align with integration `PaymentRecord` shape where applicable.
 - **Unmatched payment without roster row**: First release keeps unmatched payments visible until merge or create-passenger-from-payment; dismiss/archive is optional/future (see Edge Cases).
+- Localhost development may simulate proxy user headers by default for faster internal flow testing; this simulation is explicitly disableable to validate unauthenticated/share-link behavior.
