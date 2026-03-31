@@ -21,9 +21,6 @@ Deliver a multi-repo implementation where `sitio-dashboard` (CSR React app) allo
 - **Requirement**: Each phase’s test tasks in `tasks.md` MUST be implemented; PRs keep the repo test command green (`pnpm test` or equivalent). Incomplete automated coverage for a story requires an explicit deferral in Complexity Tracking with an agreed substitute (e.g. time-boxed follow-up issue).  
 **Target Platform**: Browser clients (evergreen desktop/mobile browsers) + Linux ARM64 containers on Oracle OKE  
 **Project Type**: Web application with separate frontend and backend repositories; frontend is CSR  
-**Performance Goals**:  
-- Trip details (up to 50 passengers) usable in under 2 minutes for staff workflows (SC-001)  
-- Share-link pages load status lists with p95 backend API latency under 300ms for typical trip payloads  
 **Constraints**:  
 - UI language in frontend must be pt-BR  
 - Contracts and code artifacts in English  
@@ -122,7 +119,7 @@ Verify against `.specify/memory/constitution.md` (Sitio App, CSR bare minimum):
 
 ## Post-Design Constitution Check
 
-- **Spec-first**: PASS. `research.md`, `data-model.md`, `quickstart.md`, and `contracts/` reflect FR-001..FR-015 and clarifications.
+- **Spec-first**: PASS. `research.md`, `data-model.md`, `quickstart.md`, and `contracts/` reflect FR-001..FR-019 and clarifications.
 - **CSR & client-safe config**: PASS. Frontend remains CSR; client config restricted to public `VITE_` vars; sensitive logic remains backend side.
 - **Independent stories**: PASS. Design keeps internal trip management, share-link access, and reconciliation workflows independently testable.
 - **Tests when spec says so**: PASS. Spec mandates automated suites; quickstart covers how to run them with Bruno as adjunct.

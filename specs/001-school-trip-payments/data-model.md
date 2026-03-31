@@ -44,6 +44,7 @@
   - `documentStatus` (enum: `NOT_REQUIRED`, `PENDING`, `SUBMITTED`, `VERIFIED`)
   - `isFlagged` (boolean, default false)
   - `flagReason` (string, optional)
+  - `createdVia` (enum: `IMPORT_FILE`, `MANUAL_FORM`, `FROM_PAYMENT`, optional; see “Passenger creation provenance” below)
   - `createdAt` (timestamp)
   - `updatedAt` (timestamp)
 - **Relationships**
@@ -54,12 +55,15 @@
   - `fullName` non-empty
   - `flagReason` required when `isFlagged=true`
 
-## Entity: PaymentRecord (Integration)
+## Entity: PaymentRecord (integration or manual staff entry)
+
+Per `spec.md` FR-005 and FR-018, rows may originate from the **external integration** or from **manual staff registration**. Manual rows MUST be auditable and distinguishable from integration rows.
 
 - **Fields**
   - `id` (UUID)
-  - `integrationSource` (string, required)
-  - `externalPaymentId` (string, required)
+  - `entrySource` (enum: `INTEGRATION`, `MANUAL_STAFF`, required)
+  - `integrationSource` (string, required; use a sentinel such as `manual` when `entrySource=MANUAL_STAFF` if no vendor id exists)
+  - `externalPaymentId` (string, required; for manual entries, may be a staff-entered reference or generated unique id per implementation rules)
   - `tripId` (UUID, optional FK -> Trip)
   - `rawPayload` (JSONB)
   - `amount` (numeric, optional, internal use only)
@@ -78,13 +82,22 @@
 - **Validation Rules**
   - Unique (`integrationSource`, `externalPaymentId`)
   - One payment active-match to at most one passenger at a time
+  - Manual entries: uniqueness rules MUST prevent accidental duplicate manual rows (same policy as integration duplicates).
+
+## Process: Passenger file import (CSV / Excel)
+
+Not a separate persisted entity in v1 unless needed for audit: **FR-016** expects upload → validate → preview → commit with **all-or-nothing** persistence (any validation failure blocks the entire import), structured **error report** payload for the UI (per-row messages + summary), and **in-app help** for format and common mistakes. Optional future entity: `PassengerImportJob` (id, `tripId`, file metadata, status, error report JSON).
+
+## Passenger creation provenance
+
+Passengers may be created via **file import** (FR-016), **manual single registration** (FR-017), or **create-from-payment** during reconciliation (FR-019). The `createdVia` field on `Passenger` records the origin when known.
 
 ## Entity: PaymentAuditEvent
 
 - **Fields**
   - `id` (UUID)
   - `paymentRecordId` (UUID, FK -> PaymentRecord)
-  - `eventType` (enum: `VERIFIED`, `MATCHED`, `REASSIGNED`, `UNMATCHED`, `FLAGGED`, `UNFLAGGED`)
+  - `eventType` (enum: `VERIFIED`, `MATCHED`, `REASSIGNED`, `UNMATCHED`, `FLAGGED`, `UNFLAGGED`, `PASSENGER_CREATED_FROM_PAYMENT`) — last value used when `spec.md` FR-019 creates a passenger and links the payment in one transaction
   - `actorType` (enum: `INTERNAL_USER`, `SYSTEM`)
   - `actorId` (string, required for `INTERNAL_USER`)
   - `fromPassengerId` (UUID, nullable)

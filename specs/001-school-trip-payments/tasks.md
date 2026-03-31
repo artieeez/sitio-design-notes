@@ -38,7 +38,7 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 
 **⚠️ CRITICAL**: No user story phase work should start until this phase is complete.
 
-- [ ] T006 Model `School`, `Trip`, `Passenger`, `PaymentRecord`, `PaymentAuditEvent`, `ShareLink`, `Flag` with enums and relations in `/Users/arturwebber/Documents/sitio/sitio-backend/prisma/schema.prisma` per `/Users/arturwebber/Documents/sitio/sitio-design-notes/specs/001-school-trip-payments/data-model.md`
+- [ ] T006 Model `School`, `Trip`, `Passenger`, `PaymentRecord`, `PaymentAuditEvent`, `ShareLink`, `Flag` with enums and relations in `/Users/arturwebber/Documents/sitio/sitio-backend/prisma/schema.prisma` per `/Users/arturwebber/Documents/sitio/sitio-design-notes/specs/001-school-trip-payments/data-model.md` (including `PaymentRecord.entrySource`, `Passenger.createdVia`, and extended `PaymentAuditEvent` event types where applicable)
 - [ ] T007 Create and apply initial Prisma migration from `schema.prisma` in `sitio-backend` (run `pnpm exec prisma migrate dev` or equivalent per repo policy; user must have `DATABASE_URL` set)
 - [ ] T008 Create module folder layout under `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/` (`schools/`, `trips/`, `passengers/`, `payments/`, `reconciliation/`, `share-links/`) with empty module classes wired in `app.module.ts`
 - [ ] T009 Implement `/Users/arturwebber/Documents/sitio/sitio-backend/src/common/auth-proxy/auth-proxy.guard.ts` to require forwarded proxy user headers on internal routes per `research.md`
@@ -57,9 +57,9 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 
 ## Phase 3: User Story 1 — View trips by school and passenger payment status (Priority: P1) 🎯 MVP
 
-**Goal**: Staff navigate schools → trips → trip detail with passenger payment and document pending indicators.
+**Goal**: Staff navigate schools → trips → trip detail with passenger payment and document pending indicators; staff **import rosters** (CSV/Excel) and **add single passengers** per `spec.md` FR-016–FR-017.
 
-**Independent Test**: With seeded schools, trips, and passengers, confirm lists and statuses match data without share links or reconciliation actions (`spec.md` US1).
+**Independent Test**: With seeded schools, trips, and passengers (including at least one import and one manual add), confirm lists and statuses match data without share links or reconciliation actions (`spec.md` US1).
 
 ### Implementation for User Story 1
 
@@ -68,12 +68,14 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T018 [P] [US1] Add TanStack Query hooks for schools, trips, and passenger status in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/api/` (or `features/*/api/`)
 - [ ] T019 [P] [US1] Implement staff UI: school list / selector in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/trips/` (or `routes/`) with pt-BR copy in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/i18n/`
 - [ ] T020 [US1] Implement trip list for selected school and trip detail page with Mantine passenger table showing `paymentStatus`, `documentStatus`, and flagged state in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/trips/`
+- [ ] T058 [US1] Implement **CSV/Excel passenger import** for a trip (FR-016): upload, validation, preview, **all-or-nothing commit** (any invalid row aborts persist), API responses with **per-row and summary errors**; **in-app help** (pt-BR) on the import screen: column template, examples, **common mistakes**; backend in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/passengers/` (or `trips/`); extend `contracts/backend-api.openapi.yaml` as needed; staff UI on trip detail in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/trips/` (help copy may live in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/i18n/`)
+- [ ] T059 [US1] Implement **manual single-passenger registration** for a trip (FR-017): `POST` (or equivalent) + form in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/trips/`; OpenAPI + Bruno requests
 - [ ] T021 [P] [US1] Add Zustand store for selected school/trip UI context only in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/stores/`
 - [ ] T022 [US1] Add Bruno requests for `GET /v1/schools`, `GET /v1/schools/{schoolId}/trips`, `GET /v1/trips/{tripId}/passengers/status` under `/Users/arturwebber/Documents/sitio/sitio-backend/bruno/school-trip-payments/`
-- [ ] T048 [US1] Add Supertest integration tests in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (or `src/**/*.spec.ts`) for `GET /v1/schools`, `GET /v1/schools/{schoolId}/trips`, and `GET /v1/trips/{tripId}/passengers/status` (use test DB or approved mocks per repo conventions)
-- [ ] T049 [P] [US1] Add React Testing Library tests in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` (or colocated `*.test.tsx`) for staff school → trip → passenger status flow with mocked API clients / TanStack Query
+- [ ] T048 [US1] Add Supertest integration tests in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (or `src/**/*.spec.ts`) for `GET /v1/schools`, `GET /v1/schools/{schoolId}/trips`, and `GET /v1/trips/{tripId}/passengers/status` (use test DB or approved mocks per repo conventions); **extend** with import and manual-passenger endpoints once T058–T059 exist (assert **no DB writes** on validation failure and error payload shape for FR-016)
+- [ ] T049 [P] [US1] Add React Testing Library tests in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` (or colocated `*.test.tsx`) for staff school → trip → passenger status flow with mocked API clients / TanStack Query; **extend** with import and manual-add flows when T058–T059 exist (include **blocked import** + error summary and **help panel** visibility for FR-016)
 
-**Checkpoint**: US1 acceptance scenarios 1–3 from `spec.md` are demonstrable; T048–T049 pass.
+**Checkpoint**: US1 acceptance scenarios 1–5 from `spec.md` are demonstrable; T048–T049 pass; **T058–T059** complete.
 
 ---
 
@@ -114,15 +116,20 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 - [ ] T034 [US3] Implement `POST /v1/reconciliation/payments/{paymentId}/match` with conflict detection (no double-count paid status) and `409` on inconsistency per FR-009 in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/reconciliation/`
 - [ ] T035 [US3] Implement `POST /v1/reconciliation/payments/{paymentId}/reassign` requiring `reason`, emit immutable `PaymentAuditEvent` type `REASSIGNED` with from/to passenger IDs per FR-015 in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/reconciliation/`
 - [ ] T036 [US3] Implement `POST /v1/reconciliation/payments/{paymentId}/verify` and audit `VERIFIED` event in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/reconciliation/`
+- [ ] T060 [US3] Implement **manual single-payment registration** (FR-018): API + reconciliation UI so staff can create a `PaymentRecord` marked as manual in audit/metadata; extend Prisma/OpenAPI/`data-model.md` if a source/origin field is required
+- [ ] T061 [US3] Implement **create passenger from payment** while verifying or accepting a payment (FR-019): one flow that creates `Passenger` on the selected trip from payment-derived fields, links the payment, and writes audit events; backend in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/reconciliation/` (and `passengers/` as needed); UI in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/reconciliation/`
 - [ ] T037 [US3] Implement `POST /v1/flags` for `PASSENGER` and `PAYMENT_RECORD` targets per OpenAPI in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/reconciliation/` (or dedicated `flags` handler)
 - [ ] T038 [US3] Append `PaymentAuditEvent` rows for `MATCHED`, `VERIFIED`, `FLAGGED`, etc., with immutability enforced at repository layer in `/Users/arturwebber/Documents/sitio/sitio-backend/src/modules/payments/` or `reconciliation/`
 - [ ] T039 [US3] Build staff reconciliation UI (queue list, match/reassign/verify/flag actions) in `/Users/arturwebber/Documents/sitio/sitio-dashboard/src/features/reconciliation/` consuming internal APIs; pt-BR copy
 - [ ] T040 [US3] Add Bruno requests for reconciliation list, match, reassign, verify, flags, and conflict responses in `/Users/arturwebber/Documents/sitio/sitio-backend/bruno/school-trip-payments/`
 - [ ] T041 [US3] Provide dev seed or admin script to insert sample `PaymentRecord` rows for `integrationSource`/`externalPaymentId` in `/Users/arturwebber/Documents/sitio/sitio-backend/` (supports FR-005 demo without live integration)
-- [ ] T052 [US3] Add Supertest tests for reconciliation list, match, reassign, verify, flags, and `409` conflict path in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (assert audit events where applicable)
+- [ ] T052 [US3] Add Supertest tests for reconciliation list, match, reassign, verify, flags, and `409` conflict path in `/Users/arturwebber/Documents/sitio/sitio-backend/test/` (assert audit events where applicable); **extend** with manual payment (T060) and create-passenger-from-payment (T061) when implemented
 - [ ] T053 [P] [US3] Add RTL tests for reconciliation staff UI (queue, primary actions) in `/Users/arturwebber/Documents/sitio/sitio-dashboard/tests/` with mocked internal APIs
+- [ ] T055 [US3] **Duplicate integration payments** (spec edge case): In `payments` / `reconciliation`, surface suspected duplicate rows for the same logical payment (e.g. same `externalPaymentId` or integration-defined key), block match flows that would double-count paid status, and show staff a clear duplicate/conflict state in the reconciliation UI; extend `contracts/backend-api.openapi.yaml` and `data-model.md` if new fields or query filters are required. Add Supertest cases for duplicate scenarios.
+- [ ] T056 [US3] **Payment before passenger exists** (spec edge case): Ensure `GET /v1/reconciliation/payments` (and staff UI) always lists unmatched `PaymentRecord` when no passenger exists on the trip yet; support match after the roster is updated; implement dismiss or archive behavior if policy requires it (document in API or admin notes). Add Supertest + seed fixtures for “unmatched, no passenger” rows.
+- [ ] T057 [US3] **Cancelled trip or passenger** (spec edge case): Extend Prisma schema (see `data-model.md`), internal trip/passenger APIs, and staff UIs so cancelled or removed trips/passengers still show understandable status and payment linkage (no unexplained orphans); reconciliation views must remain coherent. Add RTL/Supertest coverage for at least one cancelled-entity path.
 
-**Checkpoint**: US3 acceptance scenarios 1–5 from `spec.md` are demonstrable; T052–T053 pass.
+**Checkpoint**: US3 acceptance scenarios 1–7 from `spec.md` are demonstrable; T052–T053 pass; **T060–T061** complete; edge-case tasks **T055–T057** complete.
 
 ---
 
@@ -148,7 +155,7 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 | Phase 2 Foundational | Phase 1 | Blocks all user stories; includes T046–T047 test harness |
 | Phase 3 US1 | Phase 2 | MVP slice; T048–T049 after T016–T017 (and T020 for full UI assertions on T049) |
 | Phase 4 US2 | Phase 2 | Uses `ShareLink` + passengers/trips from schema; functionally stacks on US1 data model |
-| Phase 5 US3 | Phase 2 | Uses `PaymentRecord`, passengers, audit; overlaps US1 passenger display when matched |
+| Phase 5 US3 | Phase 2 | Uses `PaymentRecord`, passengers, audit; overlaps US1 passenger display when matched; **T060–T061** (FR-018–FR-019) after core match/verify paths; **T055–T057** close spec edge cases after core US3 work |
 | Phase 6 Polish | Phases 3–5 as needed | Can run partial polish after each story; T054 can follow once test scripts exist |
 
 ### User Story Dependencies
@@ -161,9 +168,9 @@ description: "Task list for School Trip Payment and Passenger Status (multi-repo
 
 - **Phase 1**: T003, T004, T005 in parallel.
 - **Phase 2**: T009 and T010 in parallel after T008; T013 and T014 parallel with backend tasks if staffed separately; **T046 and T047 in parallel** after T001–T002 (tooling present).
-- **Phase 3**: T018, T019, T021 in parallel after T016–T017 exist; **T048 after T016–T017**; **T049 in parallel** with T018–T021 once trip UI exists (typically after T020).
+- **Phase 3**: T018, T019, T021 in parallel after T016–T017 exist; **T058–T059 after T016–T017** (import/manual need passenger APIs); **T048 after T016–T017**; **T049 in parallel** with T018–T021 once trip UI exists (typically after T020).
 - **Phase 4**: T029 and T030 in parallel after backend share endpoints exist; **T051 in parallel** with T029–T030 after routes exist.
-- **Phase 5**: **T053 in parallel** with T039 after reconciliation UI skeleton exists.
+- **Phase 5**: **T053 in parallel** with T039 after reconciliation UI skeleton exists; **T055–T057** after core reconciliation (T033–T039) and schema clarity—**T057** may require Prisma migration after T006/T007 follow-ups.
 - **Phase 6**: T042, T043, and **T054 in parallel**.
 
 ---
@@ -196,13 +203,15 @@ Task T030: Public share routes in sitio-dashboard/src/routes/
 ### MVP First (User Story 1 only)
 
 1. Complete Phase 1 and Phase 2 (including T046–T047).
-2. Complete Phase 3 (US1), including **T048–T049**.
-3. Stop and validate `spec.md` US1 independent test, SC-001, and green automated suites for US1.
+2. Complete **all of Phase 3 (US1)** through the Phase 3 **checkpoint**: implementation tasks **T016–T022, T058–T059** (navigation, trip/passenger UI, **CSV/Excel import**, **manual single passenger**) plus automated tests **T048–T049** with extensions described in those tasks (import failure, help UI, manual add).
+3. Stop and validate `spec.md` US1 independent test (**including** at least one successful import and one manual add per scenarios 4–5), **SC-001**, and green automated suites for US1.
+
+**Note**: **Confirmed** — MVP is **full US1** per `spec.md`: **T016–T022, T058–T059** and tests **T048–T049** (covers FR-001–FR-002, FR-016–FR-017). Deferring import/manual would require revising `spec.md` and **Complexity Tracking** in `plan.md`.
 
 ### Incremental Delivery
 
 1. Setup + Foundational → stable schema and auth boundaries.
-2. US1 → staff trip/passenger visibility (core operations).
+2. US1 → staff trip/passenger visibility, **roster import (FR-016)**, and **manual passenger (FR-017)** (core operations).
 3. US2 → school transparency via links (status-only, scoped).
 4. US3 → reconciliation trust and auditability.
 
@@ -217,4 +226,4 @@ After Foundational: one developer on `sitio-dashboard` US1 routes/UI, another on
 - **Prisma migrations**: If `sitio-backend` follows a “human runs migrate” policy, T007 remains a human-gated step; do not hand-edit SQL migrations unless your repo allows it.
 - **Contract source of truth**: `contracts/backend-api.openapi.yaml` lives under `sitio-design-notes`; implementation tasks reference both repos—keep OpenAPI in sync when endpoints change (T045).
 - **[P]** tasks must not edit the same file concurrently.
-- **Task count**: T001–T054 (54 tasks), including mandatory automated test tasks T046–T054.
+- **Task count**: T001–T061 (61 tasks), including mandatory automated test harness and story tests **T046–T053**, CI **T054**, edge-case work **T055–T057**, and roster/payment intake **T058–T061** (FR-016–FR-019).
