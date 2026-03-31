@@ -81,3 +81,25 @@ Minimal required steps per workflow:
 - P2: share links created and read-only status-only views enforced per scope; T050–T051 pass.
 - P3: reconciliation flows support match/reassign/verify/flag with immutable audit records; T052–T053 pass.
 - Automated test runs are wired in CI (T054) or explicitly scheduled as a follow-up with Complexity Tracking.
+
+## 7) Pre-release validation *(SC-002 / SC-004)*
+
+This section documents **human-in-the-loop** checks for success criteria that are **not** fully replaced by automated suites. Fill in placeholders during implementation (`tasks.md` **T062**); execute before release candidate and tick off via **T044**.
+
+### SC-002 — School staff share-link usability (scripted task)
+
+| Field | Record here |
+|-------|-------------|
+| Scripted steps (school staff persona, status-only link) | *e.g. open link → identify one passenger with pending payment or document action* |
+| Pass/fail definition | *e.g. participant names correct passenger from list* |
+| Target | *e.g. ≥90% success across **n** participants, or pilot note if **n** is small* |
+| Date / participants / outcome | *short log for sign-off* |
+
+### SC-004 — Flagged-item findability (≤1 minute)
+
+| Field | Record here |
+|-------|-------------|
+| **Entry screen** (where the timer starts) | *e.g. home, reconciliation queue, trips list* |
+| **Labeled test data** (flag IDs or names in seed/fixtures) | *identifiers staff use to search* |
+| Success | *staff locates flagged payment/passenger within 60 seconds from entry* |
+| Date / runner / outcome | *short log for sign-off* |

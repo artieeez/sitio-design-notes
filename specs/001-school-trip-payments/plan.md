@@ -123,6 +123,7 @@ Verify against `.specify/memory/constitution.md` (Sitio App, CSR bare minimum):
 - **CSR & client-safe config**: PASS. Frontend remains CSR; client config restricted to public `VITE_` vars; sensitive logic remains backend side.
 - **Independent stories**: PASS. Design keeps internal trip management, share-link access, and reconciliation workflows independently testable.
 - **Tests when spec says so**: PASS. Spec mandates automated suites; quickstart covers how to run them with Bruno as adjunct.
+- **Pre-release success criteria (SC-002 / SC-004)**: Documented. `spec.md` ties **SC-002** (scripted school-staff share-link task) and **SC-004** (flagged-item findability ≤1 minute) to `quickstart.md` §Pre-release validation; **`tasks.md` T062** fills in scripted steps and fixture labels, then **T044** includes that section before release candidate. This supplements automated suites; it does not replace Vitest/Jest.
 - **Small changes & safe errors**: PASS. Chosen patterns are requirement-driven; error contract avoids exposing internals in production-facing responses.
 
 ## Complexity Tracking

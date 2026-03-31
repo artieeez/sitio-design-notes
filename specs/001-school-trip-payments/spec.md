@@ -87,7 +87,7 @@ Tourism company staff see payment information arriving from the external integra
 
 - Import file has malformed rows, duplicates, or columns that do not map to the template: **the import does not commit any rows** until the file passes validation; staff see **per-row error detail** and a **clear summary** that the whole import was blocked; they can use the **in-app help** (format, examples, common mistakes) to fix the file and retry.
 - Integration sends a duplicate payment for the same passenger: staff can identify duplicates and avoid double-counting paid status.
-- Payment arrives before the passenger exists on the trip list: unmatched payment remains visible until merged, **create-passenger-from-payment**, or dismissed per policy.
+- Payment arrives before the passenger exists on the trip list: unmatched payment remains **visible in reconciliation** until staff **merge** it to a passenger or complete **create-passenger-from-payment**. **Dismiss or archive** of an unmatched row is **not required in the first release**; if added later, it MUST be an explicit staff action with **audit metadata** (document in API / data model).
 - School staff share link is shared widely: content is limited to what is appropriate for schools (status-only pending signals; no internal-only financial detail, no payment amounts, and no transaction-level references), and the exposed records remain constrained to the link scope (trip or school).
 - Trip or passenger is cancelled or removed after a payment was matched: status and history remain understandable for staff (no orphaned confusing states without explanation).
 
@@ -119,7 +119,7 @@ Tourism company staff see payment information arriving from the external integra
 
 - **School**: An educational institution the tourism company serves; groups trips for navigation.
 - **Trip**: A defined travel offering for a school with a passenger roster.
-- **Passenger**: A traveler on a trip (typically a student); holds payment and pending-action status for that trip. Passengers may be created via **file import**, **manual single registration**, or **create-from-payment** during reconciliation.
+- **Passenger**: A traveler on a trip (typically a student); holds payment and pending-action status for that trip. Passengers may be created via **file import**, **manual single registration**, or **create-from-payment** during reconciliation. **Terminology**: requirements use **passenger**; school-facing copy may say **student** where natural—the obligations are the same.
 - **Payment record (integration)**: A payment event or row from the external system **or a manual staff entry**, possibly unmatched or matched to a passenger; manual rows MUST be distinguishable in audit/metadata from integration-sourced rows.
 - **Payment reconciliation audit event**: Immutable log entry for verification, merge, unmerge/reassignment actions including who performed the action, when, affected records, and reason.
 - **Share link**: A revocable or expirable access grant for school staff with one of two scopes: **trip-scoped** (single trip) or **school-scoped** (school-wide trips).
@@ -130,9 +130,9 @@ Tourism company staff see payment information arriving from the external integra
 ### Measurable Outcomes
 
 - **SC-001**: Tourism company staff can clearly see, on a trip’s passenger list, who is unpaid for payment and who still has a pending document (or other) action when trip data is complete.
-- **SC-002**: School staff, using only an issued share link and a status-only view, can correctly name at least one student who still has a pending action on a trip in a usability test (e.g., 90% success on a scripted task).
+- **SC-002**: School staff, using only an issued share link and a status-only view, can correctly name at least one **passenger** who still has a pending action on a trip in a usability test (e.g., 90% success on a scripted task). **Validation**: scripted steps, pass/fail definition, and participant count (or documented pilot threshold) are recorded in `quickstart.md` (Pre-release validation); Phase 6 tasks **T044** / **T062** include executing that script before release candidate.
 - **SC-003**: For test cases with intentionally unmatched integration payments, staff complete manual merge to the correct passenger without creating duplicate “paid” outcomes for the same money, in 100% of controlled test scenarios.
-- **SC-004**: Flagged payments or passengers are locatable by staff within one minute of returning to the application (findability test with labeled test data).
+- **SC-004**: Flagged payments or passengers are locatable by staff within one minute of returning to the application (findability test with labeled test data). **Validation**: the **entry screen** (where the clock starts), **labeled fixture identifiers**, and success criteria are recorded in `quickstart.md` (Pre-release validation); **T044** / **T062** include this findability run alongside SC-002.
 
 ## Assumptions
 
@@ -142,3 +142,4 @@ Tourism company staff see payment information arriving from the external integra
 - The external payment integration provides enough fields for staff to verify amounts and references; exact fields are defined at implementation time.
 - **CSV/Excel import**: Accepted file types (e.g. `.csv`, `.xlsx`), maximum size, and column template are defined at implementation time; **validation is all-or-nothing** (see FR-016). Operator-facing **help copy** in the UI supplements downloadable templates.
 - **Manual payment entry**: Required fields (minimum to satisfy reconciliation and audit) are defined at implementation time and may align with integration `PaymentRecord` shape where applicable.
+- **Unmatched payment without roster row**: First release keeps unmatched payments visible until merge or create-passenger-from-payment; dismiss/archive is optional/future (see Edge Cases).
