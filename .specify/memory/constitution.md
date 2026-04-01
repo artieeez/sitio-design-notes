@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 -> 1.1.0
+- Version change: 1.1.0 -> 1.2.0
 - Modified principles:
-  - III. User Experience Must Stay Consistent -> III. User Experience and Language Must Stay Consistent
+  - V. Documentation Mirrors Behavior -> V. Specs Must Target Real Sibling Repositories
 - Added sections:
-  - None
+  - Scope & Repository Boundaries
 - Removed sections:
   - None
 - Templates requiring updates:
@@ -48,11 +48,13 @@ increments, each aligned to user value. Large changes MUST be split before
 implementation unless a documented constraint prevents it. Rationale: small slices
 improve review quality, rollback safety, and predictable progress.
 
-### V. Documentation Mirrors Behavior
-Specifications, plans, and task lists MUST stay synchronized with actual behavior.
-When implementation decisions change scope, tests, or UX, the corresponding docs
-MUST be updated in the same change set. Rationale: trustworthy documentation
-improves handoffs and avoids institutional drift.
+### V. Specs Must Target Real Sibling Repositories
+This repository is specifications-only. It MUST not be treated as an application
+runtime or source implementation repository. Every spec, plan, and task list MUST
+identify the target application repository or repositories under the shared parent
+folder (for example `../sitio-dashboard` and `../sitio-backend`) and MUST use
+repository-relative paths for implementation tasks. Rationale: explicit targeting
+prevents ambiguity, broken handoffs, and implementation in the wrong repository.
 
 ## Quality Standards
 
@@ -63,10 +65,20 @@ improves handoffs and avoids institutional drift.
 - Language rules MUST be explicit: code/spec content in English and user-facing
   interface content in Brazilian Portuguese (`pt-BR`).
 
+## Scope & Repository Boundaries
+
+- `sitio-design-notes` contains specifications, planning artifacts, and task
+  decomposition only.
+- Application code changes MUST be executed in target sibling repositories, not
+  in this repository.
+- Each spec MUST declare target repositories explicitly, at minimum using relative
+  paths from this repository root.
+
 ## Delivery Workflow & Quality Gates
 
 - Constitution Check in planning MUST explicitly validate code quality approach,
-  test strategy, UX consistency expectations, and language compliance.
+  test strategy, UX consistency expectations, language compliance, and target
+  repository mapping.
 - Task breakdowns MUST include test tasks for each user story and MUST identify
   verification points before cross-cutting polish work.
 - Pull requests MUST demonstrate passing quality gates (lint, tests, and
@@ -90,4 +102,4 @@ Compliance review expectations:
   UX consistency).
 - Reviewers SHOULD block merges that violate non-negotiable principles.
 
-**Version**: 1.1.0 | **Ratified**: 2026-04-01 | **Last Amended**: 2026-04-01
+**Version**: 1.2.0 | **Ratified**: 2026-04-01 | **Last Amended**: 2026-04-01

@@ -17,14 +17,15 @@ integration, and acceptance-level coverage as appropriate to the story risk.
 
 - **[P]**: Can run in parallel (different files, no dependencies)
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
-- Include exact file paths in descriptions
+- Include exact file paths in descriptions, using target sibling repository paths
+  (e.g., `../sitio-dashboard/src/...`, `../sitio-backend/src/...`)
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Specs repo**: this repository stores specs/tasks only; no app code tasks here
+- **Frontend target**: `../sitio-dashboard/src/`, `../sitio-dashboard/tests/`
+- **Backend target**: `../sitio-backend/src/`, `../sitio-backend/tests/`
+- Use paths defined in `plan.md` when additional sibling repositories are targeted
 
 <!-- 
   ============================================================================
@@ -49,8 +50,8 @@ integration, and acceptance-level coverage as appropriate to the story risk.
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
+- [ ] T001 Confirm target sibling repositories and ownership per implementation plan
+- [ ] T002 Validate repository access and baseline structure in each target repo
 - [ ] T003 [P] Configure linting and formatting tools
 - [ ] T003a [P] Define language policy checks (English for code/spec, `pt-BR` for UI copy)
 
@@ -90,10 +91,10 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T012 [P] [US1] Create [Entity1] model in ../sitio-backend/src/models/[entity1].py
+- [ ] T013 [P] [US1] Create [Entity2] model in ../sitio-backend/src/models/[entity2].py
+- [ ] T014 [US1] Implement [Service] in ../sitio-backend/src/services/[service].py (depends on T012, T013)
+- [ ] T015 [US1] Implement [endpoint/feature] in ../sitio-backend/src/[location]/[file].py
 - [ ] T016 [US1] Add validation and error handling
 - [ ] T017 [US1] Add logging for user story 1 operations
 - [ ] T017a [US1] Validate user-facing copy is Brazilian Portuguese (`pt-BR`)
@@ -115,9 +116,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T020 [P] [US2] Create [Entity] model in ../sitio-backend/src/models/[entity].py
+- [ ] T021 [US2] Implement [Service] in ../sitio-backend/src/services/[service].py
+- [ ] T022 [US2] Implement [endpoint/feature] in ../sitio-backend/src/[location]/[file].py
 - [ ] T023 [US2] Integrate with User Story 1 components (if needed)
 - [ ] T023a [US2] Validate user-facing copy is Brazilian Portuguese (`pt-BR`)
 
@@ -138,9 +139,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create [Entity] model in ../sitio-dashboard/src/models/[entity].py
+- [ ] T027 [US3] Implement [Service] in ../sitio-dashboard/src/services/[service].py
+- [ ] T028 [US3] Implement [endpoint/feature] in ../sitio-dashboard/src/[location]/[file].py
 - [ ] T028a [US3] Validate user-facing copy is Brazilian Portuguese (`pt-BR`)
 
 **Checkpoint**: All user stories should now be independently functional

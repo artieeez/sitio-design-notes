@@ -4,6 +4,7 @@
 **Created**: [DATE]  
 **Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
+**Target Repositories**: [e.g., ../sitio-dashboard, ../sitio-backend]
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -97,11 +98,13 @@
   Portuguese (`pt-BR`) and define review criteria for language quality.
 - **FR-009**: System MUST keep source code and technical specification content in
   English for implementation and maintenance consistency.
+- **FR-010**: Specification MUST identify target implementation repository or
+  repositories in the shared parent folder and describe the scope split per repo.
 
 *Example of marking unclear requirements:*
 
-- **FR-010**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-011**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-011**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-012**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 

@@ -23,6 +23,7 @@
 **Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 **Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
+**Target Repository/Repos**: [e.g., ../sitio-dashboard, ../sitio-backend or NEEDS CLARIFICATION]
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
 **Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
@@ -39,6 +40,8 @@
   justified deviations with acceptance criteria.
 - **Language Gate**: Confirm code/spec artifacts are in English and all
   user-facing UI content is in Brazilian Portuguese (`pt-BR`).
+- **Repository Boundary Gate**: Confirm this repo is used for specs only and
+  implementation paths are mapped to sibling target repositories.
 - **Incremental Delivery Gate**: Confirm user stories are independently testable
   and deliverable in small reviewable slices.
 - **Documentation Sync Gate**: Identify which docs/spec artifacts must be updated
@@ -58,52 +61,32 @@ specs/[###-feature]/
 └── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
-### Source Code (repository root)
+### Implementation Repositories (sibling repositories)
 <!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
+  ACTION REQUIRED: Replace the placeholder trees below with concrete target repo
+  layouts. Keep paths relative to this repository root (e.g., ../sitio-dashboard).
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
+# Example target repo A: ../sitio-dashboard
+../sitio-dashboard/
 ├── src/
 │   ├── components/
 │   ├── pages/
 │   └── services/
 └── tests/
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+# Example target repo B: ../sitio-backend
+../sitio-backend/
+├── src/
+│   ├── modules/
+│   ├── services/
+│   └── api/
+└── tests/
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: [Document selected target repositories and the concrete
+directories where implementation will occur]
 
 ## Complexity Tracking
 
