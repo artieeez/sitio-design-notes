@@ -89,11 +89,19 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-006**: System MUST define observable quality constraints (linting, code
+  style, or maintainability expectations) for changed components.
+- **FR-007**: System MUST define user experience consistency constraints
+  (terminology, interaction patterns, and visual behavior) for impacted flows.
+- **FR-008**: System MUST ensure all user-facing interface copy is in Brazilian
+  Portuguese (`pt-BR`) and define review criteria for language quality.
+- **FR-009**: System MUST keep source code and technical specification content in
+  English for implementation and maintenance consistency.
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-010**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-011**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -113,6 +121,14 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-005**: [Quality metric, e.g., "All changed modules pass lint and no new
+  high-severity static analysis issues are introduced"]
+- **SC-006**: [Testing metric, e.g., "New behavior is covered by automated tests
+  and all related tests pass in CI"]
+- **SC-007**: [UX consistency metric, e.g., "Users complete updated flow without
+  increased confusion/error rate versus baseline"]
+- **SC-008**: [Language metric, e.g., "100% of new or changed UI strings are in
+  Brazilian Portuguese (`pt-BR`) and pass product review"]
 
 ## Assumptions
 

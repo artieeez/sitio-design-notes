@@ -31,7 +31,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Code Quality Gate**: Define linting/formatting/static analysis checks and
+  identify how complexity is kept maintainable.
+- **Testing Gate**: Define required test layers per user story and confirm a
+  regression strategy for changed behavior.
+- **UX Consistency Gate**: List existing UX patterns this feature reuses and any
+  justified deviations with acceptance criteria.
+- **Language Gate**: Confirm code/spec artifacts are in English and all
+  user-facing UI content is in Brazilian Portuguese (`pt-BR`).
+- **Incremental Delivery Gate**: Confirm user stories are independently testable
+  and deliverable in small reviewable slices.
+- **Documentation Sync Gate**: Identify which docs/spec artifacts must be updated
+  with implementation to prevent drift.
 
 ## Project Structure
 
