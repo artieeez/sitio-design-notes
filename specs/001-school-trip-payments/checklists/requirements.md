@@ -32,6 +32,6 @@
 ## Notes
 
 - Validation pass 1: all checklist items pass; no clarification questions required.
-- Validation pass 2: spec updated with simplified and detailed payment creation flows and required payment data fields; all checklist items still pass.
+- Validation pass 2: spec updated with payment creation requirements (required fields on every payment record and separate passenger-list action for manual paid-without-info tag); all checklist items still pass.
 - Validation pass 3: spec updated with optional landing page URL autofill for school and trip forms (title, description, image, favicon) with manual fallback; all checklist items still pass.
-- Validation pass 4: removed simplified payment concept; payment records always require amount (prefill from effective expected when linked to passenger) plus date, location, payer; separate passenger-list action for manual paid-without-info tag with agreed UX wording; FR/status rules and user stories renumbered; all checklist items pass.
+- Validation pass 4: payment records always require amount (prefill from effective expected when creating for a passenger) plus date, location, payer; separate passenger-list action for manual paid-without-info tag with agreed UX wording; FR/status rules and user stories renumbered; all checklist items pass.
