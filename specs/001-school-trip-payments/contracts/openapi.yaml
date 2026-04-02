@@ -1,0 +1,482 @@
+openapi: 3.1.0
+info:
+  title: Sitio School Trip Payments API
+  version: 0.1.0
+  description: >
+    REST contract for staff dashboard backend (NestJS + CQRS + Prisma).
+    User-facing copy is pt-BR in the product; error `message` keys may be codes
+    with client-side localization.
+servers:
+  - url: http://localhost:3000/api
+    description: Local NestJS (adjust port to match implementation)
+
+tags:
+  - name: metadata
+  - name: schools
+  - name: trips
+  - name: passengers
+  - name: payments
+
+paths:
+  /metadata/fetch-page:
+    post:
+      tags: [metadata]
+      summary: Fetch landing page metadata for school/trip prefill (FR-005–FR-007)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: Partial or full metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingMetadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '502':
+          description: Upstream fetch failed; client may still save manually
+
+  /schools:
+    get:
+      tags: [schools]
+      summary: List schools (FR-001, FR-029)
+      parameters:
+        - in: query
+          name: includeInactive
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/School' }
+    post:
+      tags: [schools]
+      summary: Create school
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SchoolCreate' }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/School' }
+
+  /schools/{schoolId}:
+    parameters:
+      - $ref: '#/components/parameters/SchoolId'
+    get:
+      tags: [schools]
+      summary: Get school
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/School' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [schools]
+      summary: Update school
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SchoolUpdate' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/School' }
+    delete:
+      tags: [schools]
+      summary: Deactivate school (soft business deactivation, not necessarily HTTP DELETE)
+      responses:
+        '204': { description: No content }
+
+  /schools/{schoolId}/trips:
+    parameters:
+      - $ref: '#/components/parameters/SchoolId'
+    get:
+      tags: [trips]
+      summary: List trips for school (FR-002, FR-004, FR-030)
+      parameters:
+        - in: query
+          name: includeInactive
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Trip' }
+    post:
+      tags: [trips]
+      summary: Create trip bound to school (schoolId from path only)
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TripCreate' }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Trip' }
+        '409':
+          description: School inactive — cannot create trip (FR-029)
+
+  /trips/{tripId}:
+    parameters:
+      - $ref: '#/components/parameters/TripId'
+    get:
+      tags: [trips]
+      summary: Get trip
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Trip' }
+    patch:
+      tags: [trips]
+      summary: Update trip (including default expected amount)
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TripUpdate' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Trip' }
+
+  /trips/{tripId}/passengers:
+    parameters:
+      - $ref: '#/components/parameters/TripId'
+    get:
+      tags: [passengers]
+      summary: List passengers with derived status (FR-009, FR-018, FR-036)
+      parameters:
+        - in: query
+          name: includeRemoved
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PassengerWithStatus' }
+    post:
+      tags: [passengers]
+      summary: Create passenger (FR-008, FR-031, FR-032, FR-038)
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PassengerCreate' }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Passenger' }
+        '409':
+          description: Duplicate CPF on trip
+        '428':
+          description: Name duplicate warning — client must confirm (optional flow)
+
+  /passengers/{passengerId}:
+    parameters:
+      - $ref: '#/components/parameters/PassengerId'
+    patch:
+      tags: [passengers]
+      summary: Update passenger
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PassengerUpdate' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Passenger' }
+    post:
+      tags: [passengers]
+      summary: Soft-remove or restore (e.g. action query or body discriminator)
+      description: Implementation may use PATCH with flags instead; documented as POST for clarity.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Passenger' }
+
+  /passengers/{passengerId}/manual-paid-without-info:
+    parameters:
+      - $ref: '#/components/parameters/PassengerId'
+    put:
+      tags: [passengers]
+      summary: Set or clear manual paid-without-info flag (FR-016, FR-017)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PassengerWithStatus' }
+
+  /passengers/{passengerId}/payments:
+    parameters:
+      - $ref: '#/components/parameters/PassengerId'
+    get:
+      tags: [payments]
+      summary: List payments for passenger (trip context on client) (FR-010, FR-021)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Payment' }
+    post:
+      tags: [payments]
+      summary: Create payment (passenger from path; block if passenger removed) (FR-011, FR-035)
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentCreate' }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+        '409':
+          description: Passenger removed — cannot create payment
+
+  /payments/{paymentId}:
+    parameters:
+      - $ref: '#/components/parameters/PaymentId'
+    patch:
+      tags: [payments]
+      summary: Update payment
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentUpdate' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+    delete:
+      tags: [payments]
+      summary: Delete payment
+      responses:
+        '204': { description: No content }
+
+components:
+  parameters:
+    SchoolId:
+      name: schoolId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    TripId:
+      name: tripId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    PassengerId:
+      name: passengerId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    PaymentId:
+      name: paymentId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+
+  schemas:
+    MoneyMinor:
+      type: integer
+      description: Amount in BRL centavos (FR-034)
+      minimum: 0
+
+    LandingMetadata:
+      type: object
+      properties:
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+
+    School:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        active: { type: boolean }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    SchoolCreate:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+
+    SchoolUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        active: { type: boolean }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+
+    Trip:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        schoolId: { type: string, format: uuid }
+        active: { type: boolean }
+        defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    TripCreate:
+      type: object
+      properties:
+        defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+        active: { type: boolean, default: true }
+
+    TripUpdate:
+      type: object
+      properties:
+        defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        active: { type: boolean }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+
+    Passenger:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        tripId: { type: string, format: uuid }
+        fullName: { type: string }
+        cpf: { type: string, nullable: true, description: Display/normalized form per API convention }
+        expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        manualPaidWithoutInfo: { type: boolean }
+        removedAt: { type: string, format: date-time, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    PassengerWithStatus:
+      allOf:
+        - { $ref: '#/components/schemas/Passenger' }
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [pending, settled_payments, settled_manual, unavailable]
+            paidTotalMinor: { $ref: '#/components/schemas/MoneyMinor' }
+            effectiveExpectedMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+
+    PassengerCreate:
+      type: object
+      required: [fullName]
+      properties:
+        fullName: { type: string }
+        cpf: { type: string, nullable: true }
+        expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        confirmNameDuplicate: { type: boolean, default: false }
+
+    PassengerUpdate:
+      type: object
+      properties:
+        fullName: { type: string }
+        cpf: { type: string, nullable: true }
+        expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        confirmNameDuplicate: { type: boolean, default: false }
+
+    Payment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        passengerId: { type: string, format: uuid }
+        amountMinor: { $ref: '#/components/schemas/MoneyMinor' }
+        paidOn: { type: string, format: date, description: Date-only, America/Sao_Paulo (FR-037) }
+        location: { type: string }
+        payerIdentity: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    PaymentCreate:
+      type: object
+      required: [amountMinor, paidOn, location, payerIdentity]
+      properties:
+        amountMinor: { $ref: '#/components/schemas/MoneyMinor' }
+        paidOn: { type: string, format: date }
+        location: { type: string }
+        payerIdentity: { type: string }
+
+    PaymentUpdate:
+      type: object
+      required: [amountMinor, paidOn, location, payerIdentity]
+      properties:
+        amountMinor: { $ref: '#/components/schemas/MoneyMinor' }
+        paidOn: { type: string, format: date }
+        location: { type: string }
+        payerIdentity: { type: string }
+
+  responses:
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string }
+              code: { type: string }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string }
