@@ -6,8 +6,8 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 
 | Entity | Description |
 |--------|-------------|
-| **School** | Customer school; owns many trips; can be **deactivated** (FR-029). |
-| **Trip** | Belongs to one school; default expected amount (BRL, 2 dp); can be **deactivated** (FR-030); owns many passengers. |
+| **School** | Customer school; owns many trips; optional persisted **landing page URL** (`url`, FR-043); can be **deactivated** (FR-029). |
+| **Trip** | Belongs to one school; default expected amount (BRL, 2 dp); optional persisted **landing page URL** (`url`, FR-043); can be **deactivated** (FR-030); owns many passengers. |
 | **Passenger** | Belongs to one trip; name; optional CPF (unique per trip among non-empty normalized values, FR-031/038); optional expected amount override; **manual paid-without-info** flag (FR-016/017); **soft-removed** flag (FR-035); derived **payment status** (FR-018). |
 | **Payment** | Belongs to exactly one passenger (FR-015); amount BRL 2 dp; **date only** (FR-037); location; payer identity (FR-012–FR-014). |
 | **Landing metadata** | Ephemeral or DTO-only: title, description, image URL, favicon URL from pasted URL (FR-005–FR-007) — not necessarily persisted as its own table. |
@@ -18,8 +18,9 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 |-------|------|--------|
 | `id` | UUID (or cuid) | Primary key |
 | `name` | string | Required |
+| `url` | string (URI), nullable | Optional landing page URL used for metadata prefill and staff “open landing page” (FR-043); validate format when non-null |
 | `active` | boolean | `true` by default; deactivation blocks **new** trips (FR-029) |
-| Contact / marketing fields | strings, optional | As needed for UI (spec allows landing metadata pre-fill) |
+| Contact / marketing fields | strings, optional | As needed for UI (title, description, image, favicon from FR-005–FR-007) |
 | `createdAt`, `updatedAt` | timestamptz | Standard audit |
 
 **Relationships**: one-to-many **Trip**.
@@ -30,6 +31,7 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 |-------|------|--------|
 | `id` | UUID | PK |
 | `schoolId` | FK → School | Required |
+| `url` | string (URI), nullable | Optional landing page URL (FR-043); same semantics as school `url` |
 | `title`, `description`, `imageUrl`, `faviconUrl` | optional strings | From metadata or manual (FR-005–FR-007) |
 | `defaultExpectedAmountMinor` | int (centavos) | Nullable if trip may have no default yet; BRL scale (FR-034) |
 | `active` | boolean | Deactivation blocks **new** passengers (FR-030) |

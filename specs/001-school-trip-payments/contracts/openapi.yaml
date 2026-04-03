@@ -330,6 +330,11 @@ components:
         id: { type: string, format: uuid }
         name: { type: string }
         active: { type: boolean }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Landing page URL for prefill provenance and staff navigation (FR-043)
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
@@ -342,6 +347,11 @@ components:
       required: [name]
       properties:
         name: { type: string }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Optional; same URL used for /metadata/fetch-page when staff starts from URL
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
@@ -352,6 +362,11 @@ components:
       properties:
         name: { type: string }
         active: { type: boolean }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Set to null to clear
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
@@ -364,6 +379,11 @@ components:
         schoolId: { type: string, format: uuid }
         active: { type: boolean }
         defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Landing page URL for prefill provenance and staff navigation (FR-043)
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
@@ -375,6 +395,11 @@ components:
       type: object
       properties:
         defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Optional; same URL used for /metadata/fetch-page when staff starts from URL
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
@@ -386,6 +411,11 @@ components:
       properties:
         defaultExpectedAmountMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
         active: { type: boolean }
+        url:
+          type: string
+          format: uri
+          nullable: true
+          description: Set to null to clear
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }

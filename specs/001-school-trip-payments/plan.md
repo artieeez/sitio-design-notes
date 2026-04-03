@@ -1,13 +1,13 @@
 # Implementation Plan: School Trip Pending Payments Dashboard
 
-**Branch**: `001-school-trip-payments` | **Date**: 2026-04-01 | **Spec**: [spec.md](./spec.md)  
+**Branch**: `001-school-trip-payments` | **Date**: 2026-04-02 | **Spec**: [spec.md](./spec.md)  
 **Input**: Feature specification from `/specs/001-school-trip-payments/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-Staff-facing dashboard for a tourism company to manage schools, school-scoped trips, trip passengers, and trip-scoped manual payments, with derived pending/settled/unavailable status per passenger (BRL, two decimals, America/Sao_Paulo date semantics, CPF rules, soft-remove, manual “paid without info” tag). **Frontend** (`../sitio-dashboard`): TanStack Start in **SPA mode** (client-rendered app), UI via **shadcn** (Base UI `base` + preset `b1Fk0lmym`, Start template), **TanStack Query** for server state, **TanStack Form** + **Zod** for forms, **Zustand** for global client state, and **light/dark** theming. **Backend** (`../sitio-backend`): **NestJS** with **CQRS** (**@nestjs/cqrs**), **Prisma** on **PostgreSQL** (`localhost:5432` for local dev), REST (or future GraphQL) as the HTTP surface the SPA calls.
+Staff-facing dashboard for a tourism company to manage schools, school-scoped trips, trip passengers, and trip-scoped manual payments, with derived pending/settled/unavailable status per passenger (BRL, two decimals, America/Sao_Paulo date semantics, CPF rules, soft-remove, manual “paid without info” tag). **School** and **trip** records persist an optional **landing page URL** (`url`) for the link used to fetch prefill metadata and for staff-facing navigation (e.g. open landing page) per **FR-043**. **Frontend** (`../sitio-dashboard`): TanStack Start in **SPA mode** (client-rendered app), UI via **shadcn** (Base UI `base` + preset `b1Fk0lmym`, Start template), **TanStack Query** for server state, **TanStack Form** + **Zod** for forms, **Zustand** for global client state, and **light/dark** theming. **Backend** (`../sitio-backend`): **NestJS** with **CQRS** (**@nestjs/cqrs**), **Prisma** on **PostgreSQL** (`localhost:5432` for local dev), REST (or future GraphQL) as the HTTP surface the SPA calls.
 
 ## Technical Context
 
@@ -36,7 +36,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 
 ### Constitution Check (post–Phase 1)
 
-Design artifacts (`research.md`, `data-model.md`, `contracts/openapi.yaml`, `quickstart.md`) align with constitution: English technical docs, explicit repo split, test and quality gates called out, no implementation in design-notes.
+Design artifacts (`research.md`, `data-model.md`, `contracts/openapi.yaml`, `quickstart.md`) align with constitution: English technical docs, explicit repo split, test and quality gates called out, no implementation in design-notes. Persisted `url` on school/trip is reflected in data model and OpenAPI.
 
 ## Project Structure
 

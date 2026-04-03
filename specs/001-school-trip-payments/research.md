@@ -51,3 +51,9 @@ Consolidated decisions for stack and architecture choices. All prior Technical C
 - **Decision**: Backend endpoint accepts URL, performs server-side fetch with strict timeouts, size limits, and SSRF protections (allowlist schemes, no internal IPs), returns title/description/image/favicon fields; dashboard shows non-blocking errors and keeps fields editable.
 - **Rationale**: Metadata fetch must not rely on browser CORS; security belongs on server.
 - **Alternatives considered**: Client-only fetch — often blocked by CORS and leaks staff IPs less critically but still inconsistent; server-side preferred.
+
+## 9. Persisted landing page URL on school and trip (FR-043)
+
+- **Decision**: Store optional `url` (URI string, nullable) on **School** and **Trip** entities and expose it on create/update/read in the API. When staff pastes a URL to drive metadata prefill, the client SHOULD send the same value in the save payload so the record retains the link for later “open landing page” actions and traceability of prefill source. Staff may clear `url` on update (null) or omit it when not used.
+- **Rationale**: Prefill flow alone does not persist which URL was used; product needs a stable field for redirect/open-in-browser and optional auditing of the public page associated with the school or trip.
+- **Alternatives considered**: Derive URL only from `imageUrl` or canonical links inside HTML — unreliable and not equivalent to the staff-supplied landing page; storing only ephemeral form state — lost after navigation.

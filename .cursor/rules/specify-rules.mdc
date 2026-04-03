@@ -6,9 +6,10 @@ alwaysApply: true
 
 # sitio-design-notes Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-01
+Auto-generated from all feature plans. Last updated: 2026-04-02
 
 ## Active Technologies
+- PostgreSQL 14+; local dev assumed at `localhost:5432`; schema and migrations via Prisma (001-school-trip-payments)
 
 - TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma (001-school-trip-payments)
 
@@ -31,10 +32,8 @@ Backend (`../sitio-backend`): `pnpm install`, `pnpm start:dev`, `pnpm test`, `pn
 TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time): Follow standard conventions
 
 ## Recent Changes
-
 - 001-school-trip-payments: Added TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma
 
 <!-- MANUAL ADDITIONS START -->
 - Dashboard scaffold: `pnpm dlx shadcn@latest init --preset b1Fk0lmym --base base --template start` (TanStack Start **SPA mode**, TanStack Query + Form, Zustand, Zod, light/dark theme).
-- Backend: PostgreSQL `localhost:5432`, `DATABASE_URL` for Prisma, CQRS via `@nestjs/cqrs`.
 <!-- MANUAL ADDITIONS END -->
