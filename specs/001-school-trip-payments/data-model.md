@@ -8,7 +8,7 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 |--------|-------------|
 | **School** | Customer school; owns many trips; optional persisted **landing page URL** (`url`, FR-043); can be **deactivated** (FR-029). |
 | **Trip** | Belongs to one school; default expected amount (BRL, 2 dp); optional persisted **landing page URL** (`url`, FR-043); can be **deactivated** (FR-030); owns many passengers. |
-| **Passenger** | Belongs to one trip; name; optional CPF (unique per trip among non-empty normalized values, FR-031/038); optional expected amount override; **manual paid-without-info** flag (FR-016/017); **soft-removed** flag (FR-035); derived **payment status** (FR-018). |
+| **Passenger** | Belongs to one trip; name; optional CPF (FR-031/038); optional **parent/guardian** name, phone, email (FR-044); optional expected amount override; **manual paid-without-info** flag (FR-016/017); **soft-removed** flag (FR-035); derived **payment status** (FR-018). |
 | **Payment** | Belongs to exactly one passenger (FR-015); amount BRL 2 dp; **date only** (FR-037); location; payer identity (FR-012–FR-014). |
 | **Landing metadata** | Ephemeral or DTO-only: title, description, image URL, favicon URL from pasted URL (FR-005–FR-007) — not necessarily persisted as its own table. |
 
@@ -47,6 +47,9 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 | `tripId` | FK → Trip | Required |
 | `fullName` | string | Required; normalized for duplicate **warning** (FR-032) |
 | `cpfNormalized` | string, nullable | Unique among rows for same `tripId` where not null (include soft-removed, FR-031) |
+| `parentName` | string, nullable | Optional parent/guardian display name (FR-044) |
+| `parentPhoneNumber` | string, nullable | Optional; normalize consistently (e.g. Brazil) when non-empty (FR-044) |
+| `parentEmail` | string, nullable | Optional; validate email format when non-empty (FR-044) |
 | `expectedAmountOverrideMinor` | int, nullable | Overrides trip default for **this** passenger only (FR-028) |
 | `manualPaidWithoutInfo` | boolean | When true, status **settled** with manual labeling (FR-016–FR-018) |
 | `removedAt` | timestamptz, nullable | Soft-remove (FR-035); null = not removed |
@@ -93,6 +96,7 @@ Computed on read (or cached in query layer) per FR-018:
 ## Validation rules (cross-cutting)
 
 - **CPF**: When non-empty after normalize, validate Brazilian algorithm (FR-038); reject duplicates on same trip (FR-031).
+- **Parent contact (FR-044)**: When `parentEmail` is non-empty, require valid email; when `parentPhoneNumber` is non-empty, apply agreed phone normalization; `parentName` is free text. None of these participate in duplicate-passenger logic.
 - **Name duplicate**: Same trip, normalized full name match, and FR-031 does not apply → **warning + confirm** before commit (FR-032); backend may accept a header or `confirmNameDuplicate: true` on write DTO.
 - **Money**: Half-up rounding to centavos on input; all sums in integer minor units (FR-034).
 - **Logging**: Never log raw CPF (FR-039).

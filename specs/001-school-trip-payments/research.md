@@ -57,3 +57,9 @@ Consolidated decisions for stack and architecture choices. All prior Technical C
 - **Decision**: Store optional `url` (URI string, nullable) on **School** and **Trip** entities and expose it on create/update/read in the API. When staff pastes a URL to drive metadata prefill, the client SHOULD send the same value in the save payload so the record retains the link for later “open landing page” actions and traceability of prefill source. Staff may clear `url` on update (null) or omit it when not used.
 - **Rationale**: Prefill flow alone does not persist which URL was used; product needs a stable field for redirect/open-in-browser and optional auditing of the public page associated with the school or trip.
 - **Alternatives considered**: Derive URL only from `imageUrl` or canonical links inside HTML — unreliable and not equivalent to the staff-supplied landing page; storing only ephemeral form state — lost after navigation.
+
+## 10. Parent/guardian contact on passenger (FR-044)
+
+- **Decision**: Persist three optional nullable string fields on **Passenger**: `parentName`, `parentPhoneNumber`, `parentEmail`. OpenAPI uses `format: email` for `parentEmail` when present. Backend validates email when non-empty; phone accepts common Brazilian formats with consistent normalization (e.g. strip to digits + country code rules in application code). Fields are excluded from FR-031/FR-032 duplicate logic.
+- **Rationale**: Staff need a place to record who to call or write for payment follow-up without conflating parent identity with the passenger’s own `fullName` or CPF rules.
+- **Alternatives considered**: Single unstructured “notes” field — loses structured contact usability; reusing `payerIdentity` on payments — wrong aggregate (payment-specific, not passenger roster).

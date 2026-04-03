@@ -57,7 +57,7 @@ Local development orientation for the two implementation repositories. Paths are
 ## Sanity checklist
 
 - [ ] Create school → create trip from that school’s list only (no school picker on trip form).
-- [ ] Add passengers; CPF duplicate blocked; invalid CPF blocked; name warning flow with confirm.
+- [ ] Add passengers; optional parent name/phone/email (FR-044); CPF duplicate blocked; invalid CPF blocked; name warning flow with confirm.
 - [ ] Payment only from passenger row; amount prefilled when effective expected exists.
 - [ ] Manual paid-without-info tag toggles; status and aggregates respect soft-remove and “include removed” (FR-036).
 - [ ] PostgreSQL on `localhost:5432` with migrations applied.

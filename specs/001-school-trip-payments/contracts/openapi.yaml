@@ -428,6 +428,19 @@ components:
         tripId: { type: string, format: uuid }
         fullName: { type: string }
         cpf: { type: string, nullable: true, description: Display/normalized form per API convention }
+        parentName:
+          type: string
+          nullable: true
+          description: Optional parent/guardian name (FR-044)
+        parentPhoneNumber:
+          type: string
+          nullable: true
+          description: Optional parent/guardian phone; Brazilian formats accepted (FR-044)
+        parentEmail:
+          type: string
+          format: email
+          nullable: true
+          description: Optional parent/guardian email; validate when non-null (FR-044)
         expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
         manualPaidWithoutInfo: { type: boolean }
         removedAt: { type: string, format: date-time, nullable: true }
@@ -451,6 +464,9 @@ components:
       properties:
         fullName: { type: string }
         cpf: { type: string, nullable: true }
+        parentName: { type: string, nullable: true }
+        parentPhoneNumber: { type: string, nullable: true }
+        parentEmail: { type: string, format: email, nullable: true }
         expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
         confirmNameDuplicate: { type: boolean, default: false }
 
@@ -459,6 +475,9 @@ components:
       properties:
         fullName: { type: string }
         cpf: { type: string, nullable: true }
+        parentName: { type: string, nullable: true }
+        parentPhoneNumber: { type: string, nullable: true }
+        parentEmail: { type: string, format: email, nullable: true }
         expectedAmountOverrideMinor: { $ref: '#/components/schemas/MoneyMinor', nullable: true }
         confirmNameDuplicate: { type: boolean, default: false }
 
