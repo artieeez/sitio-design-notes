@@ -75,10 +75,12 @@
 
 ### Implementation for User Story 1
 
+**Order**: **T025** (shared payment-status logic) before **T026–T027** so trip FR-019 recalculation and passenger list queries use the same implementation.
+
 - [ ] T024 [US1] Implement School CQRS commands/queries and REST `/schools`, `/schools/{schoolId}` matching OpenAPI in `../sitio-backend/src/modules/school/`
-- [ ] T025 [US1] Implement Trip CQRS and REST `/schools/{schoolId}/trips`, `/trips/{tripId}` with `defaultExpectedAmountMinor`, `url`, and FR-029/FR-030 rules in `../sitio-backend/src/modules/trip/`; on **trip update**, when `defaultExpectedAmountMinor` changes, **recompute derived `paymentStatus` (FR-019)** for all passengers on that trip using shared logic from T027
-- [ ] T026 [US1] Implement Passenger CQRS and REST `/trips/{tripId}/passengers`, `/passengers/{passengerId}` with FR-031/FR-032/FR-038/FR-044 and `paymentStatus` derivation per FR-018 in `../sitio-backend/src/modules/passenger/`
-- [ ] T027 [US1] Extract or implement shared **payment status** calculation (BRL minor units, effective expected amount) in `../sitio-backend/src/modules/passenger/payment-status.util.ts` (or `domain/`) for use in passenger queries
+- [ ] T025 [US1] Extract or implement shared **payment status** calculation (BRL minor units, effective expected amount) in `../sitio-backend/src/modules/passenger/payment-status.util.ts` (or `domain/`) for use in **T026** (trip update / FR-019) and **T027** (passenger queries)
+- [ ] T026 [US1] Implement Trip CQRS and REST `/schools/{schoolId}/trips`, `/trips/{tripId}` with `defaultExpectedAmountMinor`, `url`, and FR-029/FR-030 rules in `../sitio-backend/src/modules/trip/`; on **trip update**, when `defaultExpectedAmountMinor` changes, **recompute derived `paymentStatus` (FR-019)** for all passengers on that trip using **T025**
+- [ ] T027 [US1] Implement Passenger CQRS and REST `/trips/{tripId}/passengers`, `/passengers/{passengerId}` with FR-031/FR-032/FR-038/FR-044 and `paymentStatus` derivation per FR-018 **via T025** in `../sitio-backend/src/modules/passenger/`
 - [ ] T028 [P] [US1] Implement school list and create/edit forms with optional `url`, metadata prefetch via `/metadata/fetch-page`, and “open landing page” when `url` present in `../sitio-dashboard/src/routes/` and feature components under `../sitio-dashboard/src/components/schools/`
 - [ ] T029 [US1] Implement **school trips** list and **trip create** opened only from that list (no school selector) in `../sitio-dashboard/src/routes/` per FR-004
 - [ ] T030 [US1] Implement trip edit with `url`, metadata prefill, and default expected amount fields in `../sitio-dashboard/src/components/trips/`
@@ -205,7 +207,7 @@ T021 ../sitio-backend/test/school.e2e-spec.ts
 T022 ../sitio-backend/test/trip.e2e-spec.ts
 T023 ../sitio-backend/test/passenger.e2e-spec.ts
 
-# Then backend modules (T024→T026 sequential where shared types),
+# Then backend modules: T024, then T025→T026→T027 (util before trip/passenger),
 # while T028 starts when school REST is stable.
 ```
 
