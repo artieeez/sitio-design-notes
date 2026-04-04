@@ -14,7 +14,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 **Language/Version**: TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time)  
 **Primary Dependencies**: Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma  
 **Storage**: PostgreSQL 14+; local dev assumed at `localhost:5432`; schema and migrations via Prisma  
-**Testing**: Dashboard: Vitest (or framework default from Start template), Testing Library for components, MSW or similar for API mocks where useful. Backend: Jest (Nest default), supertest/e2e for HTTP, Prisma with test DB or sqlite-only if team standard allows (prefer Postgres parity)  
+**Testing**: Dashboard: **Vitest** (Start template default unless explicitly changed), Testing Library for components, MSW or similar for API mocks; **required** per-user-story UI tests are listed in [tasks.md](./tasks.md) (T053). Backend: Jest (Nest default), supertest/e2e for HTTP, Prisma with test DB or sqlite-only if team standard allows (prefer Postgres parity)  
 **Target Platform**: Modern evergreen browsers; staff web dashboard (not mobile-first). NestJS HTTP API on Node server  
 **Project Type**: Web SPA + HTTP API (two sibling repositories)  
 **Target Repository/Repos**: `../sitio-dashboard` (UI and client), `../sitio-backend` (API, domain, persistence)  
@@ -36,7 +36,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 
 ### Constitution Check (post–Phase 1)
 
-Design artifacts (`research.md`, `data-model.md`, `contracts/openapi.yaml`, `quickstart.md`) align with constitution: English technical docs, explicit repo split, test and quality gates called out, no implementation in design-notes. Persisted `url` on school/trip (FR-043) and optional parent contact fields on passenger (FR-044) are reflected in data model and OpenAPI.
+Design artifacts (`research.md`, `data-model.md`, `contracts/openapi.yaml`, `quickstart.md`) align with constitution: English technical docs, explicit repo split, test and quality gates called out, no implementation in design-notes. Persisted `url` on school/trip (FR-043), optional parent contact fields on passenger (FR-044), and trip-level **passenger-status aggregates** (FR-036) are reflected in data model and OpenAPI.
 
 ## Project Structure
 

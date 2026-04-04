@@ -3,7 +3,9 @@
 **Input**: Design documents from `/specs/001-school-trip-payments/`  
 **Prerequisites**: [plan.md](./plan.md), [spec.md](./spec.md), [research.md](./research.md), [data-model.md](./data-model.md), [contracts/openapi.yaml](./contracts/openapi.yaml), [quickstart.md](./quickstart.md)
 
-**Tests**: Included per [plan.md](./plan.md) constitution (integration/e2e per story; contract alignment with OpenAPI where practical).
+**Tests**: Included per [plan.md](./plan.md) constitution (integration/e2e per story; contract alignment with OpenAPI where practical). **Dashboard**: Vitest + Testing Library tests are **required** per story slice (see T053)—not optional—so UI behavior has automated proof alongside Nest e2e.
+
+**Constitution traceability**: **§I** quality via lint/TS strict (Phases 1–2); **§II** tests per US + T053; **§III** pt-BR in T020 and feature components; **§IV** phased US1→US4; **§V** paths below target `../sitio-dashboard` / `../sitio-backend` only.
 
 **Organization**: Tasks are grouped by user story ([spec.md](./spec.md) US1–US4) for independent implementation and testing.
 
@@ -74,7 +76,7 @@
 ### Implementation for User Story 1
 
 - [ ] T024 [US1] Implement School CQRS commands/queries and REST `/schools`, `/schools/{schoolId}` matching OpenAPI in `../sitio-backend/src/modules/school/`
-- [ ] T025 [US1] Implement Trip CQRS and REST `/schools/{schoolId}/trips`, `/trips/{tripId}` with `defaultExpectedAmountMinor`, `url`, and FR-029/FR-030 rules in `../sitio-backend/src/modules/trip/`
+- [ ] T025 [US1] Implement Trip CQRS and REST `/schools/{schoolId}/trips`, `/trips/{tripId}` with `defaultExpectedAmountMinor`, `url`, and FR-029/FR-030 rules in `../sitio-backend/src/modules/trip/`; on **trip update**, when `defaultExpectedAmountMinor` changes, **recompute derived `paymentStatus` (FR-019)** for all passengers on that trip using shared logic from T027
 - [ ] T026 [US1] Implement Passenger CQRS and REST `/trips/{tripId}/passengers`, `/passengers/{passengerId}` with FR-031/FR-032/FR-038/FR-044 and `paymentStatus` derivation per FR-018 in `../sitio-backend/src/modules/passenger/`
 - [ ] T027 [US1] Extract or implement shared **payment status** calculation (BRL minor units, effective expected amount) in `../sitio-backend/src/modules/passenger/payment-status.util.ts` (or `domain/`) for use in passenger queries
 - [ ] T028 [P] [US1] Implement school list and create/edit forms with optional `url`, metadata prefetch via `/metadata/fetch-page`, and “open landing page” when `url` present in `../sitio-dashboard/src/routes/` and feature components under `../sitio-dashboard/src/components/schools/`
@@ -137,13 +139,13 @@
 
 ### Tests for User Story 4
 
-- [ ] T043 [P] [US4] Add Nest e2e or integration tests asserting passenger list filters (`includeRemoved`) and computed `paymentStatus` for edge cases (no expected amount, partial payments, tag + payments) in `../sitio-backend/test/passenger-status.e2e-spec.ts`
+- [ ] T043 [P] [US4] Add Nest e2e or integration tests asserting passenger list filters (`includeRemoved`), `GET /trips/{tripId}/passenger-status-aggregates` counts vs list expectations, trip default amount change recalculating statuses (FR-019), and computed `paymentStatus` edge cases (no expected amount, partial payments, tag + payments) in `../sitio-backend/test/passenger-status.e2e-spec.ts`
 
 ### Implementation for User Story 4
 
 - [ ] T044 [US4] Ensure list queries apply **default vs includeRemoved** consistently for roster responses per FR-036 in `../sitio-backend/src/modules/passenger/queries/`
-- [ ] T045 [US4] Add trip-level **aggregate** counts (e.g. pending vs settled) computed from **non-removed** passengers by default; include removed when toggle on — implement in `../sitio-backend/src/modules/trip/queries/trip-aggregates.query.ts` **or** document client-side derivation from full passenger payload in `../sitio-dashboard/src/components/trips/TripStatusSummary.tsx` (choose one place; keep single source of truth)
-- [ ] T046 [US4] Implement **TripStatusSummary** (or route section) with pt-BR labels wired to `includeRemoved` store in `../sitio-dashboard/src/components/trips/TripStatusSummary.tsx`
+- [ ] T045 [US4] Implement **backend-only** trip-level status aggregates — `GET /trips/{tripId}/passenger-status-aggregates?includeRemoved=` per [contracts/openapi.yaml](./contracts/openapi.yaml) — in `../sitio-backend/src/modules/trip/queries/trip-aggregates.query.ts` (or handler colocated with trip module); reuse the same status derivation as passenger list (FR-018, FR-036). **Do not** duplicate counting logic on the client except for display formatting. Add matching Zod types in `../sitio-dashboard/src/lib/schemas/` when wiring the dashboard.
+- [ ] T046 [US4] Implement **TripStatusSummary** (or route section) with pt-BR labels, fetching aggregates from T045’s endpoint and passing `includeRemoved` from `../sitio-dashboard/src/stores/ui-preferences-store.ts` in `../sitio-dashboard/src/components/trips/TripStatusSummary.tsx`
 - [ ] T047 [US4] When viewing payment history for a **removed** passenger, show removed indicator per FR-021 in `../sitio-dashboard/src/components/trips/PassengerPaymentHistory.tsx`
 
 **Checkpoint**: US4 scenarios and SC-006 in [spec.md](./spec.md) satisfied.
@@ -159,7 +161,7 @@
 - [ ] T050 Walk through [quickstart.md](./quickstart.md) sanity checklist and fix gaps in `../sitio-dashboard/` and `../sitio-backend/`
 - [ ] T051 [P] Best-effort a11y pass: labels, focus order, keyboard operable menus for kebab actions per FR-040 in `../sitio-dashboard/src/components/trips/`
 - [ ] T052 Verify no CPF in logs or stack traces in error paths; add tests if needed in `../sitio-backend/test/logging-redaction.spec.ts`
-- [ ] T053 [P] Add Vitest + Testing Library smoke tests for school → trip → passenger navigation in `../sitio-dashboard/src/test/navigation.test.tsx` (optional but recommended)
+- [ ] T053 [P] Add **required** Vitest + Testing Library tests in `../sitio-dashboard/src/test/` (one file or colocated `*.test.tsx`) covering at least **US1** school→trip→passenger navigation, **US2** payment history + create payment from row context (MSW or mocked client), **US3** manual paid-without-info control, and **US4** TripStatusSummary rendering from aggregate API response (mocked)—constitution §II applies to dashboard code as well as API
 
 ---
 
@@ -236,3 +238,4 @@ All tasks use: `- [ ] Tnnn [P?] [USn?] Description with explicit file path`
 - **Migrations**: Only `schema.prisma` and docs from agents; humans run `prisma migrate` per [AGENTS.md](../../.cursor/rules) in implementation repos.
 - **OpenAPI**: `specs/001-school-trip-payments/contracts/openapi.yaml` is the contract reference; keep DTOs aligned.
 - **CPF**: Full display in UI; never in routine logs (FR-039).
+- **Success criteria (non-automated)**: [spec.md](./spec.md) **SC-001–SC-005**, **SC-007**, and **SC-008** are usability or pilot/business metrics—validate during human demos or pilot runs; no substitute for automated tests in T021–T023, T032, T039, T043, T053.

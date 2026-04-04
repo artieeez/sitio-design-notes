@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-school-trip-payments`  
 **Created**: 2026-04-01  
-**Status**: Draft  
+**Status**: Ready for implementation  
 **Input**: User description: "We are creating a dashboard for a tourism company to control which passengers have payment pending. This tourism company mainly works with schools. The tourism company staff should be able to register a school, register a trip for a school and register passengers for the trip and register payments. Authentication is out of scope for this spec. Any payment integration is out of scope for this spec (there should only be a CRUD for manual interaction). **Scope note:** Trip creation is only reachable from a **school’s trip list** (school is implicit on the trip form). All payment **create / view / edit / delete** happens **only** in **trip context** via **passenger row** affordances (kebab / per-passenger payment history); there is **no** centralized cross-trip payment list."  
 **Target Repositories**: `../sitio-dashboard` (user flows and UI), `../sitio-backend` (business rules and data persistence)
 

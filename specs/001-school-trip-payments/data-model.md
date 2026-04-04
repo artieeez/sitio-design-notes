@@ -39,6 +39,8 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 
 **Relationships**: many-to-one **School**; one-to-many **Passenger**.
 
+**Computed (not stored)**: Trip-level **passenger status aggregate counts** (pending / settled via payments / settled via manual tag / unavailable) are derived in the API from passengers on that trip, with `includeRemoved` matching list semantics (FR-036); see `GET /trips/{tripId}/passenger-status-aggregates` in [contracts/openapi.yaml](./contracts/openapi.yaml).
+
 ## Passenger
 
 | Field | Type | Rules |

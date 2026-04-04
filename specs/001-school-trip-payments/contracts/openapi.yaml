@@ -159,6 +159,25 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Trip' }
 
+  /trips/{tripId}/passenger-status-aggregates:
+    parameters:
+      - $ref: '#/components/parameters/TripId'
+      - in: query
+        name: includeRemoved
+        schema: { type: boolean, default: false }
+        description: When true, include soft-removed passengers in counts (FR-036)
+    get:
+      tags: [trips]
+      summary: Trip-level counts by derived passenger status (FR-036)
+      description: >-
+        Single source of truth for trip dashboards; same status rules as list passengers.
+        Excludes soft-removed passengers by default.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PassengerStatusAggregates' }
+
   /trips/{tripId}/passengers:
     parameters:
       - $ref: '#/components/parameters/TripId'
@@ -405,6 +424,20 @@ components:
         imageUrl: { type: string, nullable: true }
         faviconUrl: { type: string, nullable: true }
         active: { type: boolean, default: true }
+
+    PassengerStatusAggregates:
+      type: object
+      description: Counts of passengers per derived status for one trip (FR-036)
+      required:
+        - pendingCount
+        - settledPaymentsCount
+        - settledManualCount
+        - unavailableCount
+      properties:
+        pendingCount: { type: integer, minimum: 0 }
+        settledPaymentsCount: { type: integer, minimum: 0 }
+        settledManualCount: { type: integer, minimum: 0 }
+        unavailableCount: { type: integer, minimum: 0 }
 
     TripUpdate:
       type: object

@@ -47,7 +47,7 @@ Local development orientation for the two implementation repositories. Paths are
 
 4. Add API base URL (e.g. `VITE_API_URL=http://localhost:3000`) and a small fetch client; wrap app with `QueryClientProvider`.
 5. Implement **theme** store (Zustand) + toggle; apply `light`/`dark` class and persist preference.
-6. Implement routes: **School list** → **School trips** → **Trip detail** (passenger table with kebab actions). No global payment list (FR-010).
+6. Implement routes: **School list** → **School trips** → **Trip detail** (passenger table with kebab actions, trip status summary from `GET /trips/{tripId}/passenger-status-aggregates`). No global payment list (FR-010).
 
 ## Contract-driven development
 
