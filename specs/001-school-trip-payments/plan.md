@@ -26,7 +26,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- **Code Quality Gate**: ESLint + Prettier (or Biome if adopted) in both repos; TypeScript strict; NestJS module boundaries; dashboard components colocated with routes/features; CQRS keeps write/read paths explicit; Prisma schema as single persistence contract; complexity controlled via feature modules and shared libs (Zod schemas shared optionally via package or duplication with tests).
+- **Code Quality Gate**: Biome in both repos; TypeScript strict; NestJS module boundaries; dashboard components colocated with routes/features; CQRS keeps write/read paths explicit; Prisma schema as single persistence contract; complexity controlled via feature modules and shared libs (Zod schemas shared optionally via package or duplication with tests).
 - **Testing Gate**: P1: integration tests for school/trip/passenger CRUD + navigation constraints; P2: payment CRUD + status recalculation + manual tag; P3: aggregates default vs include-removed; regression tests for CPF duplicate/block, name warning flow, soft-remove payment rules; API contract tests against OpenAPI where practical.
 - **UX Consistency Gate**: shadcn/Base UI patterns, tables with kebab actions, contextual forms without school/passenger pickers where spec forbids; pt-BR strings centralized (e.g. messages map); light/dark via theme provider and design tokens; best-effort a11y per FR-040.
 - **Language Gate**: Confirmed: specs and code English; all user-visible strings pt-BR.

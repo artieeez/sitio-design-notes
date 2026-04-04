@@ -30,8 +30,8 @@
 - [ ] T001 Document feature scope, `DATABASE_URL`, and `VITE_API_URL` in `../sitio-backend/README.md` and `../sitio-dashboard/README.md` per [quickstart.md](./quickstart.md)
 - [ ] T002 [P] Initialize NestJS project structure with strict TypeScript in `../sitio-backend/package.json` and `../sitio-backend/tsconfig.json`
 - [ ] T003 [P] Scaffold TanStack Start **SPA** + shadcn (`--preset b1Fk0lmym --base base --template start`) in `../sitio-dashboard/` per [research.md](./research.md)
-- [ ] T004 [P] Configure ESLint and Prettier (or Biome) with TypeScript strict mode in `../sitio-backend/`
-- [ ] T005 [P] Configure ESLint and Prettier (or Biome) with TypeScript strict mode in `../sitio-dashboard/`
+- [ ] T004 [P] Configure Biome for linting and formatting with TypeScript strict mode in `../sitio-backend/`
+- [ ] T005 [P] Configure Biome for linting and formatting with TypeScript strict mode in `../sitio-dashboard/`
 - [ ] T006 Add `@nestjs/cqrs`, Prisma, and runtime config dependencies in `../sitio-backend/package.json` per [plan.md](./plan.md)
 
 ---
