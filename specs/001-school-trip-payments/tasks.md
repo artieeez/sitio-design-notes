@@ -42,20 +42,20 @@
 
 **⚠️ CRITICAL**: User story phases must not start until Prisma schema + Nest `AppModule` + dashboard `QueryClientProvider` exist.
 
-- [ ] T007 Define `School`, `Trip`, `Passenger`, `Payment` models, indexes (including `tripId` + `cpfNormalized` uniqueness including soft-removed per FR-031), and money/date field types in `../sitio-backend/prisma/schema.prisma` per [data-model.md](./data-model.md)
-- [ ] T008 Document human-run `pnpm exec prisma migrate dev` workflow after schema changes in `../sitio-backend/README.md` (agents do not commit migration SQL)
-- [ ] T009 Add `../sitio-backend/src/prisma/prisma.module.ts` and `../sitio-backend/src/prisma/prisma.service.ts` with `enableShutdownHooks`
-- [ ] T010 Register `CqrsModule`, `PrismaModule`, and `ConfigModule` in `../sitio-backend/src/app.module.ts`
-- [ ] T011 Configure global validation pipe and consistent JSON error shape in `../sitio-backend/src/main.ts`
-- [ ] T012 Implement structured logging / interceptors that **omit or redact passenger CPF** from request and error logs per FR-039 in `../sitio-backend/src/common/` (or equivalent)
-- [ ] T013 Implement `POST /metadata/fetch-page` with timeouts, size limits, and SSRF protections per [contracts/openapi.yaml](./contracts/openapi.yaml) in `../sitio-backend/src/modules/metadata/`
-- [ ] T014 Configure Vite SPA mode and `VITE_API_URL` in `../sitio-dashboard/vite.config.ts` and `../sitio-dashboard/.env.example`
-- [ ] T015 Wrap the dashboard root with `QueryClientProvider` (and optional devtools) in `../sitio-dashboard/src/routes/__root.tsx` or the template root entry file
-- [ ] T016 [P] Add Zustand theme store (light/dark, `localStorage`, DOM class sync) in `../sitio-dashboard/src/stores/theme-store.ts`
-- [ ] T017 [P] Add Zustand store for `includeInactiveSchools`, `includeInactiveTrips`, `includeRemovedPassengers` toggles in `../sitio-dashboard/src/stores/ui-preferences-store.ts`
-- [ ] T018 Add typed JSON API client (base URL, headers, error parsing) in `../sitio-dashboard/src/lib/api-client.ts`
-- [ ] T019 [P] Add Zod schemas for request/response DTOs aligned with [contracts/openapi.yaml](./contracts/openapi.yaml) in `../sitio-dashboard/src/lib/schemas/`
-- [ ] T020 [P] Centralize **pt-BR** UI strings (school/trip/passenger/payment labels) in `../sitio-dashboard/src/messages/pt-BR.ts` per FR-024
+- [X] T007 Define `School`, `Trip`, `Passenger`, `Payment` models, indexes (including `tripId` + `cpfNormalized` uniqueness including soft-removed per FR-031), and money/date field types in `../sitio-backend/prisma/schema.prisma` per [data-model.md](./data-model.md)
+- [X] T008 Document human-run `pnpm exec prisma migrate dev` workflow after schema changes in `../sitio-backend/README.md` (agents do not commit migration SQL)
+- [X] T009 Add `../sitio-backend/src/prisma/prisma.module.ts` and `../sitio-backend/src/prisma/prisma.service.ts` with `enableShutdownHooks`
+- [X] T010 Register `CqrsModule`, `PrismaModule`, and `ConfigModule` in `../sitio-backend/src/app.module.ts`
+- [X] T011 Configure global validation pipe and consistent JSON error shape in `../sitio-backend/src/main.ts`
+- [X] T012 Implement structured logging / interceptors that **omit or redact passenger CPF** from request and error logs per FR-039 in `../sitio-backend/src/common/` (or equivalent)
+- [X] T013 Implement `POST /metadata/fetch-page` with timeouts, size limits, and SSRF protections per [contracts/openapi.yaml](./contracts/openapi.yaml) in `../sitio-backend/src/modules/metadata/`
+- [X] T014 Configure Vite SPA mode and `VITE_API_URL` in `../sitio-dashboard/vite.config.ts` and `../sitio-dashboard/.env.example`
+- [X] T015 Wrap the dashboard root with `QueryClientProvider` (and optional devtools) in `../sitio-dashboard/src/routes/__root.tsx` or the template root entry file
+- [X] T016 [P] Add Zustand theme store (light/dark, `localStorage`, DOM class sync) in `../sitio-dashboard/src/stores/theme-store.ts`
+- [X] T017 [P] Add Zustand store for `includeInactiveSchools`, `includeInactiveTrips`, `includeRemovedPassengers` toggles in `../sitio-dashboard/src/stores/ui-preferences-store.ts`
+- [X] T018 Add typed JSON API client (base URL, headers, error parsing) in `../sitio-dashboard/src/lib/api-client.ts`
+- [X] T019 [P] Add Zod schemas for request/response DTOs aligned with [contracts/openapi.yaml](./contracts/openapi.yaml) in `../sitio-dashboard/src/lib/schemas/`
+- [X] T020 [P] Centralize **pt-BR** UI strings (school/trip/passenger/payment labels) in `../sitio-dashboard/src/messages/pt-BR.ts` per FR-024
 
 **Checkpoint**: Schema documented, API shell runnable, dashboard loads with theme and query client.
 
