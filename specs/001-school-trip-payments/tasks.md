@@ -119,7 +119,7 @@
 
 ### Tests for User Story 3
 
-- [ ] T039 [P] [US3] Add Nest e2e tests for `PATCH /passengers/{passengerId}/manual-paid-without-info` and interaction with payment-derived status in `../sitio-backend/test/manual-paid-without-info.e2e-spec.ts`
+- [ ] T039 [P] [US3] Add Nest e2e tests for `PUT /passengers/{passengerId}/manual-paid-without-info` (per OpenAPI) and interaction with payment-derived status in `../sitio-backend/test/manual-paid-without-info.e2e-spec.ts`
 
 ### Implementation for User Story 3
 
