@@ -16,6 +16,9 @@ Local development orientation for the two implementation repositories. Paths are
 
    ```bash
    export DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/sitio_dev"
+   # Optional in dev: non-production allows any browser origin (see FR-045).
+   # Required in production: comma-separated dashboard origins, e.g.:
+   # export CORS_ORIGINS="https://dashboard.example.com"
    ```
 
 4. Define `prisma/schema.prisma` to match [data-model.md](./data-model.md); run migrations (human/CI):  
