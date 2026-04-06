@@ -17,11 +17,13 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 | Field | Type | Rules |
 |-------|------|--------|
 | `id` | UUID (or cuid) | Primary key |
-| `name` | string | Required |
 | `url` | string (URI), nullable | Optional landing page URL used for metadata prefill and staff “open landing page” (FR-043); validate format when non-null |
+| `title` | string, nullable | Primary display label for lists and breadcrumbs; typically autofilled from pasted landing URL metadata (same semantics as **Trip** `title`, FR-005–FR-007) |
 | `active` | boolean | `true` by default; deactivation blocks **new** trips (FR-029) |
-| Contact / marketing fields | strings, optional | As needed for UI (title, description, image, favicon from FR-005–FR-007) |
+| Other marketing fields | strings, optional | `description`, `imageUrl`, `faviconUrl` from FR-005–FR-007 (same pattern as Trip) |
 | `createdAt`, `updatedAt` | timestamptz | Standard audit |
+
+There is **no** separate `name` column: **`title` is the only** human-facing label field for School, aligned with Trip.
 
 **Relationships**: one-to-many **Trip**.
 

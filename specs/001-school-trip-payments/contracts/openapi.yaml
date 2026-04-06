@@ -347,14 +347,16 @@ components:
       type: object
       properties:
         id: { type: string, format: uuid }
-        name: { type: string }
         active: { type: boolean }
         url:
           type: string
           format: uri
           nullable: true
           description: Landing page URL for prefill provenance and staff navigation (FR-043)
-        title: { type: string, nullable: true }
+        title:
+          type: string
+          nullable: true
+          description: Display title; typically autofilled from landing metadata when staff pastes url (same pattern as Trip)
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
         faviconUrl: { type: string, nullable: true }
@@ -363,9 +365,7 @@ components:
 
     SchoolCreate:
       type: object
-      required: [name]
       properties:
-        name: { type: string }
         url:
           type: string
           format: uri
@@ -375,11 +375,11 @@ components:
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
         faviconUrl: { type: string, nullable: true }
+        active: { type: boolean, default: true }
 
     SchoolUpdate:
       type: object
       properties:
-        name: { type: string }
         active: { type: boolean }
         url:
           type: string

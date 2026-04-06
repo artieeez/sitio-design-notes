@@ -58,7 +58,13 @@ Consolidated decisions for stack and architecture choices. All prior Technical C
 - **Rationale**: Prefill flow alone does not persist which URL was used; product needs a stable field for redirect/open-in-browser and optional auditing of the public page associated with the school or trip.
 - **Alternatives considered**: Derive URL only from `imageUrl` or canonical links inside HTML — unreliable and not equivalent to the staff-supplied landing page; storing only ephemeral form state — lost after navigation.
 
-## 10. Parent/guardian contact on passenger (FR-044)
+## 10. School display label: `title` only (parity with Trip)
+
+- **Decision**: Model **School** with **`title`** (and optional metadata fields) as the human-facing label; **do not** persist a separate `name` field. The create/update contract matches **Trip**: optional `url` plus nullable `title` (and related fields) typically populated when staff pastes a landing page URL and fetches metadata (FR-005–FR-007).
+- **Rationale**: One consistent pattern for school and trip forms—paste URL, autofilled **title** from page metadata, editable before save—avoids redundant “name vs title” confusion.
+- **Alternatives considered**: Required `name` plus optional `title` — rejected as duplicate concepts; `name` only — rejected because metadata prefill naturally maps to **title** (Open Graph / document title), same as Trip.
+
+## 11. Parent/guardian contact on passenger (FR-044)
 
 - **Decision**: Persist three optional nullable string fields on **Passenger**: `parentName`, `parentPhoneNumber`, `parentEmail`. OpenAPI uses `format: email` for `parentEmail` when present. Backend validates email when non-empty; phone accepts common Brazilian formats with consistent normalization (e.g. strip to digits + country code rules in application code). Fields are excluded from FR-031/FR-032 duplicate logic.
 - **Rationale**: Staff need a place to record who to call or write for payment follow-up without conflating parent identity with the passenger’s own `fullName` or CPF rules.
