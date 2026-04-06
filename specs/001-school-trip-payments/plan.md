@@ -14,14 +14,14 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 **Language/Version**: TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time)  
 **Primary Dependencies**: Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma  
 **Storage**: PostgreSQL 14+; local dev assumed at `localhost:5432`; schema and migrations via Prisma  
-**Testing**: Dashboard: **Vitest** (Start template default unless explicitly changed), Testing Library for components, MSW or similar for API mocks; **required** per-user-story UI tests are listed in [tasks.md](./tasks.md) (T053). Backend: Jest (Nest default), supertest/e2e for HTTP, Prisma with test DB or sqlite-only if team standard allows (prefer Postgres parity)  
+**Testing**: Dashboard: **Vitest** (Start template default unless explicitly changed), Testing Library for components, MSW or similar for API mocks; **required** per-user-story UI tests are listed in [tasks.md](./tasks.md) (**T054** for US5 shell/navigation; **T053** for cross-story US1–US4 flows in Phase 8 polish). Backend: Jest (Nest default), supertest/e2e for HTTP, Prisma with test DB or sqlite-only if team standard allows (prefer Postgres parity)  
 **Target Platform**: Modern evergreen browsers; staff web dashboard (not mobile-first). NestJS HTTP API on Node server  
 **Project Type**: Web SPA + HTTP API (two sibling repositories)  
 **Target Repository/Repos**: `../sitio-dashboard` (UI and client), `../sitio-backend` (API, domain, persistence)  
 **Performance Goals**: v1 loads full in-context lists without pagination (per FR-041); API should remain responsive for typical school/trip/passenger counts; no hard numeric SLA in spec  
 **Constraints**: Auth and payment gateways out of scope; no stale-save concurrency UX (FR-033); UI copy pt-BR, code/specs English (FR-024/025); CPF visible in UI but omitted from routine logs (FR-039); BRL two-decimal money and date-only in America/Sao_Paulo (FR-034, FR-037)  
 **Cross-origin (CORS)**: The SPA calls the API on a different origin/port in local dev and typically in production. **Non-production** (e.g. `NODE_ENV` not `production`): the API MUST allow browser requests from **any** origin by reflecting the request `Origin` (so any localhost port or dev tunnel works). **Production** (`NODE_ENV=production`): the API MUST allow only origins listed in **`CORS_ORIGINS`** (comma-separated full origins, e.g. `https://dashboard.example.com`); omitting `CORS_ORIGINS` in production MUST NOT fall back to permissive CORS. See **FR-045** and [quickstart.md](./quickstart.md).  
-**Scale/Scope**: Five user stories (P1–P3), including dashboard-shell/navigation consistency (US5); screens for schools, school trips, trip passengers, per-passenger payments; no CSV/export/print reports in v1 (FR-042)
+**Scale/Scope**: **Five** user stories (**US1–US5**) across priority bands **P1** (US1), **P2** (US2, US3, US5), **P3** (US4)—including **US5** (dashboard shell, breadcrumbs, route recovery); screens for schools, school trips, trip passengers, per-passenger payments; no CSV/export/print reports in v1 (FR-042)
 
 ## Constitution Check
 
@@ -32,7 +32,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 - **UX Consistency Gate**: shadcn/Base UI patterns, tables with kebab actions, contextual forms without school/passenger pickers where spec forbids; pt-BR strings centralized (e.g. messages map); light/dark via theme provider and design tokens; best-effort a11y per FR-040.
 - **Language Gate**: Confirmed: specs and code English; all user-visible strings pt-BR.
 - **Repository Boundary Gate**: Confirmed: `sitio-design-notes` holds only specs/plans/contracts; implementation in `../sitio-dashboard` and `../sitio-backend` only.
-- **Incremental Delivery Gate**: User stories P1→P2→P3 are independently testable per spec; implement in that order.
+- **Incremental Delivery Gate**: Deliver by **priority band** (P1 first, then P2, then P3): **US1** (P1) is the MVP slice; **US2**, **US3**, and **US5** (all P2) are independently testable after US1 foundation; **US4** (P3) builds on US2–US3 for full aggregate scenarios. See [tasks.md](./tasks.md) dependency diagram.
 - **Documentation Sync Gate**: Keep `spec.md` as source of truth for behavior; update `data-model.md` / `contracts/openapi.yaml` / `quickstart.md` when API or schema changes; each repo README should document env vars (`DATABASE_URL`, `CORS_ORIGINS` for production API, API base URL / `VITE_API_URL`, theme).
 
 ### Constitution Check (post–Phase 1)

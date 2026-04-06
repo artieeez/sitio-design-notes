@@ -5,6 +5,8 @@
 
 **Tests**: Included per [plan.md](./plan.md) constitution (integration/e2e per story; contract alignment with OpenAPI where practical). **Dashboard**: Vitest + Testing Library tests are **required** per story slice (see T053, T054)—not optional—so UI behavior has automated proof alongside Nest e2e.
 
+**Dashboard Vitest split (avoid duplicate assertions)**: **T054** owns **US5-only** coverage (shell, fixed sidebar + scrollable main, breadcrumbs/page title, empty state vs blank chrome, SC-009/SC-010 as automated where applicable). **T053** owns **end-to-end UI flows for US1–US4** (navigation into payments/manual tag/aggregates); it MUST **not** re-assert the same shell/breadcrumb/empty-state cases already covered in **T054**.
+
 **Constitution traceability**: **§I** quality via lint/TS strict (Phases 1–2); **§II** tests per US + T053 + T054; **§III** pt-BR in T020 and feature components; **§IV** phased US1→US5; **§V** paths below target `../sitio-dashboard` / `../sitio-backend` only.
 
 **Organization**: Tasks are grouped by user story ([spec.md](./spec.md) US1–US5) for independent implementation and testing.
@@ -162,7 +164,7 @@
 
 ### Tests for User Story 5
 
-- [ ] T054 [P] [US5] Add Vitest + Testing Library tests in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` covering fixed sidebar/main scroll layout cues, breadcrumb + page title nested context (SC-009/UI-FR-010), and empty-state instead of blank table chrome (SC-010/UI-FR-007)
+- [ ] T054 [P] [US5] Add Vitest + Testing Library tests in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` (**US5-only**; do not duplicate T053): fixed sidebar/main scroll layout cues, breadcrumb + page title nested context (SC-009/UI-FR-010), and empty-state instead of blank table chrome (SC-010/UI-FR-007)
 
 ### Implementation for User Story 5
 
@@ -182,7 +184,7 @@
 - [ ] T050 Walk through [quickstart.md](./quickstart.md) sanity checklist and fix gaps in `../sitio-dashboard/` and `../sitio-backend/`
 - [ ] T051 [P] Best-effort a11y pass: labels, focus order, keyboard operable menus for kebab actions per FR-040 in `../sitio-dashboard/src/components/trips/`
 - [ ] T052 Verify no CPF in logs or stack traces in error paths; add tests if needed in `../sitio-backend/test/logging-redaction.spec.ts`
-- [ ] T053 [P] Add **required** Vitest + Testing Library tests in `../sitio-dashboard/src/test/` (one file or colocated `*.test.tsx`) covering at least **US1** school→trip→passenger navigation, **US2** payment history + create payment from row context (MSW or mocked client), **US3** manual paid-without-info control, and **US4** TripStatusSummary rendering from aggregate API response (mocked)—constitution §II applies to dashboard code as well as API
+- [ ] T053 [P] Add **required** Vitest + Testing Library tests in `../sitio-dashboard/src/test/` (one file or colocated `*.test.tsx`) covering at least **US1** school→trip→passenger navigation, **US2** payment history + create payment from row context (MSW or mocked client), **US3** manual paid-without-info control, and **US4** TripStatusSummary rendering from aggregate API response (mocked)—constitution §II applies to dashboard code as well as API; **omit** shell/breadcrumb/empty-state assertions delegated to **T054** (US5)
 
 ---
 
