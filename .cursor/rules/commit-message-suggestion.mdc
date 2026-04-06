@@ -1,0 +1,30 @@
+---
+description: End responses that change or recommend code/docs with a suggested git commit message
+alwaysApply: true
+---
+
+# Commit message suggestion
+
+When the user’s request is satisfied and the work would reasonably be committed (code changes, spec/docs updates, config, or a coherent batch of edits), **always** end the reply with a **suggested commit message**.
+
+## Format
+
+- One line, **imperative mood** (e.g. `Add`, `Fix`, `Update`, `Remove`), ~72 characters or less when possible.
+- Optionally add a **short body** (bullet or one sentence) only if the change needs extra context; keep the first line self-contained.
+
+## Examples
+
+```text
+Update school-trip spec: trip and payment forms scoped to navigation context
+```
+
+```text
+Fix passenger duplicate check to use CPF-only validation
+```
+
+## When to skip
+
+- Pure Q&A with **no** edits and nothing to commit.
+- The user explicitly says not to suggest a message.
+
+Otherwise, include the suggestion even for small doc-only changes.
