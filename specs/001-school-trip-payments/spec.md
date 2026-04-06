@@ -2,8 +2,10 @@
 
 **Feature Branch**: `001-school-trip-payments`  
 **Created**: 2026-04-01  
+**Last updated**: 2026-04-05 (staff dashboard UI specification)  
 **Status**: Ready for implementation  
 **Input**: User description: "We are creating a dashboard for a tourism company to control which passengers have payment pending. This tourism company mainly works with schools. The tourism company staff should be able to register a school, register a trip for a school and register passengers for the trip and register payments. Authentication is out of scope for this spec. Any payment integration is out of scope for this spec (there should only be a CRUD for manual interaction). **Scope note:** Trip creation is only reachable from a **school’s trip list** (school is implicit on the trip form). All payment **create / view / edit / delete** happens **only** in **trip context** via **passenger row** affordances (kebab / per-passenger payment history); there is **no** centralized cross-trip payment list."  
+**Input (addendum 2026-04-05)**: Staff dashboard **UI**: fixed **sidebar** (School link, optional **light/dark** toggle) and **scrollable** **main**; **bento-style** main grid with **card**-wrapped sections; **file-based** route per **list / create / edit / detail** screen; **table** lists with headers, **search/filter**, **pagination** (client-side acceptable in v1 with **FR-041**); **empty states** with illustration and **Create**; **list** vs **form** **isolation** (separate URLs or **sheet/dialog**); **breadcrumbs** and **page title** for nested **school → trip → passenger** routes; **shadcn** **Dashboard** block, **Data Table**, and **Card** alignment for `../sitio-dashboard`; **app logo** and **signed-in user** avatar/name in shell **out of scope**.  
 **Target Repositories**: `../sitio-dashboard` (user flows and UI), `../sitio-backend` (business rules and data persistence)
 
 ## Clarifications
@@ -25,6 +27,32 @@
 - Q: What accessibility standard should the staff dashboard target for v1? → A: **Option B** — **best-effort** accessibility (labels, keyboard where straightforward); **no** formal WCAG conformance claim or required audit for v1 (see **FR-040**).
 - Q: Should school list, trip list, and trip passenger table use server-side pagination in v1? → A: **Option B** — **no** pagination requirement in v1; load **full** collections per screen until scale or performance feedback drives a follow-up (see **FR-041**).
 - Q: Should v1 include CSV/export or print-oriented reports? → A: **Option A** — **no** CSV, spreadsheet export, or print-optimized report in v1; staff use **on-screen** lists and forms only (see **FR-042**).
+
+### Session 2026-04-05 (UI specification addendum)
+
+- **Layout**: Staff dashboard uses a **fixed** primary navigation area (sidebar) and a **scrollable** main work area; main area scrolls independently of the sidebar.
+- **Primary navigation (v1)**: Sidebar includes a **School** entry (and may include a **light/dark theme** control). **Application logo**, **signed-in user avatar**, and **display name** in the chrome are **out of scope** for this feature release (see **FR-052**).
+- **Routing**: Each **list**, **create**, **edit**, and **detail** screen for schools, trips, and passengers is a **separate route**; the dashboard codebase implements this with **file-based routing** (one route module per screen) per project conventions. **Payment** create/edit/history remains **trip-scoped** and **row-triggered** per **FR-010** / **FR-011** (may use dedicated routes and/or overlays as long as context is implicit).
+- **Isolation**: A **list view** and its **create** (or **edit**) **form** MUST **not** share the same page as two co-equal primary panels unless the **form** is presented only inside a **sheet** or **dialog** overlay; default pattern for this product is **separate URLs** for list vs create/edit.
+- **Visual patterns**: **List** screens use a **data table** pattern (column headers, **search/filter**, **pagination**). **Create** (and **edit**) **forms** for schools, trips, and passengers appear inside a **card**-style grouped container on their **own** route (or inside sheet/dialog when used). **Empty** lists use a **centered empty state** with illustration and **Create** action—not an empty table header only.
+- **Main content**: Uses a **bento-style** modular grid for sections/widgets even when early screens have a single primary block.
+- **Hierarchy**: Nested routes under a school show **breadcrumbs** and a **page title** in the main header (e.g. school name → trips; school name → trip name → passengers or add passenger).
+- **Pagination vs FR-041**: **FR-041** remains—no **required server-side** pagination API in v1. **UI-FR** requirements mandate **on-screen** pagination controls; for v1 these MAY operate **client-side** over the full dataset loaded for the screen.
+
+## Staff dashboard layout & visual structure *(UI specification)*
+
+This section states **staff-visible** layout and navigation rules for `../sitio-dashboard`. Normative requirements are **UI-FR-001** onward in **Requirements**; this overview aligns product, design, and implementation.
+
+- **Shell**: Fixed **sidebar** + scrollable **main** content (see **UI-FR-001**).
+- **Sidebar contents (v1)**: Link to **School** flows; optional **theme** toggle (see **UI-FR-002**, **UI-FR-003**). No spec for app branding or user identity in the header (see **UI-FR-012**).
+- **Route granularity**: One **URL** (and one **route file**) per **list / create / edit / view** screen where those are primary tasks (see **UI-FR-004**, **UI-FR-005**).
+- **Lists**: Table with **headers**, **search/filter**, **pagination**; **empty** state pattern (see **UI-FR-006**, **UI-FR-007**).
+- **Forms**: **Card**-wrapped sections on dedicated routes, or **sheet/dialog** when that pattern is chosen (see **UI-FR-005**, **UI-FR-008**).
+- **Sections**: Other **main-area** blocks (lists, summaries) use **card** wrappers as part of the grid (see **UI-FR-013**).
+- **Composition**: **Bento-style** grid in the main region (see **UI-FR-009**).
+- **Context**: **Breadcrumbs** + **title** for nested school → trip → passenger flows (see **UI-FR-010**).
+
+**Dashboard implementation alignment** (for `sitio-dashboard` builds): Compose the application **shell** using the **shadcn “Dashboard” block** (or equivalent structure: sidebar + main). Implement **list** routes with the project **Data Table** component. Wrap **create/edit** form sections in **Card** components on their routes, or in **Sheet**/**Dialog** when using overlay isolation. This sentence restates the UI-FR rules in library terms for developers.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -103,6 +131,29 @@ As tourism company staff, I can identify which passengers still have pending pay
 
 ---
 
+### User Story 5 - Navigate and work in a consistent dashboard shell (Priority: P2)
+
+As tourism company staff, I use a stable sidebar-and-main layout with clear breadcrumbs and separate pages for lists versus forms so that I always know where I am and I do not mix two primary tasks on one screen unless the product uses a deliberate overlay.
+
+**Why this priority**: Reduces mistakes and supports scalable CRUD without clutter; complements P1 data-entry stories.
+
+**Independent Test**: Open school list, open a school’s trips, open a trip’s passengers, start passenger create from an empty list and from a non-empty list, and confirm URLs, breadcrumbs, sidebar, theme control (if present), table toolbars, empty states, and **card**-wrapped sections behave per **UI-FR-001**–**UI-FR-013**.
+
+**Acceptance Scenarios**:
+
+1. **Given** staff open the dashboard, **When** they view any primary screen, **Then** the **sidebar stays fixed** while the **main** content **scrolls** when content overflows (**UI-FR-001**).
+2. **Given** staff view the sidebar, **When** they look for top-level navigation, **Then** they find a **School** entry leading to school flows; **When** a theme control is present, **Then** it toggles **light** and **dark** presentation without leaving the app (**UI-FR-002**, **UI-FR-003**).
+3. **Given** staff work with schools, trips, or passengers, **When** they move between **list**, **create**, and **edit**, **Then** each step is a **distinct URL** implemented as its **own route file** in the dashboard (**UI-FR-004**).
+4. **Given** staff view a **list** screen, **When** the list is the primary feature on that URL, **Then** the **create/edit form** for that entity is **not** shown as a second primary column on the same page unless the form appears only inside a **sheet** or **dialog** (**UI-FR-005**).
+5. **Given** staff view a list with one or more rows, **When** they use the table, **Then** it has **column headers**, **search or filter** affordances, and **pagination** controls; **When** the list has **zero** rows in the default filter, **Then** they see a **centered empty state** with illustration and a **Create** (or equivalent) action—not only blank column headers (**UI-FR-006**, **UI-FR-007**).
+6. **Given** staff open **create** or **edit** for a school, trip, or passenger on its dedicated route, **When** they scan the form, **Then** fields are grouped inside a **card**-style container (**UI-FR-008**).
+7. **Given** staff view a screen in the main area, **When** content is laid out, **Then** sections sit in a **bento-style** modular grid even if only one large tile is used in early releases (**UI-FR-009**).
+8. **Given** staff navigate under a selected school into trips or a trip into passengers (or passenger create/edit), **When** they read the main header, **Then** **breadcrumbs** and the **page title** reflect **school name**, **trip name** where applicable, and the current action (e.g. add passenger) in **pt-BR** (**UI-FR-010**).
+9. **Given** staff expect branding or account chrome, **When** they look for **app logo** or **signed-in user** avatar/name in the shell, **Then** those elements are **not** required by this spec (may be absent) (**UI-FR-012**).
+10. **Given** staff view a **list** or **summary** screen in the main area, **When** they scan the layout, **Then** each **primary** block (for example table plus toolbar) sits in a **card**-style container within the **bento** grid (**UI-FR-013**).
+
+---
+
 ### Edge Cases
 
 - There is **no** global or **centralized payment list**; all payment CRUD is **trip-scoped** via **passenger row** affordances (**FR-010**, **FR-011**).
@@ -127,7 +178,9 @@ As tourism company staff, I can identify which passengers still have pending pay
 - **Default** trip passenger view and default **counts** of pending vs settled passengers (or similar operational summaries) **exclude** soft-removed passengers; **include removed** mode adds them back to the table and to those aggregates (FR-036).
 - Payment **date** has **no** time-of-day; per-passenger payment views that sort by payment date MUST order by **calendar day** under **`America/Sao_Paulo`** per **FR-037**.
 - Support or **routine** diagnostic logging that might capture request bodies or errors MUST **omit** or **redact** passenger **CPF** so values never appear in those channels; stack traces MUST NOT echo raw **CPF** (**FR-039**).
-- Extremely large passenger counts or long school/trip lists may increase load time or memory use; v1 does **not** require pagination or incremental loading—addressing that scale is **deferred** unless a later release or operational need dictates otherwise (**FR-041**).
+- Extremely large passenger counts or long school/trip lists may increase load time or memory use; v1 does **not** require **server-side** pagination or incremental loading (**FR-041**), but **UI-FR-006** still expects **on-screen** paging controls (often **client-side**); moving paging to the server is **deferred** unless a later release or operational need dictates otherwise.
+- Staff bookmark or deep-link a **create**/**edit** URL that assumes **school** or **trip** context that is missing or invalid: the product MUST **recover** with a clear message and navigation back to a valid **school** or **trip** list (exact UX is implementation detail).
+- **UI-FR-003**: If no theme toggle is shipped in v1, the spec is **not** violated; the toggle is **optional**.
 
 ## Requirements *(mandatory)*
 
@@ -144,6 +197,23 @@ As tourism company staff, I can identify which passengers still have pending pay
 - **FR-008**: System MUST allow staff to create, view, update, **soft-remove**, and **restore** passenger records linked to exactly one trip. **Soft-remove** MUST retain the passenger row and all linked payment rows (no hard-delete of the passenger as part of this action); **removed** passengers MUST be omitted from the **default** passenger table for that trip unless staff explicitly opts to **include removed passengers**, consistent with how inactive schools and trips are hidden until opted in (FR-029, FR-030). Full behavior for removal, restoration, payments, and duplicates is specified in **FR-035**.
 - **FR-044**: Each passenger record MUST support optional **parent or guardian** contact fields (API: `parentName`, `parentPhoneNumber`, `parentEmail`). Staff MAY set, update, or clear any of them independently; none are required. When `parentEmail` is non-empty, system MUST validate a well-formed email address and block save until corrected or cleared. When `parentPhoneNumber` is non-empty, system SHOULD accept common Brazilian input formats and normalize consistently for storage and display (exact normalization is an implementation detail). These fields MUST NOT affect duplicate passenger detection (FR-031, FR-032), payment status (FR-018), or payment CRUD rules.
 - **FR-045**: The HTTP API MUST apply **CORS** so browser-based clients (the dashboard SPA) can call it across origins. When the API runs in a **non-production** environment (e.g. local development where `NODE_ENV` is not `production`), the server MUST allow cross-origin browser requests from **any** origin (e.g. by reflecting the request `Origin` in `Access-Control-Allow-Origin`). When the API runs in **production** (`NODE_ENV=production`), the server MUST allow cross-origin browser requests **only** from origins explicitly listed in the **`CORS_ORIGINS`** environment variable (comma-separated full origins such as `https://staff.example.com`); if `CORS_ORIGINS` is unset or empty in production, the API MUST NOT use a permissive wildcard—browser CORS checks MUST fail until operations configure allowed origins. Standard methods and headers used by the dashboard JSON client (including `Content-Type`, `Accept`, and future `Authorization`) MUST be permitted for preflight where applicable.
+
+### Staff dashboard UI requirements
+
+- **UI-FR-001**: Staff-facing dashboard MUST present a **fixed** primary **sidebar** and a **main** work area whose content **scrolls vertically** when it exceeds the viewport; the sidebar MUST NOT scroll away with main content.
+- **UI-FR-002**: Sidebar MUST include a **School** navigation entry that leads staff into school list and downstream school-scoped flows.
+- **UI-FR-003**: Sidebar MAY include a **light/dark** (theme) toggle; when present, it MUST apply consistently across dashboard surfaces without navigating away.
+- **UI-FR-004**: Each **list**, **create**, **edit**, and **read-only detail** screen for **schools**, **trips**, and **passengers** MUST map to a **distinct URL** and MUST be implemented with **file-based routing** (one route source file per screen) following project conventions.
+- **UI-FR-005** (**isolation**): A **list** view and a **create** or **edit** **form** for the same entity in the same context MUST **not** appear as **two co-primary** features on the **same** URL **unless** the form is presented **only** inside a **sheet** or **dialog** overlay; the **default** pattern is **separate routes** for list vs create/edit.
+- **UI-FR-006**: Every **list** screen that shows schools, trips, or **trip passengers** in a **table** MUST show **column headers**, **search or filtering** controls appropriate to that list, and **pagination** controls. For v1, pagination MAY operate **client-side** over the dataset loaded for that screen, consistent with **FR-041**.
+- **UI-FR-007**: When a **list** has **no** rows under the **current** filters, the UI MUST show a **centered empty state** (illustration or equivalent visual) and a primary **Create** (or equivalent) action; it MUST **not** present only an **empty** table header row as the sole empty feedback.
+- **UI-FR-008**: **Create** and **edit** forms for schools, trips, and passengers MUST wrap their primary field groups in a **card**-style container on the **dedicated** route, **or** inside the **sheet**/**dialog** when **UI-FR-005** uses an overlay pattern.
+- **UI-FR-009**: The **main** content area MUST lay out primary sections using a **bento-style** modular **grid** (multiple tiles when applicable); early releases MAY ship screens with a **single** prominent tile but MUST **not** abandon the grid system for ad-hoc full-bleed-only pages when the design system provides a grid.
+- **UI-FR-010**: For routes nested under a **selected school** (trips, trip detail, passengers, passenger create/edit), the main region MUST show **breadcrumbs** and a **page title** that reflect **school name**, **trip name** when in trip scope, and the current **action** or **segment** (e.g. trips, passengers, add passenger), in **pt-BR** per **FR-024**.
+- **UI-FR-011**: **Payment** flows remain governed by **FR-010** and **FR-011**; payment **create**/**edit**/**history** MUST stay **trip-scoped** and opened from **passenger row** affordances. Dedicated URLs and/or overlays MAY be used provided **passenger** (and trip) context is **implicit** and selectors are **not** shown contrary to **FR-011** / **FR-015**.
+- **UI-FR-012**: **Application logo**, **authenticated user avatar**, and **user display name** in the **shell** are **out of scope** for this feature; the product MAY omit them or add them later without breaching this spec.
+- **UI-FR-013**: Each **primary section** in the **main** work area (for example a **list** with toolbar, a **summary** or **metric** strip, or a **form** block) MUST use a **card**-style wrapper as part of the **bento** layout, except where the UI is **only** a **sheet** or **dialog** per **UI-FR-005**.
+
 - **FR-009**: System MUST provide a passenger table within each trip context that shows each **included** passenger's payment status and distinguishes settlement via recorded payments versus manual paid-without-info tagging. Each row MUST expose **payment** actions per **FR-010** and **FR-011** (e.g. **kebab** menu entries). By **default**, the table MUST list **only** passengers who are **not** soft-removed; **soft-removed** passengers MUST appear only when staff opts to **include removed passengers** (FR-035, FR-036). Status for every row shown MUST follow **FR-018**.
 - **FR-010**: System MUST **not** provide a **centralized**, cross-trip **payment list** screen. Staff MUST **view**, **update**, and **delete** manual payment records **only** within the **current trip** context, via **per-passenger** affordances reachable from the **trip passenger table** (e.g. **kebab** → **manage payments** / **payment history** for that row). **Trip** and **school** context MUST be implicit from navigation (staff are already viewing that trip under a school).
 - **FR-011**: System MUST allow staff to **create** manual payment records **only** by opening the payment form from a **passenger row** **kebab** (overflow) menu **or** equivalent row action on the **trip passenger table**. The payment creation form MUST **not** include **passenger** selection—the passenger MUST be the row from which the action was opened. **Removed** passengers MUST **not** offer payment creation until **restored** (FR-035).
@@ -176,7 +246,7 @@ As tourism company staff, I can identify which passengers still have pending pay
 - **FR-037**: **Payment date** MUST be a **calendar date** only (no time-of-day). The system MUST interpret, persist, and display that date using the canonical timezone **`America/Sao_Paulo`** so day boundaries and ordering are consistent for staff in Brazil.
 - **FR-039**: For passenger **CPF**, the system MUST show the stored value **in full** wherever passenger identity is displayed in the staff UI (including passenger tables, forms, and payment-context views that surface passenger identity). **Routine** application and server **logging** (including error and request logs used for debugging) MUST **omit** **CPF** values (redact or exclude; stack traces MUST NOT echo raw **CPF**). This feature release MUST **not** require a dedicated persisted **audit trail** of **CPF** field views or edits.
 - **FR-040**: Staff-facing dashboard UI MUST apply **best-effort** accessibility: form controls SHOULD have clear, associated labels; primary flows SHOULD be operable with a keyboard where the chosen UI components support it without bespoke engineering. **Formal** WCAG 2.1 **Level A** or **Level AA** conformance, third-party accessibility audits, and remediation to a stated WCAG level are **out of scope** for this feature release; the product MUST **not** be marketed or documented as WCAG-certified on the basis of this spec alone.
-- **FR-041**: **Pagination** and **partial fetching** (server-side pages, cursor APIs, or mandatory virtualized tables) for **school lists**, **trip lists** for a school, and **trip passenger tables** are **out of scope** for v1; the system MAY load and display **all** rows for the current navigation context without paging controls. Follow-on work MAY introduce paging or chunking when real-world data volume or performance requires it.
+- **FR-041**: **Server-side pagination** and **partial fetching** (server-side pages, cursor APIs, or mandatory virtualized tables) for **school lists**, **trip lists** for a school, and **trip passenger tables** are **out of scope** for v1; the system MAY load and display **all** rows for the current navigation context at once. Staff-facing tables MUST still expose **pagination** (and search/filter) **controls** per **UI-FR-006**, which MAY operate **client-side** over the loaded dataset in v1. Follow-on work MAY introduce server-driven paging or chunking when real-world data volume or performance requires it.
 - **FR-042**: **CSV**, **spreadsheet**, or other **bulk file export** of schools, trips, passengers, or payments, and **print-optimized** or dedicated **print layout** reporting, are **out of scope** for v1. Staff MUST complete operational work using **on-screen** lists, forms, and per-passenger payment views. Incidental use of the browser’s generic **Print** action on a page is neither required nor specified.
 
 ### Key Entities *(include if feature involves data)*
@@ -200,6 +270,8 @@ As tourism company staff, I can identify which passengers still have pending pay
 - **SC-006**: For test datasets, 100% of **shown** passengers display the correct pending, settled (source distinguishable), or unavailable status after payment create, update, delete, manual-tag toggles, and soft-remove/restore, evaluated per **FR-018**, **FR-034**, and **FR-036** (default vs include-removed modes).
 - **SC-007**: At least 90% of pilot users report that identifying pending passengers is clear without additional training.
 - **SC-008**: Operational follow-up time to identify pending passengers is reduced by at least 40% compared with the current manual process.
+- **SC-009**: In usability tests, **90%** of staff correctly name the current **school** and **trip** context (or the current **task**, e.g. adding a passenger) using **only** the **breadcrumb** and **page title** within **10 seconds** of opening a nested route.
+- **SC-010**: For every school, trip, and passenger **list** screen, when filters yield **zero** rows, **100%** of test sessions show the **empty state** pattern (illustration plus **Create** action) rather than only blank table chrome (**UI-FR-007**).
 
 ## Assumptions
 
@@ -216,3 +288,5 @@ As tourism company staff, I can identify which passengers still have pending pay
 - Concurrent use by multiple staff is allowed; simultaneous edits to the same record may overwrite without the product detecting **stale** state or offering conflict resolution (per FR-033).
 - **School**, **trip**, and **passenger** list views in v1 are not required to paginate or stream results; loading full in-context datasets is acceptable per **FR-041**.
 - **Export** and **print-layout** reporting are not required in v1; staff rely on the dashboard UI only (**FR-042**).
+- Staff dashboard **layout**, **navigation**, and **table** patterns follow **UI-FR-001**–**UI-FR-013**; implementers in `../sitio-dashboard` align the shell with the **shadcn Dashboard block**, **list** routes with the **Data Table** component, and **section** grouping with **Card**s, as stated under **Dashboard implementation alignment** in this spec.
+- **Breadcrumb** labels and **page titles** use **`pt-BR`** and reflect domain wording agreed with stakeholders (exact strings are refined during implementation and copy review).
