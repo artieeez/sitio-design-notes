@@ -21,7 +21,7 @@ Staff-facing dashboard for a tourism company to manage schools, school-scoped tr
 **Performance Goals**: v1 loads full in-context lists without pagination (per FR-041); API should remain responsive for typical school/trip/passenger counts; no hard numeric SLA in spec  
 **Constraints**: Auth and payment gateways out of scope; no stale-save concurrency UX (FR-033); UI copy pt-BR, code/specs English (FR-024/025); CPF visible in UI but omitted from routine logs (FR-039); BRL two-decimal money and date-only in America/Sao_Paulo (FR-034, FR-037)  
 **Cross-origin (CORS)**: The SPA calls the API on a different origin/port in local dev and typically in production. **Non-production** (e.g. `NODE_ENV` not `production`): the API MUST allow browser requests from **any** origin by reflecting the request `Origin` (so any localhost port or dev tunnel works). **Production** (`NODE_ENV=production`): the API MUST allow only origins listed in **`CORS_ORIGINS`** (comma-separated full origins, e.g. `https://dashboard.example.com`); omitting `CORS_ORIGINS` in production MUST NOT fall back to permissive CORS. See **FR-045** and [quickstart.md](./quickstart.md).  
-**Scale/Scope**: Four user-story slices (P1–P3); screens for schools, school trips, trip passengers, per-passenger payments; no CSV/export/print reports in v1 (FR-042)
+**Scale/Scope**: Five user stories (P1–P3), including dashboard-shell/navigation consistency (US5); screens for schools, school trips, trip passengers, per-passenger payments; no CSV/export/print reports in v1 (FR-042)
 
 ## Constitution Check
 

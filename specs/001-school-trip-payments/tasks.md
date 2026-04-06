@@ -3,16 +3,16 @@
 **Input**: Design documents from `/specs/001-school-trip-payments/`  
 **Prerequisites**: [plan.md](./plan.md), [spec.md](./spec.md), [research.md](./research.md), [data-model.md](./data-model.md), [contracts/openapi.yaml](./contracts/openapi.yaml), [quickstart.md](./quickstart.md)
 
-**Tests**: Included per [plan.md](./plan.md) constitution (integration/e2e per story; contract alignment with OpenAPI where practical). **Dashboard**: Vitest + Testing Library tests are **required** per story slice (see T053)—not optional—so UI behavior has automated proof alongside Nest e2e.
+**Tests**: Included per [plan.md](./plan.md) constitution (integration/e2e per story; contract alignment with OpenAPI where practical). **Dashboard**: Vitest + Testing Library tests are **required** per story slice (see T053, T054)—not optional—so UI behavior has automated proof alongside Nest e2e.
 
-**Constitution traceability**: **§I** quality via lint/TS strict (Phases 1–2); **§II** tests per US + T053; **§III** pt-BR in T020 and feature components; **§IV** phased US1→US4; **§V** paths below target `../sitio-dashboard` / `../sitio-backend` only.
+**Constitution traceability**: **§I** quality via lint/TS strict (Phases 1–2); **§II** tests per US + T053 + T054; **§III** pt-BR in T020 and feature components; **§IV** phased US1→US5; **§V** paths below target `../sitio-dashboard` / `../sitio-backend` only.
 
-**Organization**: Tasks are grouped by user story ([spec.md](./spec.md) US1–US4) for independent implementation and testing.
+**Organization**: Tasks are grouped by user story ([spec.md](./spec.md) US1–US5) for independent implementation and testing.
 
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no ordering dependency on incomplete sibling tasks)
-- **[Story]**: `US1` … `US4` maps to user stories in [spec.md](./spec.md)
+- **[Story]**: `US1` … `US5` maps to user stories in [spec.md](./spec.md)
 - Paths use sibling repos: `../sitio-dashboard/`, `../sitio-backend/`
 
 ## Path conventions
@@ -154,7 +154,26 @@
 
 ---
 
-## Phase 7: Polish and cross-cutting concerns
+## Phase 7: User Story 5 — Navigate and work in a consistent dashboard shell (Priority: P2)
+
+**Goal**: Ensure shell/navigation consistency requirements are explicitly implemented and tested, including fixed sidebar + scrollable main, breadcrumbs/page titles, list/table patterns, and deep-link recovery UX — per US5 and UI-FR-001–UI-FR-013.
+
+**Independent test**: Navigate schools → trips → passengers and payment routes via normal flow and deep links; confirm breadcrumbs/page title context in pt-BR, empty-state behavior with filtered zero rows, and recovery navigation from invalid context.
+
+### Tests for User Story 5
+
+- [ ] T054 [P] [US5] Add Vitest + Testing Library tests in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` covering fixed sidebar/main scroll layout cues, breadcrumb + page title nested context (SC-009/UI-FR-010), and empty-state instead of blank table chrome (SC-010/UI-FR-007)
+
+### Implementation for User Story 5
+
+- [ ] T055 [US5] Implement route-context recovery for invalid or missing deep-link context (school/trip/passenger/payment routes) with clear pt-BR messaging and navigation back to valid list routes in `../sitio-dashboard/src/routes/` and related route guards/loaders
+- [ ] T056 [US5] Ensure sidebar/main shell, list toolbar/search/filter/pagination controls, and card/bento section wrappers are consistently applied across school/trip/passenger list and form routes in `../sitio-dashboard/src/components/` and `../sitio-dashboard/src/routes/`
+
+**Checkpoint**: US5 acceptance scenarios in [spec.md](./spec.md) hold with automated UI tests.
+
+---
+
+## Phase 8: Polish and cross-cutting concerns
 
 **Purpose**: Contract sync, quickstart validation, a11y and logging pass.
 
@@ -171,8 +190,8 @@
 
 ### Phase dependencies
 
-- **Phase 1** → **Phase 2** → **User story phases (3–6)** → **Phase 7**
-- **Phase 2** blocks all of US1–US4
+- **Phase 1** → **Phase 2** → **User story phases (3–7)** → **Phase 8**
+- **Phase 2** blocks all of US1–US5
 
 ### User story dependencies
 
@@ -184,12 +203,15 @@ Foundational (Phase 2)
                  │
                  ├──► US3 (P2) ──► (manual tag; can parallel US2 after US1)
                  │
-                 └──► US4 (P3) ──► (depends on US1–US3 behavior for full acceptance)
+                 ├──► US4 (P3) ──► (depends on US1–US3 behavior for full acceptance)
+                 │
+                 └──► US5 (P2) ──► (can start after shell foundation; closes UI consistency and route recovery)
 ```
 
 - **US1**: No dependency on other stories (after Phase 2)
 - **US2**, **US3**: Require US1 data model and passenger UI shell
 - **US4**: Validates aggregates and display; implement after US2+US3 for full scenario coverage (partial UI can start after US1)
+- **US5**: Requires foundational shell/routing from Phase 2 and route surfaces from US1–US4; can be started incrementally after US1 and finalized after US4
 
 ### Parallel opportunities
 
@@ -197,7 +219,8 @@ Foundational (Phase 2)
 - **Phase 2**: T016, T017, T019, T020 in parallel after T015
 - **US1**: T021–T023 tests in parallel; T028 parallel with backend work once API stubs exist
 - **US2 / US3**: After US1, different developers can split payment module vs manual-tag work
-- **Phase 7**: T048, T049, T051, T053 in parallel
+- **US5**: T054 and T055 in parallel (tests + route recovery), then T056 for cross-route consistency pass
+- **Phase 8**: T048, T049, T051, T053 in parallel
 
 ### Parallel example: User Story 1
 
@@ -228,6 +251,7 @@ T023 ../sitio-backend/test/passenger.e2e-spec.ts
 2. +US2 → full payment ledger
 3. +US3 → manual tag shortcut
 4. +US4 → operational monitoring and aggregates
+5. +US5 → shell/routing consistency and deep-link recovery hardening
 
 ### Format validation
 
@@ -240,4 +264,4 @@ All tasks use: `- [ ] Tnnn [P?] [USn?] Description with explicit file path`
 - **Migrations**: Only `schema.prisma` and docs from agents; humans run `prisma migrate` per [AGENTS.md](../../.cursor/rules) in implementation repos.
 - **OpenAPI**: `specs/001-school-trip-payments/contracts/openapi.yaml` is the contract reference; keep DTOs aligned.
 - **CPF**: Full display in UI; never in routine logs (FR-039).
-- **Success criteria (non-automated)**: [spec.md](./spec.md) **SC-001–SC-005**, **SC-007**, and **SC-008** are usability or pilot/business metrics—validate during human demos or pilot runs; no substitute for automated tests in T021–T023, T032, T039, T043, T053.
+- **Success criteria (non-automated)**: [spec.md](./spec.md) **SC-001–SC-005**, **SC-007**, and **SC-008** are usability or pilot/business metrics—validate during human demos or pilot runs; no substitute for automated tests in T021–T023, T032, T039, T043, T053, T054.
