@@ -169,7 +169,7 @@
 ### Implementation for User Story 5
 
 - [ ] T055 [US5] Implement route-context recovery for invalid or missing deep-link context (school/trip/passenger/payment routes) with clear pt-BR messaging and navigation back to valid list routes in `../sitio-dashboard/src/routes/` and related route guards/loaders
-- [ ] T056 [US5] Ensure sidebar/main shell, list toolbar/search/filter/pagination controls, and card/bento section wrappers are consistently applied across school/trip/passenger list and form routes in `../sitio-dashboard/src/components/` and `../sitio-dashboard/src/routes/`
+- [ ] T056 [US5] Close gaps vs **UI-FR-001** (fixed sidebar + scrollable main), **UI-FR-006/007** (table toolbars + empty states on **school**, **trip**, and **trip passenger** lists), **UI-FR-008** (card-wrapped school/trip/passenger **create/edit** forms), **UI-FR-009** (bento-style main grid), and **UI-FR-013** (card wrappers for primary list/summary sections)—including **payment** create/edit/history routes once US2 exists—in `../sitio-dashboard/src/components/` and `../sitio-dashboard/src/routes/`; **do not** change domain behavior owned by US1–US4 tasks
 
 **Checkpoint**: US5 acceptance scenarios in [spec.md](./spec.md) hold with automated UI tests.
 
@@ -248,6 +248,8 @@ T023 ../sitio-backend/test/passenger.e2e-spec.ts
 4. Demo MVP (schools → trips → passengers)
 
 ### Incremental delivery
+
+**Priority vs. order**: **US5** is **P2** and **US4** is **P3**, but this list puts **US5 last** on purpose: dashboard-shell hardening (**T054–T056**) is most valuable once **US2–US4** routes and behaviors exist (payments, manual tag, aggregates). That is **not** “ship every P3 story before any P2 story”—it is a **dependency-friendly** rollout sequence aligned with the user-story dependency diagram above.
 
 1. US1 → deploy/demo (operational roster without payments)
 2. +US2 → full payment ledger
