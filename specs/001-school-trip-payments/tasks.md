@@ -100,16 +100,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T032 [P] [US2] Add Nest e2e tests for `POST/GET /passengers/{passengerId}/payments`, `PATCH/DELETE /payments/{paymentId}`, sort order by `paidOn`, block payment create when passenger removed in `../sitio-backend/test/payment.e2e-spec.ts`
+- [X] T032 [P] [US2] Add Nest e2e tests for `POST/GET /passengers/{passengerId}/payments`, `PATCH/DELETE /payments/{paymentId}`, sort order by `paidOn`, block payment create when passenger removed in `../sitio-backend/test/payment.e2e-spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T033 [US2] Implement Payment CQRS handlers and REST for `/passengers/{passengerId}/payments` and `/payments/{paymentId}` with immutable `passengerId` on update per OpenAPI in `../sitio-backend/src/modules/payment/`
-- [ ] T034 [US2] Enforce FR-035 (no new payments for soft-removed passengers) and FR-034 (minor units, rounding) in `../sitio-backend/src/modules/payment/payment.command-handlers.ts` (or equivalent)
-- [ ] T035 [US2] Ensure passenger `paymentStatus` reflects payment totals after every payment CUD in `../sitio-backend/src/modules/payment/` (invalidate/recalculate per FR-020)
-- [ ] T036 [P] [US2] Add passenger row **kebab**: open **payment history** UI (list + edit + delete) scoped to trip in `../sitio-dashboard/src/components/trips/PassengerPaymentHistory.tsx`
-- [ ] T037 [US2] Add **create payment** flow from kebab with TanStack Form + Zod, no passenger picker, amount prefilled from effective expected amount when present in `../sitio-dashboard/src/components/trips/PaymentForm.tsx`
-- [ ] T038 [US2] Wire TanStack Query mutations and query invalidation for passenger list and payment history in `../sitio-dashboard/src/lib/query-keys.ts` and consuming components
+- [X] T033 [US2] Implement Payment CQRS handlers and REST for `/passengers/{passengerId}/payments` and `/payments/{paymentId}` with immutable `passengerId` on update per OpenAPI in `../sitio-backend/src/modules/payment/`
+- [X] T034 [US2] Enforce FR-035 (no new payments for soft-removed passengers) and FR-034 (minor units, rounding) in `../sitio-backend/src/modules/payment/payment.command-handlers.ts` (or equivalent)
+- [X] T035 [US2] Ensure passenger `paymentStatus` reflects payment totals after every payment CUD in `../sitio-backend/src/modules/payment/` (invalidate/recalculate per FR-020)
+- [X] T036 [P] [US2] Add passenger row **kebab**: open **payment history** UI (list + edit + delete) scoped to trip in `../sitio-dashboard/src/components/trips/PassengerPaymentHistory.tsx`
+- [X] T037 [US2] Add **create payment** flow from kebab with TanStack Form + Zod, no passenger picker, amount prefilled from effective expected amount when present in `../sitio-dashboard/src/components/trips/PaymentForm.tsx`
+- [X] T038 [US2] Wire TanStack Query mutations and query invalidation for passenger list and payment history in `../sitio-dashboard/src/lib/query-keys.ts` and consuming components
 
 **Checkpoint**: US2 scenarios in [spec.md](./spec.md) pass.
 
@@ -123,13 +123,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T039 [P] [US3] Add Nest e2e tests for `PUT /passengers/{passengerId}/manual-paid-without-info` (per OpenAPI) and interaction with payment-derived status in `../sitio-backend/test/manual-paid-without-info.e2e-spec.ts`
+- [X] T039 [P] [US3] Add Nest e2e tests for `PUT /passengers/{passengerId}/manual-paid-without-info` (per OpenAPI) and interaction with payment-derived status in `../sitio-backend/test/manual-paid-without-info.e2e-spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T040 [US3] Implement manual paid-without-info command handler and REST endpoint per OpenAPI in `../sitio-backend/src/modules/passenger/manual-paid-without-info.handler.ts` (or colocated with passenger module)
-- [ ] T041 [US3] Add passenger row action to set/clear manual tag with pt-BR wording equivalent to FR-016 in `../sitio-dashboard/src/components/trips/PassengerRowActions.tsx`
-- [ ] T042 [US3] Visually distinguish **settled via payments** vs **settled via manual tag** in `../sitio-dashboard/src/components/trips/PassengerTable.tsx` per FR-009/FR-018
+- [X] T040 [US3] Implement manual paid-without-info command handler and REST endpoint per OpenAPI in `../sitio-backend/src/modules/passenger/manual-paid-without-info.handler.ts` (or colocated with passenger module)
+- [X] T041 [US3] Add passenger row action to set/clear manual tag with pt-BR wording equivalent to FR-016 in `../sitio-dashboard/src/components/trips/PassengerRowActions.tsx`
+- [X] T042 [US3] Visually distinguish **settled via payments** vs **settled via manual tag** in `../sitio-dashboard/src/components/trips/PassengerTable.tsx` per FR-009/FR-018
 
 **Checkpoint**: US3 scenarios in [spec.md](./spec.md) pass.
 
@@ -143,14 +143,14 @@
 
 ### Tests for User Story 4
 
-- [ ] T043 [P] [US4] Add Nest e2e or integration tests asserting passenger list filters (`includeRemoved`), `GET /trips/{tripId}/passenger-status-aggregates` counts vs list expectations, trip default amount change recalculating statuses (FR-019), and computed `paymentStatus` edge cases (no expected amount, partial payments, tag + payments) in `../sitio-backend/test/passenger-status.e2e-spec.ts`
+- [X] T043 [P] [US4] Add Nest e2e or integration tests asserting passenger list filters (`includeRemoved`), `GET /trips/{tripId}/passenger-status-aggregates` counts vs list expectations, trip default amount change recalculating statuses (FR-019), and computed `paymentStatus` edge cases (no expected amount, partial payments, tag + payments) in `../sitio-backend/test/passenger-status.e2e-spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T044 [US4] Ensure list queries apply **default vs includeRemoved** consistently for roster responses per FR-036 in `../sitio-backend/src/modules/passenger/queries/`
-- [ ] T045 [US4] Implement **backend-only** trip-level status aggregates — `GET /trips/{tripId}/passenger-status-aggregates?includeRemoved=` per [contracts/openapi.yaml](./contracts/openapi.yaml) — in `../sitio-backend/src/modules/trip/queries/trip-aggregates.query.ts` (or handler colocated with trip module); reuse the same status derivation as passenger list (FR-018, FR-036). **Do not** duplicate counting logic on the client except for display formatting. Add matching Zod types in `../sitio-dashboard/src/lib/schemas/` when wiring the dashboard.
-- [ ] T046 [US4] Implement **TripStatusSummary** (or route section) with pt-BR labels, fetching aggregates from T045’s endpoint and passing `includeRemoved` from `../sitio-dashboard/src/stores/ui-preferences-store.ts` in `../sitio-dashboard/src/components/trips/TripStatusSummary.tsx`
-- [ ] T047 [US4] When viewing payment history for a **removed** passenger, show removed indicator per FR-021 in `../sitio-dashboard/src/components/trips/PassengerPaymentHistory.tsx`
+- [X] T044 [US4] Ensure list queries apply **default vs includeRemoved** consistently for roster responses per FR-036 in `../sitio-backend/src/modules/passenger/queries/`
+- [X] T045 [US4] Implement **backend-only** trip-level status aggregates — `GET /trips/{tripId}/passenger-status-aggregates?includeRemoved=` per [contracts/openapi.yaml](./contracts/openapi.yaml) — in `../sitio-backend/src/modules/trip/queries/trip-aggregates.query.ts` (or handler colocated with trip module); reuse the same status derivation as passenger list (FR-018, FR-036). **Do not** duplicate counting logic on the client except for display formatting. Add matching Zod types in `../sitio-dashboard/src/lib/schemas/` when wiring the dashboard.
+- [X] T046 [US4] Implement **TripStatusSummary** (or route section) with pt-BR labels, fetching aggregates from T045’s endpoint and passing `includeRemoved` from `../sitio-dashboard/src/stores/ui-preferences-store.ts` in `../sitio-dashboard/src/components/trips/TripStatusSummary.tsx`
+- [X] T047 [US4] When viewing payment history for a **removed** passenger, show removed indicator per FR-021 in `../sitio-dashboard/src/components/trips/PassengerPaymentHistory.tsx`
 
 **Checkpoint**: US4 scenarios and SC-006 in [spec.md](./spec.md) satisfied.
 
@@ -164,12 +164,12 @@
 
 ### Tests for User Story 5
 
-- [ ] T054 [P] [US5] Add Vitest + Testing Library tests in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` (**US5-only**; do not duplicate T053): fixed sidebar/main scroll layout cues, breadcrumb + page title nested context (SC-009/UI-FR-010), and empty-state instead of blank table chrome (SC-010/UI-FR-007)
+- [X] T054 [P] [US5] Add Vitest + Testing Library tests in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` (**US5-only**; do not duplicate T053): fixed sidebar/main scroll layout cues, breadcrumb + page title nested context (SC-009/UI-FR-010), and empty-state instead of blank table chrome (SC-010/UI-FR-007)
 
 ### Implementation for User Story 5
 
-- [ ] T055 [US5] Implement route-context recovery for invalid or missing deep-link context (school/trip/passenger/payment routes) with clear pt-BR messaging and navigation back to valid list routes in `../sitio-dashboard/src/routes/` and related route guards/loaders
-- [ ] T056 [US5] Close gaps vs **UI-FR-001** (fixed sidebar + scrollable main), **UI-FR-006/007** (table toolbars + empty states on **school**, **trip**, and **trip passenger** lists), **UI-FR-008** (card-wrapped school/trip/passenger **create/edit** forms), **UI-FR-009** (bento-style main grid), and **UI-FR-013** (card wrappers for primary list/summary sections)—including **payment** create/edit/history routes once US2 exists—in `../sitio-dashboard/src/components/` and `../sitio-dashboard/src/routes/`; **do not** change domain behavior owned by US1–US4 tasks
+- [X] T055 [US5] Implement route-context recovery for invalid or missing deep-link context (school/trip/passenger/payment routes) with clear pt-BR messaging and navigation back to valid list routes in `../sitio-dashboard/src/routes/` and related route guards/loaders
+- [X] T056 [US5] Close gaps vs **UI-FR-001** (fixed sidebar + scrollable main), **UI-FR-006/007** (table toolbars + empty states on **school**, **trip**, and **trip passenger** lists), **UI-FR-008** (card-wrapped school/trip/passenger **create/edit** forms), **UI-FR-009** (bento-style main grid), and **UI-FR-013** (card wrappers for primary list/summary sections)—including **payment** create/edit/history routes once US2 exists—in `../sitio-dashboard/src/components/` and `../sitio-dashboard/src/routes/`; **do not** change domain behavior owned by US1–US4 tasks
 
 **Checkpoint**: US5 acceptance scenarios in [spec.md](./spec.md) hold with automated UI tests.
 
@@ -179,12 +179,12 @@
 
 **Purpose**: Contract sync, quickstart validation, a11y and logging pass.
 
-- [ ] T048 [P] Export or document OpenAPI from Nest (e.g. `@nestjs/swagger`) or add contract check script comparing routes to `../sitio-design-notes/specs/001-school-trip-payments/contracts/openapi.yaml` in `../sitio-backend/package.json`
-- [ ] T049 [P] Update `../sitio-backend/README.md` and `../sitio-dashboard/README.md` with final scripts (`start:dev`, `test`, `lint`) and env vars
-- [ ] T050 Walk through [quickstart.md](./quickstart.md) sanity checklist and fix gaps in `../sitio-dashboard/` and `../sitio-backend/`
-- [ ] T051 [P] Best-effort a11y pass: labels, focus order, keyboard operable menus for kebab actions per FR-040 in `../sitio-dashboard/src/components/trips/`
-- [ ] T052 Verify no CPF in logs or stack traces in error paths; add tests if needed in `../sitio-backend/test/logging-redaction.spec.ts`
-- [ ] T053 [P] Add **required** Vitest + Testing Library tests in `../sitio-dashboard/src/test/` (one file or colocated `*.test.tsx`) covering at least **US1** school→trip→passenger navigation, **US2** payment history + create payment from row context (MSW or mocked client), **US3** manual paid-without-info control, and **US4** TripStatusSummary rendering from aggregate API response (mocked)—constitution §II applies to dashboard code as well as API; **omit** shell/breadcrumb/empty-state assertions delegated to **T054** (US5)
+- [X] T048 [P] Export or document OpenAPI from Nest (e.g. `@nestjs/swagger`) or add contract check script comparing routes to `../sitio-design-notes/specs/001-school-trip-payments/contracts/openapi.yaml` in `../sitio-backend/package.json`
+- [X] T049 [P] Update `../sitio-backend/README.md` and `../sitio-dashboard/README.md` with final scripts (`start:dev`, `test`, `lint`) and env vars
+- [X] T050 Walk through [quickstart.md](./quickstart.md) sanity checklist and fix gaps in `../sitio-dashboard/` and `../sitio-backend/`
+- [X] T051 [P] Best-effort a11y pass: labels, focus order, keyboard operable menus for kebab actions per FR-040 in `../sitio-dashboard/src/components/trips/`
+- [X] T052 Verify no CPF in logs or stack traces in error paths; add tests if needed in `../sitio-backend/test/logging-redaction.spec.ts`
+- [X] T053 [P] Add **required** Vitest + Testing Library tests in `../sitio-dashboard/src/test/` (one file or colocated `*.test.tsx`) covering at least **US1** school→trip→passenger navigation, **US2** payment history + create payment from row context (MSW or mocked client), **US3** manual paid-without-info control, and **US4** TripStatusSummary rendering from aggregate API response (mocked)—constitution §II applies to dashboard code as well as API; **omit** shell/breadcrumb/empty-state assertions delegated to **T054** (US5)
 
 ---
 
