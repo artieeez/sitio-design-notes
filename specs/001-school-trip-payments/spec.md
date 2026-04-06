@@ -162,7 +162,7 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 
 ### Edge Cases
 
-- There is **no** global or **centralized payment list**; all payment CRUD is **trip-scoped** via **passenger row** affordances (**FR-010**, **FR-011**).
+- **FR-010** / **FR-011** (normative): no centralized payment list; payment CRUD is trip-scoped and only from passenger row affordances.
 - There is **no** roster or payment **CSV**/**Excel** download and **no** product-defined **print** report in v1; sharing data offline is outside this feature (**FR-042**).
 - A passenger has multiple payments below the effective expected amount; status remains **pending** until cumulative amounts meet or exceed it at **BRL** and **two decimal places** per FR-034 (implicit partial progress while **pending**).
 - Trip default expected amount changes after passengers and payments exist; system recalculates each passenger's status using current effective expected amounts and active manual tags.
@@ -186,8 +186,8 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 - Support or **routine** diagnostic logging that might capture request bodies or errors MUST **omit** or **redact** passenger **CPF** so values never appear in those channels; stack traces MUST NOT echo raw **CPF** (**FR-039**).
 - Extremely large passenger counts or long school/trip lists may increase load time or memory use; v1 does **not** require **server-side** pagination or incremental loading (**FR-041**), but **UI-FR-006** still expects **on-screen** paging controls (often **client-side**); moving paging to the server is **deferred** unless a later release or operational need dictates otherwise.
 - Staff bookmark or deep-link a **create**/**edit** URL that assumes **school** or **trip** context that is missing or invalid: the product MUST **recover** with a clear message and navigation back to a valid **school** or **trip** list (exact UX is implementation detail).
-- Staff bookmark or deep-link a **payment** **create**, **edit**, or **history** URL with **missing** or **invalid** trip/passenger context: the product MUST **recover** with a clear message and navigation back toward the **trip passenger table** (or upstream lists)—**no** cross-trip **payment** picker (**UI-FR-011**, **FR-010**).
-- **UI-FR-003**: If no theme toggle is shipped in v1, the spec is **not** violated; the toggle is **optional**.
+- Staff bookmark or deep-link a **payment** **create**, **edit**, or **history** URL with **missing** or **invalid** trip/passenger context: the product MUST **recover** with a clear message and navigation back toward the **trip passenger table** (or upstream lists); route-first payment surfaces and scope — **UI-FR-011** with **FR-010** / **FR-011**.
+- Optional **light/dark** theme toggle: if it is not shipped in v1, the product does not violate this spec (normative details under **UI-FR-003** in Staff dashboard UI requirements).
 
 ## Requirements *(mandatory)*
 
