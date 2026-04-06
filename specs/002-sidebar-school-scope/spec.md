@@ -46,11 +46,11 @@ As tourism company staff, I always see which school the dashboard is scoped to s
 
 **Why this priority**: Wrong-school context is a high-severity operational mistake; orientation is foundational for every other task.
 
-**Independent Test**: With a school selected, open any school-scoped screen and verify the scope control shows that school’s name and visual identity (favicon or agreed fallback), a **placeholder username** on the secondary line, and that **real** sign-in identity is not implied.
+**Independent Test**: With a school selected, open any school-scoped screen and verify the scope control shows that school’s **title** and visual identity (favicon or agreed fallback), a **placeholder username** on the secondary line, and that **real** sign-in identity is not implied.
 
 **Acceptance Scenarios**:
 
-1. **Given** the dashboard is scoped to a school, **When** staff view the shell, **Then** the scope control shows that school’s name and favicon (or fallback when no favicon exists) and a **secondary line** with a **placeholder username** (non-authoritative stub until authenticated identity exists).
+1. **Given** the dashboard is scoped to a school, **When** staff view the shell, **Then** the scope control shows that school’s **title** and favicon (or fallback when no favicon exists) and a **secondary line** with a **placeholder username** (non-authoritative stub until authenticated identity exists).
 2. **Given** a school has no stored favicon, **When** staff view the scope control, **Then** the product shows a consistent fallback treatment that remains recognizable as the school row (not a broken image).
 
 ---
@@ -95,8 +95,8 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **Initialization — empty tenant**: No schools exist → **school creation form** per priority rule; scope control shows appropriate empty or post-create state once a school exists.
 - **Initialization — required data unavailable**: If **network or API failure** prevents loading the **minimum server data** needed to apply **FR-001** (validate last accessed, resolve **last created**, or confirm **zero schools**), the product MUST show a **blocking error** with **retry** and MUST **not** enter a **school-scoped** shell with a **guessed** school (**FR-019**).
 - **Routing — unrecognized school id**: If a **school-scoped** route or URL names a **school id** that the server **does not recognize**, the product MUST follow **FR-020** (blocking error; **no** silent substitution from **FR-001**). This is **distinct** from **FR-001** step (1) when **last accessed** points at a **removed** school **without** a conflicting deep-linked id: there **FR-001** fall-through to **last created** or **school creation** still applies.
-- **No favicon**: School row still shows name and secondary line; visual fallback is consistent across the product.
-- **Very long school names**: Scope control truncates or wraps in a way that does not break the sidebar layout; full name available via tooltip or expanded menu where appropriate.
+- **No favicon**: School row still shows **title** and secondary line; visual fallback is consistent across the product.
+- **Very long school titles**: Scope control truncates or wraps in a way that does not break the sidebar layout; full **title** available via tooltip or expanded menu where appropriate.
 - **No recent schools** (first visit or cleared storage): Recent list is empty or explains none yet; search and Add school remain available.
 - **Search returns no schools**: Clear empty state; staff can still use Add school if permitted.
 - **Single school only**: Search and recents still behave sensibly (search may return one row; recents may show one).
@@ -111,7 +111,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **FR-020**: When a **school-scoped** route or URL carries a **school id** that the server **does not recognize** (including **deleted** schools), the product MUST show a **blocking error** state with **retry** and MUST **not** automatically scope the dashboard to a **different** school by applying **FR-001** priority rules **in place of** resolving that id. The product MAY offer an **explicit** user control to navigate to a **neutral** entry (for example **app root** or a route **without** a school id) so staff can recover without guessing scope.
 - **FR-002**: The shell MUST present a primary **scope control** at the top of the sidebar that always reflects the **currently active school** for the dashboard session whenever a school is active (**FR-001**).
 - **FR-003**: The scope control MUST display the school’s **favicon** when available and a **consistent fallback** when not.
-- **FR-004**: The scope control MUST display the school’s **display name** as the primary label.
+- **FR-004**: The scope control MUST display the school’s **`title`** as the primary label (the human-facing School field from `001-school-trip-payments`; there is **no** separate persisted `name` column—informal phrases such as “display name” or “school name” in UX copy refer to this **`title`** value).
 - **FR-005**: The scope control MUST include a **secondary line** suitable for short contextual text. Until authentication exists, this line MUST show a **placeholder username** (a **non-authoritative** display name used for layout and future identity shape—not a **real** authenticated user). The specification does not mandate exact wording; product copy in Brazilian Portuguese (`pt-BR`) is set during implementation.
 - **FR-006**: Activating the scope control MUST open a **menu or panel** that includes: (a) **recently accessed schools** (most recent first, **at most 10** entries; older entries fall off), (b) **search** over schools the staff may open, and (c) a control to **add a new school** that navigates to the **school creation** flow.
 - **FR-007**: **Authentication** and **binding** the secondary line to **real user identity** are **out of scope** for this feature; only the **placeholder username** behavior in **FR-005** is required.
@@ -133,7 +133,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **Active school scope**: The school currently governing dashboard routes and labels; drives which school’s trips, passengers, and payments staff manage.
 - **Last accessed school (initialization)**: The school last confirmed as active for this browser profile; MUST align with the **most recent** entry used for **FR-001** step (1) and with updating **recent schools** when staff work in a scoped dashboard.
 - **Recent schools (client-side)**: Ordered list of schools the user opened recently for quick switching, **retaining at most 10** entries (**FR-006**); persistence mechanism is an implementation detail but MUST be consistent per device/profile until authentication provides a server-side preference.
-- **School summary for scope UI**: Name, favicon reference or resolved image, and identifiers needed to load edit and navigation targets—aligned with school entities in the related domain specification.
+- **School summary for scope UI**: **`title`** (display label), favicon reference or resolved image, and identifiers needed to load edit and navigation targets—aligned with school entities in the related domain specification.
 
 ## Success Criteria *(mandatory)*
 
@@ -155,7 +155,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **Assumption — Repository split**: Primary implementation is in `../sitio-dashboard`. Backend changes are needed only if listing schools for search, resolving favicons, or persisting recents requires APIs not already provided by `001-school-trip-payments`; otherwise backend scope is minimal or none.
 - **Assumption — Initialization “last created”**: **Creation time** comes from the **authoritative persisted** school record (server-defined ordering); ties use a **deterministic** secondary key as noted in Edge Cases.
 - **Assumption — Recent schools**: Stored **per browser profile** (local persistence) until authenticated cross-device preferences exist.
-- **Assumption — Search**: Matches school **name** (and optionally other fields already exposed for school lists) with case-insensitive substring matching unless product later defines advanced search.
+- **Assumption — Search**: Matches school **`title`** (and optionally other fields already exposed for school lists) with case-insensitive substring matching unless product later defines advanced search.
 - **Assumption — Home**: Empty or minimal placeholder is acceptable; no KPI or feed content in this release.
 - **Assumption — Alignment with 001**: Trip lists, passenger tables, and payment routes remain as defined in `001-school-trip-payments`; this specification only defines **where** sidebar links **enter** those graphs.
 - **Assumption — Mobile**: Responsive behavior follows the same information architecture; deep mobile-specific gestures are not required unless already standard for the dashboard shell.
