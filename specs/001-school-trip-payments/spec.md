@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-school-trip-payments`  
 **Created**: 2026-04-01  
-**Last updated**: 2026-04-05 (staff dashboard UI specification)  
+**Last updated**: 2026-04-06 (clarification: payment screens route-first)  
 **Status**: Ready for implementation  
 **Input**: User description: "We are creating a dashboard for a tourism company to control which passengers have payment pending. This tourism company mainly works with schools. The tourism company staff should be able to register a school, register a trip for a school and register passengers for the trip and register payments. Authentication is out of scope for this spec. Any payment integration is out of scope for this spec (there should only be a CRUD for manual interaction). **Scope note:** Trip creation is only reachable from a **school’s trip list** (school is implicit on the trip form). All payment **create / view / edit / delete** happens **only** in **trip context** via **passenger row** affordances (kebab / per-passenger payment history); there is **no** centralized cross-trip payment list."  
 **Input (addendum 2026-04-05)**: Staff dashboard **UI**: fixed **sidebar** (School link, optional **light/dark** toggle) and **scrollable** **main**; **bento-style** main grid with **card**-wrapped sections; **file-based** route per **list / create / edit / detail** screen; **table** lists with headers, **search/filter**, **pagination** (client-side acceptable in v1 with **FR-041**); **empty states** with illustration and **Create**; **list** vs **form** **isolation** (separate URLs or **sheet/dialog**); **breadcrumbs** and **page title** for nested **school → trip → passenger** routes; **shadcn** **Dashboard** block, **Data Table**, and **Card** alignment for `../sitio-dashboard`; **app logo** and **signed-in user** avatar/name in shell **out of scope**.  
@@ -28,11 +28,15 @@
 - Q: Should school list, trip list, and trip passenger table use server-side pagination in v1? → A: **Option B** — **no** pagination requirement in v1; load **full** collections per screen until scale or performance feedback drives a follow-up (see **FR-041**).
 - Q: Should v1 include CSV/export or print-oriented reports? → A: **Option A** — **no** CSV, spreadsheet export, or print-optimized report in v1; staff use **on-screen** lists and forms only (see **FR-042**).
 
+### Session 2026-04-06
+
+- Q: For payment **create**, **edit**, and **payment history**, should the product prefer **overlay-first** (sheet/dialog) or **route-first** (dedicated URLs)? → A: **Option B — route-first**: each of **payment create**, **payment edit**, and **payment history** uses a **dedicated URL** and **file-based route**; flows remain **opened only** from **passenger row** affordances on the **trip passenger table**, with **passenger**/**trip** context **implicit** (**FR-010**, **FR-011**, **FR-015**). **Sheets**/**dialogs** MAY still be used for **ancillary** actions (e.g. delete confirm) but **not** as the **primary** surface for those three payment tasks (**UI-FR-011**).
+
 ### Session 2026-04-05 (UI specification addendum)
 
 - **Layout**: Staff dashboard uses a **fixed** primary navigation area (sidebar) and a **scrollable** main work area; main area scrolls independently of the sidebar.
-- **Primary navigation (v1)**: Sidebar includes a **School** entry (and may include a **light/dark theme** control). **Application logo**, **signed-in user avatar**, and **display name** in the chrome are **out of scope** for this feature release (see **FR-052**).
-- **Routing**: Each **list**, **create**, **edit**, and **detail** screen for schools, trips, and passengers is a **separate route**; the dashboard codebase implements this with **file-based routing** (one route module per screen) per project conventions. **Payment** create/edit/history remains **trip-scoped** and **row-triggered** per **FR-010** / **FR-011** (may use dedicated routes and/or overlays as long as context is implicit).
+- **Primary navigation (v1)**: Sidebar includes a **School** entry (and may include a **light/dark theme** control). **Application logo**, **signed-in user avatar**, and **display name** in the chrome are **out of scope** for this feature release (see **UI-FR-012**).
+- **Routing**: Each **list**, **create**, **edit**, and **detail** screen for schools, trips, and passengers is a **separate route**; **payment** **create**, **edit**, and **history** each use a **dedicated URL** and **file-based route** (**route-first**, Session 2026-04-06). All remain **trip-scoped** and **row-triggered** per **FR-010** / **FR-011**.
 - **Isolation**: A **list view** and its **create** (or **edit**) **form** MUST **not** share the same page as two co-equal primary panels unless the **form** is presented only inside a **sheet** or **dialog** overlay; default pattern for this product is **separate URLs** for list vs create/edit.
 - **Visual patterns**: **List** screens use a **data table** pattern (column headers, **search/filter**, **pagination**). **Create** (and **edit**) **forms** for schools, trips, and passengers appear inside a **card**-style grouped container on their **own** route (or inside sheet/dialog when used). **Empty** lists use a **centered empty state** with illustration and **Create** action—not an empty table header only.
 - **Main content**: Uses a **bento-style** modular grid for sections/widgets even when early screens have a single primary block.
@@ -45,14 +49,14 @@ This section states **staff-visible** layout and navigation rules for `../sitio-
 
 - **Shell**: Fixed **sidebar** + scrollable **main** content (see **UI-FR-001**).
 - **Sidebar contents (v1)**: Link to **School** flows; optional **theme** toggle (see **UI-FR-002**, **UI-FR-003**). No spec for app branding or user identity in the header (see **UI-FR-012**).
-- **Route granularity**: One **URL** (and one **route file**) per **list / create / edit / view** screen where those are primary tasks (see **UI-FR-004**, **UI-FR-005**).
+- **Route granularity**: One **URL** (and one **route file**) per **list / create / edit / view** screen where those are primary tasks, **including** **payment** **create**, **edit**, and **history** (see **UI-FR-004**, **UI-FR-005**, **UI-FR-011**).
 - **Lists**: Table with **headers**, **search/filter**, **pagination**; **empty** state pattern (see **UI-FR-006**, **UI-FR-007**).
 - **Forms**: **Card**-wrapped sections on dedicated routes, or **sheet/dialog** when that pattern is chosen (see **UI-FR-005**, **UI-FR-008**).
 - **Sections**: Other **main-area** blocks (lists, summaries) use **card** wrappers as part of the grid (see **UI-FR-013**).
 - **Composition**: **Bento-style** grid in the main region (see **UI-FR-009**).
 - **Context**: **Breadcrumbs** + **title** for nested school → trip → passenger flows (see **UI-FR-010**).
 
-**Dashboard implementation alignment** (for `sitio-dashboard` builds): Compose the application **shell** using the **shadcn “Dashboard” block** (or equivalent structure: sidebar + main). Implement **list** routes with the project **Data Table** component. Wrap **create/edit** form sections in **Card** components on their routes, or in **Sheet**/**Dialog** when using overlay isolation. This sentence restates the UI-FR rules in library terms for developers.
+**Dashboard implementation alignment** (for `sitio-dashboard` builds): Compose the application **shell** using the **shadcn “Dashboard” block** (or equivalent structure: sidebar + main). Implement **list** routes with the project **Data Table** component. Wrap **create/edit** form sections in **Card** components on their routes, or in **Sheet**/**Dialog** when using overlay isolation for **school/trip/passenger** flows per **UI-FR-005**. **Payment** **create**, **edit**, and **history** use **dedicated route pages** (**UI-FR-011**); **Sheet**/**Dialog** only for ancillary confirms, not as the primary payment surfaces.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -180,6 +184,7 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 - Support or **routine** diagnostic logging that might capture request bodies or errors MUST **omit** or **redact** passenger **CPF** so values never appear in those channels; stack traces MUST NOT echo raw **CPF** (**FR-039**).
 - Extremely large passenger counts or long school/trip lists may increase load time or memory use; v1 does **not** require **server-side** pagination or incremental loading (**FR-041**), but **UI-FR-006** still expects **on-screen** paging controls (often **client-side**); moving paging to the server is **deferred** unless a later release or operational need dictates otherwise.
 - Staff bookmark or deep-link a **create**/**edit** URL that assumes **school** or **trip** context that is missing or invalid: the product MUST **recover** with a clear message and navigation back to a valid **school** or **trip** list (exact UX is implementation detail).
+- Staff bookmark or deep-link a **payment** **create**, **edit**, or **history** URL with **missing** or **invalid** trip/passenger context: the product MUST **recover** with a clear message and navigation back toward the **trip passenger table** (or upstream lists)—**no** cross-trip **payment** picker (**UI-FR-011**, **FR-010**).
 - **UI-FR-003**: If no theme toggle is shipped in v1, the spec is **not** violated; the toggle is **optional**.
 
 ## Requirements *(mandatory)*
@@ -210,7 +215,7 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 - **UI-FR-008**: **Create** and **edit** forms for schools, trips, and passengers MUST wrap their primary field groups in a **card**-style container on the **dedicated** route, **or** inside the **sheet**/**dialog** when **UI-FR-005** uses an overlay pattern.
 - **UI-FR-009**: The **main** content area MUST lay out primary sections using a **bento-style** modular **grid** (multiple tiles when applicable); early releases MAY ship screens with a **single** prominent tile but MUST **not** abandon the grid system for ad-hoc full-bleed-only pages when the design system provides a grid.
 - **UI-FR-010**: For routes nested under a **selected school** (trips, trip detail, passengers, passenger create/edit), the main region MUST show **breadcrumbs** and a **page title** that reflect **school name**, **trip name** when in trip scope, and the current **action** or **segment** (e.g. trips, passengers, add passenger), in **pt-BR** per **FR-024**.
-- **UI-FR-011**: **Payment** flows remain governed by **FR-010** and **FR-011**; payment **create**/**edit**/**history** MUST stay **trip-scoped** and opened from **passenger row** affordances. Dedicated URLs and/or overlays MAY be used provided **passenger** (and trip) context is **implicit** and selectors are **not** shown contrary to **FR-011** / **FR-015**.
+- **UI-FR-011**: **Payment** flows remain governed by **FR-010** and functional **FR-011**. **Payment** **create**, **edit**, and **payment history** MUST each map to a **dedicated URL** and a **file-based route** (Session 2026-04-06, **route-first**). Staff MUST open these flows **only** from **passenger row** affordances on the **trip passenger table**; **passenger** and **trip** context MUST be **implicit** from navigation/route context—forms MUST **not** include **passenger** or **trip** pickers (**FR-011**, **FR-015**). **Sheet**, **dialog**, or other overlays MAY be used for **secondary** actions (for example **delete** confirmation) but MUST **not** replace the **primary** route-based screens for payment **create**, **edit**, or **history**.
 - **UI-FR-012**: **Application logo**, **authenticated user avatar**, and **user display name** in the **shell** are **out of scope** for this feature; the product MAY omit them or add them later without breaching this spec.
 - **UI-FR-013**: Each **primary section** in the **main** work area (for example a **list** with toolbar, a **summary** or **metric** strip, or a **form** block) MUST use a **card**-style wrapper as part of the **bento** layout, except where the UI is **only** a **sheet** or **dialog** per **UI-FR-005**.
 
