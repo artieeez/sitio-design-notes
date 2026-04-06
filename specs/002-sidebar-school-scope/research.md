@@ -16,9 +16,9 @@ Consolidated decisions for school-scoped shell, initialization priority, and cli
 
 ## 3. Initialization sequence vs FR-019 / FR-020
 
-- **Decision**: On load, distinguish **(A)** normal init (**FR-001**) from **(B)** route carries a **school id** that must be validated (**FR-020**). For **(A)**, after **successful** fetch of the **minimum** school list (or equivalent) needed to evaluate priority, apply **last accessed → last created → redirect to school creation**. For **(B)**, resolve **`GET /schools/{id}`** (or validate membership in list); on **404**, show **blocking error** with **retry** and optional **neutral navigation**; **do not** apply **FR-001** to substitute another school. For **(A)**, if the minimum fetch **fails**, show **blocking error** (**FR-019**) and do not mount school-scoped content from guesses.
-- **Rationale**: Matches clarifications and prevents silent wrong-school operations.
-- **Alternatives considered**: Fallback to **FR-001** when deep link invalid — explicitly rejected by spec.
+- **Decision**: On load, distinguish **(A)** normal init (**FR-001**) from **(B)** route carries a **school id** that must be validated (**FR-020**). For **(A)**, after **successful** fetch of the **minimum** school list (or equivalent) needed to evaluate priority, apply **last accessed → last created → redirect to school creation**; the **`/`** route uses the **same** logic (no standalone **visible root landing**). For **(B)**, resolve **`GET /schools/{id}`** (or validate membership in list); on **404**, show **blocking error** with **retry** in **main content only**; keep **sidebar** and **scope menu** so staff can pick **another school** or **add a school**—**do not** apply **FR-001** to substitute another school. For **(A)**, if the minimum fetch **fails**, show **blocking error** (**FR-019**) in **main content** with shell visible; do not mount **school-scoped main** content from guesses.
+- **Rationale**: Matches clarifications and prevents silent wrong-school operations; recovery via **scope menu**, not a **neutral root** page.
+- **Alternatives considered**: Fallback to **FR-001** when deep link invalid — explicitly rejected by spec. Dedicated **`/`** marketing or recovery page — rejected; **`/`** must run **FR-001** or **FR-019** only.
 
 ## 4. Routing shape for school-scoped dashboard
 

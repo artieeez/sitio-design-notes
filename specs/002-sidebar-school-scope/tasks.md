@@ -38,7 +38,7 @@
 - [ ] T008 Extend `../sitio-dashboard/src/lib/query-keys.ts` with any keys needed for schools list + school detail reuse for scope (avoid cache collisions with existing `queryKeys.school`)
 - [ ] T009 Ensure `../sitio-dashboard/src/lib/api-client.ts` / existing list calls can fetch **`GET /schools`** for initialization (reuse patterns from `../sitio-dashboard/src/routes/schools/index.tsx`); add a small `fetchSchoolsList` helper if it reduces duplication in `../sitio-dashboard/src/lib/schools-api.ts` (new file) or colocate in `../sitio-dashboard/src/lib/`
 - [ ] T010 Add `../sitio-dashboard/src/hooks/use-schools-for-scope.ts` (or equivalent) wrapping TanStack Query for **schools list** used by init + scope menu (shared loading/error semantics for **FR-019**)
-- [ ] T011 Create shared UI primitives for **blocking error + retry** (`../sitio-dashboard/src/components/layout/scope-blocking-error.tsx`) reusing existing Button/Typography patterns; copy in `../sitio-dashboard/src/messages/pt-BR.ts` (**FR-019** / **FR-020**)
+- [ ] T011 Create shared UI primitives for **blocking error + retry** in the **main content area** only (`../sitio-dashboard/src/components/layout/scope-blocking-error.tsx`) reusing existing Button/Typography patterns; **sidebar** stays visible with **scope control** usable (**FR-019** / **FR-020**); copy in `../sitio-dashboard/src/messages/pt-BR.ts`
 - [ ] T012 Document in-code where **FR-020** is enforced (route school id invalid → **no** FR-001 substitution) in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` or a dedicated layout route file — implement navigation guard or equivalent **before** relying on shell content
 
 **Checkpoint**: Persistence + resolution helpers compile; schools list query available; blocking error component ready for US1/US2.
@@ -49,7 +49,7 @@
 
 **Goal**: **FR-001**, **FR-019**, **FR-020** — cold start picks **last accessed** → **last created** → **school creation**; blocking error on init failure; invalid deep-linked school id shows recovery (**no** silent rescope).
 
-**Independent Test**: Clear `localStorage` keys, seed schools with known `createdAt` order, cold-load each branch; verify navigation target and **no** scoped shell on **FR-019**/**FR-020**.
+**Independent Test**: Clear `localStorage` keys, seed schools with known `createdAt` order, cold-load each branch; verify navigation target, **`/`** resolves via **FR-001** (no visible root landing), and on **FR-019**/**FR-020** the error is **main-content-only** with **sidebar** / **scope menu** still available for recovery.
 
 ### Tests for User Story 1 (REQUIRED)
 
@@ -59,10 +59,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement app entry resolution: after **successful** schools list load, `navigate` from `../sitio-dashboard/src/routes/index.tsx` (and/or `../sitio-dashboard/src/routes/__root.tsx` child logic) to `/schools/$schoolId`, `/schools/new`, or stay on error UI per **FR-001**/**FR-019** — **do not** render school-scoped main content until resolution completes
+- [ ] T016 [US1] Implement app entry resolution on **`/`** (`../sitio-dashboard/src/routes/index.tsx` and/or `../sitio-dashboard/src/routes/__root.tsx`): after **successful** schools list load, `navigate` to `/schools/$schoolId` or `/schools/new`, or show **FR-019** in **main content** only—**no** standalone visible root landing; **do not** render **school-scoped main** content until resolution completes
 - [ ] T017 [US1] On successful scope resolution, persist **last accessed** in `../sitio-dashboard/src/lib/scope-persistence.ts` when user lands on a valid school route
-- [ ] T018 [US1] Handle **FR-019** in entry flow when `use-schools-for-scope` / list query fails: render `../sitio-dashboard/src/components/layout/scope-blocking-error.tsx` with **retry**; clear or avoid setting active school in client state
-- [ ] T019 [US1] Handle **FR-020** when `schoolId` in URL is non-existent: extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx` usage or dedicated scope error in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` — **must not** run **FR-001** fallback to pick another school
+- [ ] T018 [US1] Handle **FR-019** in entry flow when `use-schools-for-scope` / list query fails: render `../sitio-dashboard/src/components/layout/scope-blocking-error.tsx` in **main content** with **retry**; keep **DashboardShell** / **sidebar** visible; clear or avoid setting active school in client state
+- [ ] T019 [US1] Handle **FR-020** when `schoolId` in URL is non-existent: show error in **main content** in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` (or layout) via `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx` or dedicated inline UI—**must not** run **FR-001** fallback to pick another school; **must not** offer a **visible `/` recovery** page; staff recover via **scope menu** / **retry** / **Add school**
 - [ ] T020 [US1] Ensure **last accessed** removed school falls through to **last created** or creation flow (`../sitio-dashboard/src/lib/resolve-initial-school.ts` + entry navigation)
 - [ ] T021 [US1] Update `../sitio-dashboard/src/messages/pt-BR.ts` with any new user-visible init/error strings (**pt-BR**)
 

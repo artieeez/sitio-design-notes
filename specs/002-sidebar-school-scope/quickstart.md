@@ -12,7 +12,7 @@ Local development orientation for **school-scoped shell** work. Paths are relati
 1. **Pull latest** `sitio-backend` and `sitio-dashboard` so `GET /schools` and `GET /schools/{id}` match [001 contracts](../001-school-trip-payments/contracts/openapi.yaml).
 2. Implement **scope state**:
    - Read/write **last accessed** and **recents** per [contracts/client-scope-state.md](./contracts/client-scope-state.md).
-   - On app entry, run **initialization** per [research.md](./research.md) and **FR-001** / **FR-019** / **FR-020**.
+   - On app entry, run **initialization** per [research.md](./research.md) and **FR-001** / **FR-019** / **FR-020**; **`/`** redirects per **FR-001** (no visible root landing).
 3. Extend **`DashboardShell`** (`src/components/layout/dashboard-shell.tsx`):
    - Replace or augment the header **brand** row with the **scope control** (**FR-002**–**FR-006**, **FR-010**).
    - Sidebar links: **Home**, **Passengers**, **Payments** (**FR-008**–**FR-012**); remove duplicate “edit school” nav if present (**FR-009**–**FR-010**).
@@ -32,8 +32,9 @@ Local development orientation for **school-scoped shell** work. Paths are relati
 
 - [ ] Cold start: last accessed valid → lands on that school.
 - [ ] Cold start: last accessed stale → falls through to last created or creation flow.
-- [ ] Cold start: API failure before minimum data → blocking error + retry (**FR-019**).
-- [ ] Deep link with unknown `schoolId` → blocking error; no silent rescope (**FR-020**).
+- [ ] Cold start: API failure before minimum data → blocking error + retry (**FR-019**) in **main content**; **sidebar** / **scope** remain usable where data allows.
+- [ ] Deep link with unknown `schoolId` → blocking error in **main content**; **no** silent rescope (**FR-020**); **scope menu** can switch school or **Add school**.
+- [ ] Visit **`/`** → no standalone landing page; **FR-001** (scoped route or school creation) or **FR-019** in content.
 - [ ] Scope menu: recents ≤ 10, search filters, Add school → creation route.
 - [ ] Sidebar: Home / Passengers / Payments; school edit **only** via scope row icon.
 - [ ] New UI strings **pt-BR**; tests green; lint clean.

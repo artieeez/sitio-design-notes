@@ -31,7 +31,7 @@ Given successful load of **minimum** data (typically full active school list fro
 3. Else if **any** school exists → scope to **last created** = max(`createdAt`), tie-break **max(`id`)** lexicographically.
 4. Else → navigate to **school creation** flow (`/schools/new` or as implemented).
 
-When **minimum** data cannot load → **FR-019** (blocking error, no guessed scope).
+When **minimum** data cannot load → **FR-019** (blocking error in **main content** only; **sidebar** / **scope** remain per spec; no guessed scope).
 
 ## Relationships to 001 routes
 
