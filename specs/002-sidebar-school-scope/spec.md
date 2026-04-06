@@ -8,6 +8,16 @@
 **Related specification**: `001-school-trip-payments` (domain flows, trip- and passenger-scoped payment rules)  
 **Target Repositories**: `../sitio-dashboard` (primary: shell, navigation, scope control, and school-scoped routing entry points); `../sitio-backend` (only if new or extended APIs are required for school search, recent schools, or favicon resolution—see Assumptions)
 
+## Clarifications
+
+### Session 2026-04-06
+
+- Q: When staff change the active school from the scope control while there is unsaved work in the main content area, what should the product do? → A: No special rule in this spec; defer entirely to whatever the dashboard already does when that exists (Option D).
+- Q: On cold start, if the app cannot load the school data needed to apply FR-001, what must the product do before staff can work in a school-scoped shell? → A: Show a blocking error state with retry; do not set an active school or show school-scoped content until required data loads successfully (Option A).
+- Q: What fixed maximum should this release use for the “recently accessed schools” list (FR-006)? → A: **10** schools maximum (Option C).
+- Q: If the route or URL encodes a school id that the server does not recognize (deleted school, typo, or stale bookmark), what must happen when that screen loads? → A: Show a blocking error with retry or path to a neutral entry; do **not** silently scope to another school via **FR-001** (Option B).
+- Q: What accessibility standard must new or changed UI for this feature meet? → A: **No separate WCAG level** in this spec; **match** the existing dashboard accessibility baseline and components (Option C).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Land with the correct school on app start (Priority: P1)
@@ -24,6 +34,8 @@ As tourism company staff, when I open the dashboard, I am placed in a sensible s
 2. **Given** **no** usable last-accessed school (none recorded, or recorded id no longer exists), **and** at least one school exists in the system, **When** the app initializes, **Then** the dashboard is scoped to the **most recently created** school (by authoritative creation ordering).
 3. **Given** **no** school exists in the system, **When** the app initializes, **Then** staff are taken to the **school creation** flow (not a broken or empty scoped shell).
 4. **Given** last accessed pointed to a school that was **removed** since the last visit, **When** the app initializes, **Then** the product does **not** stay stuck on the missing school; it **falls through** to **last created** if any school exists, otherwise to **school creation**.
+5. **Given** **initialization** needs **server data** to apply **FR-001** (for example to confirm last accessed still exists, resolve **last created**, or confirm **no schools** exist) but that data **cannot be loaded** due to **network or API failure**, **When** the app initializes, **Then** staff see a **blocking error** state with **retry** and the product does **not** show a **school-scoped** shell with an **assumed** active school (**FR-019**).
+6. **Given** the loaded route references a **school id** that the server **does not recognize** (for example deleted school or stale deep link), **When** the screen resolves, **Then** staff see a **blocking error** with **retry** (and MAY use an **explicit** control to reach a **neutral** app entry), and the product does **not** silently scope to a **different** school using **FR-001** alone (**FR-020**).
 
 ---
 
@@ -80,23 +92,27 @@ As staff, I use the sidebar to move between Home, school settings, passenger-rel
 
 - **Initialization — tie on “last created”**: If two schools share the same creation granularity, the product MUST use a single deterministic rule (for example server-defined ordering or stable id) so tests and support can reproduce behavior.
 - **Initialization — empty tenant**: No schools exist → **school creation form** per priority rule; scope control shows appropriate empty or post-create state once a school exists.
+- **Initialization — required data unavailable**: If **network or API failure** prevents loading the **minimum server data** needed to apply **FR-001** (validate last accessed, resolve **last created**, or confirm **zero schools**), the product MUST show a **blocking error** with **retry** and MUST **not** enter a **school-scoped** shell with a **guessed** school (**FR-019**).
+- **Routing — unrecognized school id**: If a **school-scoped** route or URL names a **school id** that the server **does not recognize**, the product MUST follow **FR-020** (blocking error; **no** silent substitution from **FR-001**). This is **distinct** from **FR-001** step (1) when **last accessed** points at a **removed** school **without** a conflicting deep-linked id: there **FR-001** fall-through to **last created** or **school creation** still applies.
 - **No favicon**: School row still shows name and secondary line; visual fallback is consistent across the product.
 - **Very long school names**: Scope control truncates or wraps in a way that does not break the sidebar layout; full name available via tooltip or expanded menu where appropriate.
 - **No recent schools** (first visit or cleared storage): Recent list is empty or explains none yet; search and Add school remain available.
 - **Search returns no schools**: Clear empty state; staff can still use Add school if permitted.
 - **Single school only**: Search and recents still behave sensibly (search may return one row; recents may show one).
-- **Switching school while unsaved work exists in main area**: Product defines whether to warn or scope-switch is blocked—default is to follow browser or app-level patterns already used elsewhere; if none exist, switching is allowed and staff accept risk until a dedicated unsaved-changes pattern is specified.
+- **Switching school while unsaved work exists in main area**: **Not mandated by this specification** — warn, block, or allow without prompt follows the **dashboard-wide unsaved-changes convention** when one exists for equivalent navigation; if none exists yet, implementation may choose freely until a separate cross-cutting specification defines it.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: On **app initialization** (cold load or full reload into the dashboard), the product MUST select the active school in this **strict priority order**: (1) **Last school accessed** — the school recorded as most recently active for this staff workflow on this **device / browser profile** (same notion as “last accessed” used for scope continuity), **if** that school **still exists** in the system; (2) **Last school created** — if step (1) does not yield a school, scope to the school with the **latest creation time** among all schools **visible to the product in this release** (global list for the deployment; no per-user permission layer in scope for this spec); (3) **School creation form** — if **no** school exists, navigate staff to the **school creation** flow instead of showing a school-scoped shell with no school.
+- **FR-001**: On **app initialization** (cold load or full reload into the dashboard), **when** the **initial navigation** is **not** governed by **FR-020** (unrecognized school id in route), **once the minimum data required to evaluate the following steps is successfully available** (see **FR-019** for failure handling), the product MUST select the active school in this **strict priority order**: (1) **Last school accessed** — the school recorded as most recently active for this staff workflow on this **device / browser profile** (same notion as “last accessed” used for scope continuity), **if** that school **still exists** in the system; (2) **Last school created** — if step (1) does not yield a school, scope to the school with the **latest creation time** among all schools **visible to the product in this release** (global list for the deployment; no per-user permission layer in scope for this spec); (3) **School creation form** — if **no** school exists, navigate staff to the **school creation** flow instead of showing a school-scoped shell with no school.
+- **FR-019**: If **initialization** cannot load the **minimum server data** needed to apply **FR-001** (for example: confirm whether the **last accessed** id still exists, determine **last created** among schools, or confirm **no schools** exist) due to **network or API failure**, the product MUST show a **blocking error** state with **retry** and MUST **not** set an **active school** or present **school-scoped** main content based on **local guesses alone**.
+- **FR-020**: When a **school-scoped** route or URL carries a **school id** that the server **does not recognize** (including **deleted** schools), the product MUST show a **blocking error** state with **retry** and MUST **not** automatically scope the dashboard to a **different** school by applying **FR-001** priority rules **in place of** resolving that id. The product MAY offer an **explicit** user control to navigate to a **neutral** entry (for example **app root** or a route **without** a school id) so staff can recover without guessing scope.
 - **FR-002**: The shell MUST present a primary **scope control** at the top of the sidebar that always reflects the **currently active school** for the dashboard session whenever a school is active (**FR-001**).
 - **FR-003**: The scope control MUST display the school’s **favicon** when available and a **consistent fallback** when not.
 - **FR-004**: The scope control MUST display the school’s **display name** as the primary label.
 - **FR-005**: The scope control MUST include a **secondary line** suitable for short contextual text. Until authentication exists, this line MUST show a **neutral placeholder** (for example fixed copy such as “Account information unavailable” or an em dash) rather than a real user identifier. The specification does not mandate exact wording; product copy in Brazilian Portuguese (`pt-BR`) is set during implementation.
-- **FR-006**: Activating the scope control MUST open a **menu or panel** that includes: (a) **recently accessed schools** (most recent first, capped at a reasonable maximum such as five to ten entries unless product sets another cap), (b) **search** over schools the staff may open, and (c) a control to **add a new school** that navigates to the **school creation** flow.
+- **FR-006**: Activating the scope control MUST open a **menu or panel** that includes: (a) **recently accessed schools** (most recent first, **at most 10** entries; older entries fall off), (b) **search** over schools the staff may open, and (c) a control to **add a new school** that navigates to the **school creation** flow.
 - **FR-007**: **Authentication** and **real user identity** on the scope control are **out of scope** for this feature; only the **placeholder** behavior in **FR-005** is required.
 - **FR-008**: **Home** in the sidebar MUST be present as a navigation target; **main Home content** (widgets, summaries) is **out of scope** and MAY be empty or a minimal placeholder until a future specification defines it.
 - **FR-009**: The sidebar MUST include the following **navigation links** under the active school scope: **Home**, **Edit school info**, **Passengers**, **Payments** (labels in `pt-BR` in the product).
@@ -106,6 +122,7 @@ As staff, I use the sidebar to move between Home, school settings, passenger-rel
 - **FR-013**: All navigation and scope switching MUST preserve **school context** in the UX: after a scope change, sidebar links and URLs reflect the **new** school; staff MUST be able to see which school is active at all times (**FR-002**).
 - **FR-014**: System MUST define observable quality constraints (linting, code style, or maintainability expectations) for changed components.
 - **FR-015**: System MUST define user experience consistency constraints (terminology, interaction patterns, and visual behavior) for impacted flows.
+- **FR-021**: New and changed UI for this feature MUST align with the **dashboard’s existing accessibility baseline** (design system, components, and documented practices). This specification does **not** set a **separate** WCAG conformance level; any **level** is inherited from the **parent product** standards.
 - **FR-016**: System MUST ensure all user-facing interface copy is in Brazilian Portuguese (`pt-BR`) and define review criteria for language quality.
 - **FR-017**: System MUST keep source code and technical specification content in English for implementation and maintenance consistency.
 - **FR-018**: Specification MUST identify target implementation repositories in the shared parent folder and describe the scope split per repo (see header).
@@ -114,7 +131,7 @@ As staff, I use the sidebar to move between Home, school settings, passenger-rel
 
 - **Active school scope**: The school currently governing dashboard routes and labels; drives which school’s trips, passengers, and payments staff manage.
 - **Last accessed school (initialization)**: The school last confirmed as active for this browser profile; MUST align with the **most recent** entry used for **FR-001** step (1) and with updating **recent schools** when staff work in a scoped dashboard.
-- **Recent schools (client-side)**: Ordered list of schools the user opened recently for quick switching; persistence mechanism is an implementation detail but MUST be consistent per device/profile until authentication provides a server-side preference.
+- **Recent schools (client-side)**: Ordered list of schools the user opened recently for quick switching, **retaining at most 10** entries (**FR-006**); persistence mechanism is an implementation detail but MUST be consistent per device/profile until authentication provides a server-side preference.
 - **School summary for scope UI**: Name, favicon reference or resolved image, and identifiers needed to load edit and navigation targets—aligned with school entities in the related domain specification.
 
 ## Success Criteria *(mandatory)*
@@ -126,10 +143,11 @@ As staff, I use the sidebar to move between Home, school settings, passenger-rel
 - **SC-003**: **95%** of attempted school switches from the scope control complete successfully (user ends on screens scoped to the chosen school) when the network and APIs behave normally.
 - **SC-004**: Sidebar navigation reaches the **correct** school-scoped destination for **Home**, **Edit school info**, **Passengers**, and **Payments** with **no** cross-school data shown on first paint after navigation, verified by test cases per school.
 - **SC-005**: All changed modules pass lint and no new high-severity static analysis issues are introduced.
-- **SC-006**: New behavior is covered by automated tests where applicable (navigation, scope switch, **app initialization priority**, empty and fallback states) and all related tests pass in CI.
+- **SC-006**: New behavior is covered by automated tests where applicable (navigation, scope switch, **app initialization priority**, **initialization blocking error** when required data cannot load (**FR-019**), **unrecognized school id in route** (**FR-020**), empty and fallback states) and all related tests pass in CI.
 - **SC-007**: Users complete scope switching and primary sidebar navigation without increased error rate versus an informal baseline on predecessor navigation, measured in moderated sessions or telemetry when available.
 - **SC-008**: 100% of new or changed UI strings are in Brazilian Portuguese (`pt-BR`) and pass product review.
 - **SC-009**: In **cold-start** tests covering all three **FR-001** branches (last accessed valid, fallback to last created, empty database → creation flow), **100%** of runs land on the **expected** screen with **no** manual school pick **when** the scenario matches that branch.
+- **SC-010**: New or changed surfaces in this feature are implemented with the **same accessibility expectations** as the rest of the dashboard (**FR-021**), verified by the **same** review or automated checks the project already applies to comparable UI.
 
 ## Assumptions
 
@@ -140,9 +158,11 @@ As staff, I use the sidebar to move between Home, school settings, passenger-rel
 - **Assumption — Home**: Empty or minimal placeholder is acceptable; no KPI or feed content in this release.
 - **Assumption — Alignment with 001**: Trip lists, passenger tables, and payment routes remain as defined in `001-school-trip-payments`; this specification only defines **where** sidebar links **enter** those graphs.
 - **Assumption — Mobile**: Responsive behavior follows the same information architecture; deep mobile-specific gestures are not required unless already standard for the dashboard shell.
+- **Assumption — Accessibility**: **WCAG** level (if any) and **accessibility** requirements for this work follow the **dashboard’s existing** baseline and components (**FR-021**); this feature does not introduce a **new** standalone conformance target.
 
 ## Out of Scope
 
+- Defining **warn / block / allow** behavior for **unsaved edits** when changing active school from the scope control (follows existing dashboard conventions when available; see **Clarifications**).
 - User authentication, sign-in, and displaying real user id or profile on the scope control (placeholder only).
 - Home dashboard content beyond an empty or minimal placeholder.
 - Changing domain rules from `001-school-trip-payments` (for example creating a global payment list or altering trip-scoped payment rules).
