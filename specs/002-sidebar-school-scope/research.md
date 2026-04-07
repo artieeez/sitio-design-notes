@@ -22,7 +22,7 @@ Consolidated decisions for school-scoped shell, initialization priority, and cli
 
 ## 4. Routing shape for school-scoped dashboard
 
-- **Decision**: Use **school id in the URL** for school-scoped areas (e.g. `/schools/$schoolId/...`) consistent with existing routes like `../sitio-dashboard/src/routes/schools/$schoolId/trips/`. Add or adjust **index** routes for **Home**, **Passengers** (trips hub), and **Payments** (trip-level entry per **FR-012**) under the same `$schoolId` segment so breadcrumbs and links stay stable.
+- **Decision**: Use **school id in the URL** for school-scoped areas (e.g. `/schools/$schoolId/...`) consistent with existing routes like `../sitio-dashboard/src/routes/schools/$schoolId/trips/`. Add or adjust **index** routes for **Home** and the **trip list** hub under the same `$schoolId` segment so breadcrumbs and links stay stable; further trip drill-down follows **001**.
 - **Rationale**: File-based router already encodes school scope; scope control and **FR-013** require URLs and sidebar to reflect the active school.
 - **Alternatives considered**: Global query param `?school=` only — weaker deep linking and harder to align with existing trip routes.
 

@@ -15,8 +15,8 @@ Local development orientation for **school-scoped shell** work. Paths are relati
    - On app entry, run **initialization** per [research.md](./research.md) and **FR-001** / **FR-019** / **FR-020**; **`/`** redirects per **FR-001** (no visible root landing).
 3. Extend **`DashboardShell`** (`src/components/layout/dashboard-shell.tsx`):
    - Replace or augment the header **brand** row with the **scope control** (**FR-002**–**FR-006**, **FR-010**).
-   - Sidebar links: **Home**, **Passengers**, **Payments** (**FR-008**–**FR-012**); remove duplicate “edit school” nav if present (**FR-009**–**FR-010**).
-4. **Routes**: Ensure school-scoped **Home** and entry routes for passengers/payments exist under `/schools/$schoolId/...` and align with trip routes from **001**.
+   - Sidebar links: **Home**, **Trips** (**FR-008**, **FR-009**, **FR-011**); remove duplicate “edit school” nav if present (**FR-010**).
+4. **Routes**: Ensure school-scoped **Home** and **trip list** under `/schools/$schoolId/...` align with trip routes from **001**.
 5. **Copy**: Add **pt-BR** strings to `src/messages/pt-BR.ts` (placeholder username, errors, `aria-label`s for icon buttons).
 
 ### Tests
@@ -36,5 +36,5 @@ Local development orientation for **school-scoped shell** work. Paths are relati
 - [ ] Deep link with unknown `schoolId` → blocking error in **main content**; **no** silent rescope (**FR-020**); **scope menu** can switch school or **Add school**.
 - [ ] Visit **`/`** → no standalone landing page; **FR-001** (scoped route or school creation) or **FR-019** in content.
 - [ ] Scope menu: recents ≤ 10, search filters, Add school → creation route.
-- [ ] Sidebar: Home / Passengers / Payments; school edit **only** via scope row icon.
+- [ ] Sidebar: Home / Trips; school edit **only** via scope row icon.
 - [ ] New UI strings **pt-BR**; tests green; lint clean.

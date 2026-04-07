@@ -6,7 +6,7 @@
 
 ## Summary
 
-The dashboard shell gains a **school-scoped** navigation model: a **scope control** at the top of the sidebar (favicon, school **title**, placeholder secondary line, icon-only school edit), **initialization rules** (last accessed → last created → school creation when empty), **recent schools** (max 10) and **search** in a scope menu, and sidebar links for **Home**, **Passengers**, and **Payments** under the active school. **Primary implementation** is in `../sitio-dashboard` (TanStack Start SPA, existing shadcn shell). **Backend** work is **conditional**: reuse `GET /schools` and `GET /schools/{schoolId}` from `001-school-trip-payments` for list, existence checks, and **last created** resolution (client-side max `createdAt` with deterministic **id** tie-break); add API surface only if product later requires server-optimized listing or ordering.
+The dashboard shell gains a **school-scoped** navigation model: a **scope control** at the top of the sidebar (favicon, school **title**, placeholder secondary line, icon-only school edit), **initialization rules** (last accessed → last created → school creation when empty), **recent schools** (max 10) and **search** in a scope menu, and sidebar links for **Home** and **Trips** under the active school. **Primary implementation** is in `../sitio-dashboard` (TanStack Start SPA, existing shadcn shell). **Backend** work is **conditional**: reuse `GET /schools` and `GET /schools/{schoolId}` from `001-school-trip-payments` for list, existence checks, and **last created** resolution (client-side max `createdAt` with deterministic **id** tie-break); add API surface only if product later requires server-optimized listing or ordering.
 
 ## Technical Context
 
@@ -35,12 +35,12 @@ The dashboard shell gains a **school-scoped** navigation model: a **scope contro
 *GATE: Passed before Phase 0 — no unresolved NEEDS CLARIFICATION in Technical Context.*
 
 - **Code Quality Gate**: ESLint/Prettier (or repo defaults) in `sitio-dashboard`; scope logic centralized (e.g. dedicated hooks/store) to avoid duplicated priority rules; colocate tests with shell and route modules.
-- **Testing Gate**: Automated tests for **FR-001** branches (last accessed valid, fall through to last created, empty → creation path), **FR-019** (blocking error + retry), **FR-020** (invalid route school id), navigation to Home / Passengers / Payments / school edit icon; regression tests if route tree changes.
+- **Testing Gate**: Automated tests for **FR-001** branches (last accessed valid, fall through to last created, empty → creation path), **FR-019** (blocking error + retry), **FR-020** (invalid route school id), navigation to Home / Trips / school edit icon; regression tests if route tree changes.
 - **UX Consistency Gate**: Reuse existing **DashboardShell**, **Sidebar**, **ScrollArea**, **dropdown-menu** / **popover** patterns; **pt-BR** copy in `messages/pt-BR.ts`; placeholder username is non-authoritative per **FR-005**; long school names: truncate + tooltip per spec edge cases.
 - **Language Gate**: Feature artifacts in English; all new UI strings in **pt-BR**.
 - **Repository Boundary Gate**: `sitio-design-notes` holds specs and plans only; implementation tasks target `../sitio-dashboard` and optionally `../sitio-backend`.
 - **Incremental Delivery Gate**: User stories P1 (init + scope display) and P2 (scope menu + sidebar nav) map to independently testable slices.
-- **Documentation Sync Gate**: Update this feature’s `data-model.md` / `contracts/` if client persistence shape or REST usage changes; keep alignment with `001` domain spec for trip/passenger/payment entry points.
+- **Documentation Sync Gate**: Update this feature’s `data-model.md` / `contracts/` if client persistence shape or REST usage changes; keep alignment with `001` domain spec for trip list and drill-down entry points.
 
 ## Project Structure
 

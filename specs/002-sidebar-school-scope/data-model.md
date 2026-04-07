@@ -35,8 +35,7 @@ When **minimum** data cannot load → **FR-019** (blocking error in **main conte
 
 ## Relationships to 001 routes
 
-- **Passengers** entry (**FR-011**): School-scoped **trip list** (or hub) under `/schools/{schoolId}/trips` (or equivalent) per existing dashboard.
-- **Payments** entry (**FR-012**): Trip-scoped payment flows under `/schools/{schoolId}/trips/{tripId}/...` — sidebar must not expose a global cross-school payment list.
+- **Trips** (**FR-011**): School-scoped **trip list** under `/schools/{schoolId}/trips` (or equivalent) per existing dashboard and **001**. Drill-down to trip detail follows **001**; **002** does not define additional sidebar targets beyond **Home** and **Trips**.
 
 ## State transitions (scope menu)
 

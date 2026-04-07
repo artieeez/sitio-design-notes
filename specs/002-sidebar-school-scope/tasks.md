@@ -115,9 +115,9 @@
 
 ## Phase 6: User Story 4 — Navigate core school-scoped areas from the sidebar (Priority: P2)
 
-**Goal**: **FR-008**–**FR-013** — sidebar **Home**, **Passengers**, **Payments** under scope; **no** sidebar “edit school” link; **FR-010** school edit via **icon-only** on scope row; links stay within `/schools/$schoolId/...` graph.
+**Goal**: **FR-008**–**FR-013** — sidebar **Home**, **Trips** under scope; **no** sidebar “edit school” link; **FR-010** school edit via **icon-only** on scope row; links stay within `/schools/$schoolId/...` graph.
 
-**Independent Test**: From scoped shell, click each nav target + edit icon; URLs and active school stay consistent; Passengers/Payments land on **001**-aligned entry routes.
+**Independent Test**: From scoped shell, click each nav target + edit icon; URLs and active school stay consistent; **Trips** lands on school trip list per **001**.
 
 ### Tests for User Story 4 (REQUIRED)
 
@@ -125,13 +125,13 @@
 
 ### Implementation for User Story 4
 
-- [X] T034 [US4] Replace generic home/schools nav in `../sitio-dashboard/src/components/layout/dashboard-shell.tsx` with school-scoped items: **Home** → `/schools/$schoolId/` (or dedicated home child), **Passengers** → `/schools/$schoolId/trips` (trip list hub per **FR-011**), **Payments** → trip hub with query or first-step pattern per **FR-012** (document chosen entry in code comment referencing `specs/001-school-trip-payments/spec.md`)
+- [X] T034 [US4] Replace generic home/schools nav in `../sitio-dashboard/src/components/layout/dashboard-shell.tsx` with school-scoped items: **Home** → `/schools/$schoolId/home`, **Trips** → `/schools/$schoolId/trips` (trip list hub per **FR-011** / `specs/001-school-trip-payments/spec.md`)
 - [X] T035 [US4] Remove duplicate **school list** sidebar entry if it conflicts with **FR-009** (keep **scope menu** for discovery); adjust `../sitio-dashboard/src/messages/pt-BR.ts` labels (**pt-BR**)
 - [X] T036 [US4] Implement **school edit** navigation from **icon-only** button in `../sitio-dashboard/src/components/layout/school-scope-header.tsx` targeting existing school edit UI (`../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` or dedicated edit route if present)
 - [X] T037 [US4] Add **Home** placeholder content route if needed under `../sitio-dashboard/src/routes/schools/$schoolId/home.tsx` or reuse `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` per **FR-008** (empty/minimal OK)
 - [X] T038 [US4] Ensure **FR-013**: after scope change from US3, `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` and sidebar links reflect new `$schoolId` (`../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx`)
 
-**Checkpoint**: Full **IA** per spec; **FR-010**/**FR-012** traceable.
+**Checkpoint**: Full **IA** per spec; **FR-010**/**FR-011** traceable.
 
 ---
 
@@ -227,7 +227,7 @@
 ## Notes
 
 - **Repository boundary**: No application code in `sitio-design-notes`; all implementation tasks target `../sitio-dashboard` unless **T042** explicitly opens backend work.
-- **001 alignment**: Trip/passenger/payment entry routes **must** stay consistent with `specs/001-school-trip-payments/spec.md` — cite in PR when choosing Payments hub.
+- **001 alignment**: Trip list and drill-down routes **must** stay consistent with `specs/001-school-trip-payments/spec.md`.
 - **Tests before implementation** where feasible: write **T013**–**T015** red, then implement **T016**–**T021**.
 
 ---

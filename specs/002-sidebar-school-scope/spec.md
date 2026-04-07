@@ -3,9 +3,9 @@
 **Feature Branch**: `002-sidebar-school-scope`  
 **Created**: 2026-04-06  
 **Status**: Draft  
-**Input**: User description: "UI and hierarchy: sidebar shows current school scope at top with favicon, school name, and secondary line (**placeholder username** until auth; auth out of scope). Scope row includes an **icon-only edit** control (no duplicate sidebar link). Scope control is clickable: recently accessed schools, search, and Add school redirecting to school create form. Dashboard is school-scoped. Sidebar links: Home (empty, content out of scope), Passengers, Payments."  
+**Input**: User description: "UI and hierarchy: sidebar shows current school scope at top with favicon, school name, and secondary line (**placeholder username** until auth; auth out of scope). Scope row includes an **icon-only edit** control (no duplicate sidebar link). Scope control is clickable: recently accessed schools, search, and Add school redirecting to school create form. Dashboard is school-scoped. Sidebar links: **Home** (placeholder content out of scope), **Trips** (school trip list hub per **001**)."  
 **Input (addendum 2026-04-06)**: On app initialization, **school selection** MUST follow this order of priority: (1) **last school accessed**, (2) **last school created** (when the first does not apply), (3) **school creation form** (when neither applies).  
-**Related specification**: `001-school-trip-payments` (domain flows, trip- and passenger-scoped payment rules)  
+**Related specification**: `001-school-trip-payments` (trip-scoped domain flows and data model)  
 **Target Repositories**: `../sitio-dashboard` (primary: shell, navigation, scope control, and school-scoped routing entry points); `../sitio-backend` (only if new or extended APIs are required for school search, recent schools, or favicon resolution—see Assumptions)
 
 ## Clarifications
@@ -75,18 +75,17 @@ As staff who work with multiple schools, I can open a scope menu from the top of
 
 ### User Story 4 - Navigate core school-scoped areas from the sidebar (Priority: P2)
 
-As staff, I use the sidebar to move between Home, passenger-related work, and payment-related work while staying in the current school context; I edit school details from the **scope header** via the **edit icon**, not from a sidebar link.
+As staff, I use the sidebar to move between **Home** and **Trips** while staying in the current school context; I edit school details from the **scope header** via the **edit icon**, not from a sidebar link.
 
-**Why this priority**: Predictable information architecture reduces training cost and aligns with how staff describe their work (by school, then passengers and payments).
+**Why this priority**: Predictable information architecture reduces training cost and aligns with how staff describe their work (by school, then trips).
 
 **Independent Test**: From a school-scoped shell, follow each sidebar link and the **scope edit icon**; verify destinations and that school context is preserved unless the flow explicitly changes scope.
 
 **Acceptance Scenarios**:
 
 1. **Given** a school is active, **When** staff activate the **school edit icon** on the **scope header row** (icon only; **no** sidebar text link for this action), **Then** they reach the school edit experience for that school (**FR-010**).
-2. **Given** a school is active, **When** staff choose Passengers, **Then** they reach the school-scoped entry point for passenger management defined in requirements (consistent with trip-scoped passenger work in the related domain specification).
-3. **Given** a school is active, **When** staff choose Payments, **Then** they reach the school-scoped entry point for payment-related work defined in requirements (consistent with trip-scoped payment constraints in the related domain specification).
-4. **Given** a school is active, **When** staff choose Home, **Then** they see the Home area for that school scope; initial release may show only an empty or placeholder state as specified.
+2. **Given** a school is active, **When** staff choose **Trips**, **Then** they reach the school-scoped **trip list** for that school (**FR-011**), consistent with the related domain specification.
+3. **Given** a school is active, **When** staff choose **Home**, **Then** they see the Home area for that school scope; initial release may show only an empty or placeholder state as specified (**FR-008**).
 
 ---
 
@@ -117,10 +116,10 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **FR-006**: Activating the scope control MUST open a **menu or panel** that includes: (a) **recently accessed schools** (most recent first, **at most 10** entries; older entries fall off), (b) **search** over schools the staff may open, and (c) a control to **add a new school** that navigates to the **school creation** flow.
 - **FR-007**: **Authentication** and **binding** the secondary line to **real user identity** are **out of scope** for this feature; only the **placeholder username** behavior in **FR-005** is required.
 - **FR-008**: **Home** in the sidebar MUST be present as a navigation target; **main Home content** (widgets, summaries) is **out of scope** and MAY be empty or a minimal placeholder until a future specification defines it.
-- **FR-009**: The sidebar MUST include the following **navigation links** under the active school scope: **Home**, **Passengers**, **Payments** (labels in `pt-BR` in the product). The sidebar MUST **not** include a separate **Edit school info** text link.
+- **FR-009**: The sidebar MUST include the following **navigation links** under the active school scope: **Home**, **Trips** (labels in `pt-BR` in the product). The sidebar MUST **not** include a separate **Edit school info** text link.
 - **FR-010**: **School edit** MUST be reachable via an **icon-only** control on the **scope header row** (alongside the school identity; **no** accompanying **sidebar** label required for this action). Activating that control MUST navigate to the **school edit** experience for the active school.
-- **FR-011**: **Passengers** MUST navigate to the **school-scoped entry point** for passenger management. This MUST remain consistent with the domain rule that passenger tables are **trip-scoped** in the related specification: the entry point is at minimum the **school trip list** (or equivalent hub) from which staff open a trip’s passengers. If a future spec adds a school-wide passenger aggregate, this requirement will be updated explicitly.
-- **FR-012**: **Payments** MUST navigate to a **school-scoped payment entry point** that respects the domain rule that **payment create, edit, and history** are **trip- and passenger-scoped** in the related specification (no global cross-school payment list). The entry point SHOULD surface **trip-level** paths into payment work (for example a trip list with **pending payment** indicators or filters, or another hub that only deep-links into trip context). Exact presentation is product choice; the requirement is that staff always reach payment tasks **without** violating trip-scoped payment rules.
+- **FR-011**: **Trips** MUST navigate to the **school-scoped trip list** for the active school (for example `/schools/{schoolId}/trips`), consistent with **001-school-trip-payments**. Further trip drill-down remains as defined in **001**; **002** does **not** add additional top-level sidebar targets beyond **FR-009**.
+- **FR-012**: *(Unused in this release; reserved for future sidebar IA.)*
 - **FR-013**: All navigation and scope switching MUST preserve **school context** in the UX: after a scope change, sidebar links and URLs reflect the **new** school; staff MUST be able to see which school is active at all times (**FR-002**).
 - **FR-014**: System MUST define observable quality constraints (linting, code style, or maintainability expectations) for changed components.
 - **FR-015**: System MUST define user experience consistency constraints (terminology, interaction patterns, and visual behavior) for impacted flows.
@@ -131,7 +130,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 
 ### Key Entities *(include if feature involves data)*
 
-- **Active school scope**: The school currently governing dashboard routes and labels; drives which school’s trips, passengers, and payments staff manage.
+- **Active school scope**: The school currently governing dashboard routes and labels; drives which school’s trips (and downstream trip-scoped work in **001**) staff manage from this shell.
 - **Last accessed school (initialization)**: The school last confirmed as active for this browser profile; MUST align with the **most recent** entry used for **FR-001** step (1) and with updating **recent schools** when staff work in a scoped dashboard.
 - **Recent schools (client-side)**: Ordered list of schools the user opened recently for quick switching, **retaining at most 10** entries (**FR-006**); persistence mechanism is an implementation detail but MUST be consistent per device/profile until authentication provides a server-side preference.
 - **School summary for scope UI**: **`title`** (display label), favicon reference or resolved image, and identifiers needed to load edit and navigation targets—aligned with school entities in the related domain specification.
@@ -143,7 +142,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **SC-001**: In usability tests or structured walkthroughs, **100%** of participants correctly identify the **active school** from the scope control without prompting after one minute of orientation.
 - **SC-002**: Staff can **open the scope control**, **search**, and **select** a different school (or **Add school**) in **under 30 seconds** in typical conditions with fewer than 50 schools visible to search.
 - **SC-003**: **95%** of attempted school switches from the scope control complete successfully (user ends on screens scoped to the chosen school) when the network and APIs behave normally.
-- **SC-004**: Navigation reaches the **correct** school-scoped destination for **Home**, **Passengers**, and **Payments** from the **sidebar**, and **school edit** from the **scope edit icon**, with **no** cross-school data shown on first paint after navigation, verified by test cases per school.
+- **SC-004**: Navigation reaches the **correct** school-scoped destination for **Home** and **Trips** from the **sidebar**, and **school edit** from the **scope edit icon**, with **no** cross-school data shown on first paint after navigation, verified by test cases per school.
 - **SC-005**: All changed modules pass lint and no new high-severity static analysis issues are introduced.
 - **SC-006**: New behavior is covered by automated tests where applicable (navigation, scope switch, **app initialization priority**, **initialization blocking error** when required data cannot load (**FR-019**), **unrecognized school id in route** (**FR-020**), empty and fallback states) and all related tests pass in CI.
 - **SC-007**: Users complete scope switching and primary sidebar navigation without increased error rate versus an informal baseline on predecessor navigation, measured in moderated sessions or telemetry when available.
@@ -158,7 +157,7 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - **Assumption — Recent schools**: Stored **per browser profile** (local persistence) until authenticated cross-device preferences exist.
 - **Assumption — Search**: Matches school **`title`** (and optionally other fields already exposed for school lists) with case-insensitive substring matching unless product later defines advanced search.
 - **Assumption — Home**: Empty or minimal placeholder is acceptable; no KPI or feed content in this release.
-- **Assumption — Alignment with 001**: Trip lists, passenger tables, and payment routes remain as defined in `001-school-trip-payments`; this specification only defines **where** sidebar links **enter** those graphs.
+- **Assumption — Alignment with 001**: Trip lists and downstream flows remain as defined in `001-school-trip-payments`; **002** defines **Home** and **Trips** sidebar entry under `/schools/{schoolId}/...`.
 - **Assumption — Mobile**: Responsive behavior follows the same information architecture; deep mobile-specific gestures are not required unless already standard for the dashboard shell.
 - **Assumption — Accessibility**: **WCAG** level (if any) and **accessibility** requirements for this work follow the **dashboard’s existing** baseline and components (**FR-021**); this feature does not introduce a **new** standalone conformance target.
 
@@ -167,5 +166,5 @@ As staff, I use the sidebar to move between Home, passenger-related work, and pa
 - Defining **warn / block / allow** behavior for **unsaved edits** when changing active school from the scope control (follows existing dashboard conventions when available; see **Clarifications**).
 - User authentication, sign-in, and **binding** the scope control’s secondary line to **real** user id or profile (**placeholder username** only; **FR-005**, **FR-007**).
 - Home dashboard content beyond an empty or minimal placeholder.
-- Changing domain rules from `001-school-trip-payments` (for example creating a global payment list or altering trip-scoped payment rules).
+- Changing domain rules from `001-school-trip-payments` (for example altering trip-scoped flows).
 - Application logo or global user avatar in the chrome (may remain out of scope per related specification unless explicitly added later).

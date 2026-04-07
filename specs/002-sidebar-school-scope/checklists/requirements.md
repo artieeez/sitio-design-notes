@@ -34,7 +34,7 @@
 | Item | Result | Notes |
 |------|--------|--------|
 | Implementation details | Pass | Repository names and split are required by project template; no stack/framework named. |
-| Stakeholder language | Pass | Domain terms (school, trip, passenger) match product vocabulary; relationship to 001 is explicit. |
+| Stakeholder language | Pass | Domain terms (school, trip) match product vocabulary; relationship to 001 is explicit. |
 | Success criteria | Pass | SC-005/SC-006 reference lint/CI as template-aligned quality gates; SC-009 covers cold-start priority branches. |
 | Technology-agnostic | Pass | FR-001 states product behavior (priority order, fallbacks); “authoritative creation time” describes outcome, not a stack. |
 
