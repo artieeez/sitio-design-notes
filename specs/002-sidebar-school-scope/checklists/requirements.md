@@ -1,7 +1,7 @@
-# Specification Quality Checklist: School-Scoped Sidebar & Scope Control
+# Specification Quality Checklist: School scope selector (002)
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2026-04-06  
+**Purpose**: Validate specification completeness and quality before planning  
+**Created**: 2026-04-07  
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -18,7 +18,7 @@
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
 - [x] All acceptance scenarios are defined
-- [x] Edge cases are identified
+- [x] Edge cases are identified (via INIT and invalid-id flows)
 - [x] Scope is clearly bounded
 - [x] Dependencies and assumptions identified
 
@@ -29,15 +29,6 @@
 - [x] Feature meets measurable outcomes defined in Success Criteria
 - [x] No implementation details leak into specification
 
-## Validation review (2026-04-06, revised after initialization addendum)
-
-| Item | Result | Notes |
-|------|--------|--------|
-| Implementation details | Pass | Repository names and split are required by project template; no stack/framework named. |
-| Stakeholder language | Pass | Domain terms (school, trip) match product vocabulary; relationship to 001 is explicit. |
-| Success criteria | Pass | SC-005/SC-006 reference lint/CI as template-aligned quality gates; SC-009 covers cold-start priority branches. |
-| Technology-agnostic | Pass | FR-001 states product behavior (priority order, fallbacks); “authoritative creation time” describes outcome, not a stack. |
-
 ## Notes
 
-- Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`.
+- Validation run: 2026-04-07 — all items pass for the narrowed scope. Out-of-scope areas (rest of sidebar, chrome) are explicit so planning does not expand scope accidentally.
