@@ -12,6 +12,8 @@ Auto-generated from all feature plans. Last updated: 2026-04-06
 - PostgreSQL 14+; local dev assumed at `localhost:5432`; schema and migrations via Prisma (001-school-trip-payments)
 - TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend — NestJS, `@nestjs/cqrs`, Prisma, class-validator/class-transformer or Zod at boundaries. (001-school-trip-payments)
 - PostgreSQL 14+; Prisma migrations; `DATABASE_URL` to `localhost:5432` in local dev. (001-school-trip-payments)
+- TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend (when touched) — NestJS, `@nestjs/cqrs`, Prisma (unchanged stack). (002-sidebar-school-scope)
+- PostgreSQL 14+ via existing Prisma models (**School** entity per `001`); **browser** `localStorage` (or equivalent) for **last accessed** and **recent schools** until auth-backed preferences exist. (002-sidebar-school-scope)
 
 - TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma (001-school-trip-payments)
 
@@ -34,9 +36,9 @@ Backend (`../sitio-backend`): `pnpm install`, `pnpm start:dev`, `pnpm test`, `pn
 TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time): Follow standard conventions
 
 ## Recent Changes
+- 002-sidebar-school-scope: Added TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend (when touched) — NestJS, `@nestjs/cqrs`, Prisma (unchanged stack).
 - 001-school-trip-payments: Added TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend — NestJS, `@nestjs/cqrs`, Prisma, class-validator/class-transformer or Zod at boundaries.
 - 001-school-trip-payments: Added TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma
 
 <!-- MANUAL ADDITIONS START -->
-- Dashboard scaffold: `pnpm dlx shadcn@latest init --preset b1Fk0lmym --base base --template start` (TanStack Start **SPA mode**, TanStack Query + Form, Zustand, Zod, light/dark theme).
 <!-- MANUAL ADDITIONS END -->
