@@ -39,7 +39,7 @@
 - [X] T009 Ensure `../sitio-dashboard/src/lib/api-client.ts` / existing list calls can fetch **`GET /schools`** for initialization (reuse patterns from `../sitio-dashboard/src/routes/schools/index.tsx`); add a small `fetchSchoolsList` helper if it reduces duplication in `../sitio-dashboard/src/lib/schools-api.ts` (new file) or colocate in `../sitio-dashboard/src/lib/`
 - [X] T010 Add `../sitio-dashboard/src/hooks/use-schools-for-scope.ts` (or equivalent) wrapping TanStack Query for **schools list** used by init + scope menu (shared loading/error semantics for **FR-019**)
 - [X] T011 Create shared UI primitives for **blocking error + retry** in the **main content area** only (`../sitio-dashboard/src/components/layout/scope-blocking-error.tsx`) reusing existing Button/Typography patterns; **sidebar** stays visible with **scope control** usable (**FR-019** / **FR-020**); copy in `../sitio-dashboard/src/messages/pt-BR.ts`
-- [ ] T012 Document in-code where **FR-020** is enforced (route school id invalid → **no** FR-001 substitution) in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` or a dedicated layout route file — implement navigation guard or equivalent **before** relying on shell content
+- [X] T012 Document in-code where **FR-020** is enforced (route school id invalid → **no** FR-001 substitution) in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` or a dedicated layout route file — implement navigation guard or equivalent **before** relying on shell content
 
 **Checkpoint**: Persistence + resolution helpers compile; schools list query available; blocking error component ready for US1/US2.
 
@@ -62,8 +62,8 @@
 - [X] T016 [US1] Implement app entry resolution on **`/`** (`../sitio-dashboard/src/routes/index.tsx` and/or `../sitio-dashboard/src/routes/__root.tsx`): after **successful** schools list load, `navigate` to `/schools/$schoolId` or `/schools/new`, or show **FR-019** in **main content** only—**no** standalone visible root landing; **do not** render **school-scoped main** content until resolution completes
 - [X] T017 [US1] On successful scope resolution, persist **last accessed** in `../sitio-dashboard/src/lib/scope-persistence.ts` when user lands on a valid school route
 - [X] T018 [US1] Handle **FR-019** in entry flow when `use-schools-for-scope` / list query fails: render `../sitio-dashboard/src/components/layout/scope-blocking-error.tsx` in **main content** with **retry**; keep **DashboardShell** / **sidebar** visible; clear or avoid setting active school in client state
-- [ ] T019 [US1] Handle **FR-020** when `schoolId` in URL is non-existent: show error in **main content** in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` (or layout) via `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx` or dedicated inline UI—**must not** run **FR-001** fallback to pick another school; **must not** offer a **visible `/` recovery** page; staff recover via **scope menu** / **retry** / **Add school**
-- [ ] T020 [US1] Ensure **last accessed** removed school falls through to **last created** or creation flow (`../sitio-dashboard/src/lib/resolve-initial-school.ts` + entry navigation)
+- [X] T019 [US1] Handle **FR-020** when `schoolId` in URL is non-existent: show error in **main content** in `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` (or layout) via `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx` or dedicated inline UI—**must not** run **FR-001** fallback to pick another school; **must not** offer a **visible `/` recovery** page; staff recover via **scope menu** / **retry** / **Add school**
+- [X] T020 [US1] Ensure **last accessed** removed school falls through to **last created** or creation flow (`../sitio-dashboard/src/lib/resolve-initial-school.ts` + entry navigation)
 - [X] T021 [US1] Update `../sitio-dashboard/src/messages/pt-BR.ts` with any new user-visible init/error strings (**pt-BR**)
 
 **Checkpoint**: Cold-start branches match **FR-001**; **FR-019**/**FR-020** covered by tests; MVP demo can stop here.
@@ -78,7 +78,7 @@
 
 ### Tests for User Story 2 (REQUIRED)
 
-- [ ] T022 [P] [US2] Add component tests for scope header rendering and fallback (mock school DTO) in `../sitio-dashboard/src/test/school-scope-control.test.tsx`
+- [X] T022 [P] [US2] Add component tests for scope header rendering and fallback (mock school DTO) in `../sitio-dashboard/src/test/school-scope-control.test.tsx`
 
 ### Implementation for User Story 2
 
@@ -99,14 +99,14 @@
 
 ### Tests for User Story 3 (REQUIRED)
 
-- [ ] T027 [P] [US3] Add tests for recent list cap/dedupe and search filter helper in `../sitio-dashboard/src/lib/scope-search.test.ts` (new) or extend existing lib tests
+- [X] T027 [P] [US3] Add tests for recent list cap/dedupe and search filter helper in `../sitio-dashboard/src/lib/scope-search.test.ts` (new) or extend existing lib tests
 - [ ] T028 [US3] Add interaction tests for scope menu (open, select, add school) in `../sitio-dashboard/src/test/school-scope-menu.test.tsx`
 
 ### Implementation for User Story 3
 
 - [X] T029 [US3] Implement `../sitio-dashboard/src/components/layout/school-scope-menu.tsx` using **DropdownMenu** / **Popover** from `../sitio-dashboard/src/components/ui/*` — list **recent** schools, **Command** or filtered list for search, **Add school** `Link` to `/schools/new`
-- [ ] T030 [US3] Wire menu to schools list query; filter client-side per [research.md](./research.md); empty states for no recents / no search results (**pt-BR** in `../sitio-dashboard/src/messages/pt-BR.ts`)
-- [ ] T031 [US3] On school select: `navigate` to `/schools/$schoolId` (or default child), update **last accessed** + **recents** via `../sitio-dashboard/src/lib/scope-persistence.ts`, invalidate TanStack Query where needed (`../sitio-dashboard/src/lib/query-keys.ts`)
+- [X] T030 [US3] Wire menu to schools list query; filter client-side per [research.md](./research.md); empty states for no recents / no search results (**pt-BR** in `../sitio-dashboard/src/messages/pt-BR.ts`)
+- [X] T031 [US3] On school select: `navigate` to `/schools/$schoolId` (or default child), update **last accessed** + **recents** via `../sitio-dashboard/src/lib/scope-persistence.ts`, invalidate TanStack Query where needed (`../sitio-dashboard/src/lib/query-keys.ts`)
 - [X] T032 [US3] Make `../sitio-dashboard/src/components/layout/school-scope-header.tsx` open the menu on activate (full row or chevron — product choice) without breaking **FR-010** edit icon hit area
 
 **Checkpoint**: Multi-school switching works; **FR-006** satisfied.
@@ -121,15 +121,15 @@
 
 ### Tests for User Story 4 (REQUIRED)
 
-- [ ] T033 [P] [US4] Add route tests asserting sidebar `Link` `to` props include current `$schoolId` in `../sitio-dashboard/src/test/school-scope-sidebar-nav.test.tsx`
+- [X] T033 [P] [US4] Add route tests asserting sidebar `Link` `to` props include current `$schoolId` in `../sitio-dashboard/src/test/school-scope-sidebar-nav.test.tsx`
 
 ### Implementation for User Story 4
 
 - [X] T034 [US4] Replace generic home/schools nav in `../sitio-dashboard/src/components/layout/dashboard-shell.tsx` with school-scoped items: **Home** → `/schools/$schoolId/` (or dedicated home child), **Passengers** → `/schools/$schoolId/trips` (trip list hub per **FR-011**), **Payments** → trip hub with query or first-step pattern per **FR-012** (document chosen entry in code comment referencing `specs/001-school-trip-payments/spec.md`)
-- [ ] T035 [US4] Remove duplicate **school list** sidebar entry if it conflicts with **FR-009** (keep **scope menu** for discovery); adjust `../sitio-dashboard/src/messages/pt-BR.ts` labels (**pt-BR**)
+- [X] T035 [US4] Remove duplicate **school list** sidebar entry if it conflicts with **FR-009** (keep **scope menu** for discovery); adjust `../sitio-dashboard/src/messages/pt-BR.ts` labels (**pt-BR**)
 - [X] T036 [US4] Implement **school edit** navigation from **icon-only** button in `../sitio-dashboard/src/components/layout/school-scope-header.tsx` targeting existing school edit UI (`../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` or dedicated edit route if present)
-- [ ] T037 [US4] Add **Home** placeholder content route if needed under `../sitio-dashboard/src/routes/schools/$schoolId/home.tsx` or reuse `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` per **FR-008** (empty/minimal OK)
-- [ ] T038 [US4] Ensure **FR-013**: after scope change from US3, `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` and sidebar links reflect new `$schoolId` (`../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx`)
+- [X] T037 [US4] Add **Home** placeholder content route if needed under `../sitio-dashboard/src/routes/schools/$schoolId/home.tsx` or reuse `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` per **FR-008** (empty/minimal OK)
+- [X] T038 [US4] Ensure **FR-013**: after scope change from US3, `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` and sidebar links reflect new `$schoolId` (`../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx`)
 
 **Checkpoint**: Full **IA** per spec; **FR-010**/**FR-012** traceable.
 
@@ -139,17 +139,18 @@
 
 **Purpose**: Lint, CI, docs, optional backend follow-up.
 
-- [ ] T039 [P] Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and fix regressions introduced by this feature
-- [ ] T040 [P] Update `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` if shell structure changes broke assumptions
-- [ ] T041 Verify **pt-BR** coverage for all new strings in `../sitio-dashboard/src/messages/pt-BR.ts` (no English user-visible regressions)
-- [ ] T042 [P] If `GET /schools` becomes too large in practice, open follow-up: optional `sort`/`limit` support in `../sitio-backend/src/modules/school/school.controller.ts` — **only** if profiling requires (else skip)
+- [X] T039 [P] Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and fix regressions introduced by this feature
+- [X] T040 [P] Update `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` if shell structure changes broke assumptions
+- [X] T041 Verify **pt-BR** coverage for all new strings in `../sitio-dashboard/src/messages/pt-BR.ts` (no English user-visible regressions)
+- [X] T042 [P] If `GET /schools` becomes too large in practice, open follow-up: optional `sort`/`limit` support in `../sitio-backend/src/modules/school/school.controller.ts` — **only** if profiling requires (else skip)
 - [ ] T043 Run manual sanity checklist in `specs/002-sidebar-school-scope/quickstart.md` and note gaps in `specs/002-sidebar-school-scope/tasks.md` (append “Verification notes” subsection when executing)
 
 ### Verification notes
 
 - 2026-04-07: `pnpm lint` passes after implementation changes (Biome emits schema-version info only).
-- 2026-04-07: `pnpm test` passes (`5` files, `8` tests).
+- 2026-04-07: `pnpm test` passes (`8` files, `14` tests).
 - 2026-04-07: Manual quickstart checklist (full browser walkthrough) not executed yet.
+- 2026-04-07: T042 intentionally skipped (no profiling evidence of `GET /schools` size bottleneck).
 
 ---
 
