@@ -4,14 +4,14 @@ Consolidated decisions for **breadcrumb information architecture**, **overflow s
 
 ## 1. Trail root: school-scoped sidebar, not “Escolas” / school name
 
-- **Decision**: For routes under **`/schools/{schoolId}/...`**, the breadcrumb trail **starts at sidebar-aligned segments** (e.g. **Início** → `/schools/$schoolId/home`, **Viagens** → `/schools/$schoolId/trips`) and **never** includes **Escolas**, a **school list** crumb, or the **active school’s title** as a segment. For **`/trips/{tripId}/...`** deep links, resolve **`schoolId`** from the trip (existing pattern), then build the same **Viagens → …** hierarchy **without** a school-named segment.
-- **Rationale**: Matches [spec.md](./spec.md) FR-001–FR-003 and **002** (school context is visible in the selector).
+- **Decision**: For routes under **`/schools/{schoolId}/...`**, the breadcrumb trail **starts at the relevant sidebar destination**—**never** **Escolas**, a **school list** crumb, or the **active school’s title**. For **trip-related** flows, the **first** crumb is **Viagens** (same label as the sidebar **Viagens** button)—**not** “Início → Viagens”. For **`/schools/{schoolId}/home`**, the trail is **Início** only. For **`/trips/{tripId}/...`** deep links, resolve **`schoolId`** from the trip (existing pattern), then build **Viagens → trip → …** **without** a school-named segment and **without** **Início** before **Viagens**.
+- **Rationale**: Matches [spec.md](./spec.md) FR-001–FR-003 and **002** (school context is visible in the selector; **Viagens** is the IA root for trips).
 - **Alternatives considered**: Keep **Escolas** + school name for orientation — **rejected** by spec.
 
-## 2. Global vs school-scoped home label
+## 2. Início vs Viagens as root
 
-- **Decision**: Inside a school-scoped shell, the first segment uses the **same label as the sidebar Home item** (**`ptBR.nav.home`** / Início) and links to **`/schools/$schoolId/home`** when not on that page. The **unscoped** `/` experience (if any) remains outside this trail’s scope.
-- **Rationale**: Spec examples (“Início”, “Viagens/…”) and FR-001 alignment with sidebar destinations.
+- **Decision**: **Início** is the breadcrumb root for the school-scoped **home** route (`/schools/$schoolId/home`). **Viagens** is the breadcrumb root for **trips** (`/schools/$schoolId/trips`, `/schools/$schoolId/trips/new`, and nested `/trips/$tripId/...` routes). Do **not** chain **Início** above **Viagens** in trip contexts.
+- **Rationale**: Aligns with sidebar: **Home** and **Trips** are siblings; breadcrumbs should not imply a parent “home” step above the trips hub.
 
 ## 3. Initial horizontal scroll shows the current (trailing) segment
 

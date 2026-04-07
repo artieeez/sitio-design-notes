@@ -6,7 +6,7 @@
 
 ## Summary
 
-Deliver **school-scoped breadcrumbs** in the dashboard shell that **omit the school name** (already shown in the school selector), start from **sidebar-aligned** destinations (e.g. Início, Viagens), continue with **nested** human-readable segments, and meet **responsive placement** (desktop: top bar after sidebar toggle; mobile: breadcrumbs **below** the school title row) and **overflow** behavior (horizontal scroll with **initial view showing the trailing/current** segment).
+Deliver **school-scoped breadcrumbs** in the dashboard shell that **omit the school name** (already shown in the school selector), start from **sidebar-aligned** roots (**Início** for home; **Viagens** as the root for trip flows—not “Início → Viagens”), continue with **nested** human-readable segments, and meet **responsive placement** (desktop: top bar after sidebar toggle; mobile: breadcrumbs **below** the school title row) and **overflow** behavior (horizontal scroll with **initial view showing the trailing/current** segment).
 
 **Current state**: `../sitio-dashboard` already has `DashboardBreadcrumbs` in `dashboard-shell.tsx` with **mobile/desktop placement** matching the spec, and `overflow-x-auto` on the list. Gaps: trail logic still injects **Escolas**, **school title**, and a **global** “home” root that does not match **school-scoped** IA; **no guaranteed scroll-to-end** on overflow; some **trip** pages duplicate an inline breadcrumb **nav** that overlaps the shell responsibility.
 

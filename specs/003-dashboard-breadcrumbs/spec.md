@@ -21,7 +21,7 @@ As staff working inside a selected school, I see a breadcrumb trail that reflect
 
 1. **Given** I am on the school-scoped home route, **When** I view the breadcrumb area, **Then** I see a trail consistent with the “home” entry (for example the label equivalent to “Início” in the product language).
 2. **Given** I am on a top-level sidebar route (for example trips), **When** I view the breadcrumb area, **Then** the first segment matches that sidebar item’s name (for example “Viagens”).
-3. **Given** I navigate deeper (for example a specific trip and then passengers), **When** I view the breadcrumb area, **Then** the trail includes nested segments using the specific names for that trip and sub-area (for example “Viagens / [trip name] / Passengers”), not internal ids alone.
+3. **Given** I navigate deeper (for example a specific trip and then passengers), **When** I view the breadcrumb area, **Then** the trail includes nested segments using the specific names for that trip and sub-area. For **trip-related** flows, the **first** segment is **Viagens** (the same label as the sidebar “Viagens” control)—not “Início → Viagens”; deeper levels follow (for example **Viagens / [trip name] / Passageiros**), not internal ids alone.
 4. **Given** the active school is shown in the school selector, **When** I view the breadcrumb trail, **Then** the school name does **not** appear as a breadcrumb segment.
 
 ---
@@ -69,7 +69,7 @@ As staff on different screen sizes, I see breadcrumbs in the right place: on lar
 
 ### Functional Requirements
 
-- **FR-001**: The product MUST show a breadcrumb trail for school-scoped dashboard routes that mirrors the hierarchy from school-scoped sidebar destinations through nested pages.
+- **FR-001**: The product MUST show a breadcrumb trail for school-scoped dashboard routes that mirrors the hierarchy from school-scoped sidebar destinations through nested pages. For **trips** (and nested trip routes such as passengers or payments), the trail MUST **root at “Viagens”** (same copy as the sidebar **Viagens** item)—it MUST NOT be prefixed with **Início** before **Viagens**. **Início** applies to the school-scoped **home** (and other non–trip flows), not as a parent above **Viagens** in trip contexts.
 - **FR-002**: The trail MUST NOT include the active school’s name as a segment, because the school is already indicated in the school selector.
 - **FR-003**: Each segment MUST use the human-readable name for that level (navigation label, entity title, or approved page title), not raw technical identifiers alone, except where the product explicitly uses an identifier as the user-visible label.
 - **FR-004**: On large layouts, the trail MUST appear in the top application bar immediately after the sidebar expand/collapse control.

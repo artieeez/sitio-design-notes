@@ -15,7 +15,7 @@ This feature introduces **no new persisted entities**. The dashboard constructs 
 
 ### `BreadcrumbTrail`
 
-Ordered list of `BreadcrumbSegment` from **root of the feature IA** (sidebar-aligned) to **current page**.
+Ordered list of `BreadcrumbSegment` from **root of the feature IA** (sidebar-aligned) to **current page**. For **trips**, the root segment is **Viagens** (not **Início** → **Viagens**). For **school home**, the root can be **Início** only.
 
 ### Derived inputs (existing APIs)
 
