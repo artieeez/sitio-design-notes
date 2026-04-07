@@ -1,42 +1,44 @@
-%% HTA — Dashboard de pagamentos pendentes em viagens escolares (staff)
-%% Plano 0: executar 1; em paralelo ou iterativamente 2 e 3 ao longo da operação
-%% Export PNG/SVG: npx @mermaid-js/mermaid-cli -i hta-school-trip-payments.mmd -o hta-school-trip-payments.png
+%% HTA — Lado agência (responsável pela agência)
+%% Plano 0: executar 1 (inclui compartilhar link com a escola); repetir 2 e 3 ao longo da operação
+%% Export: npx @mermaid-js/mermaid-cli -i hta-school-trip-payments.mmd -o hta-school-trip-payments.png
 
 flowchart TB
-  t0["0. Gerir o ciclo de vida operacional dos pagamentos<br/>de uma excursão escolar (escola → viagem → passageiro)"]
+  t0["0. Gerenciar o ciclo operacional dos pagamentos<br/>de uma excursão escolar (escola → viagem → passageiro)"]
 
   t1["1. Preparar e manter contexto<br/>(escola, viagem, passageiros)"]
-  t2["2. Registar e manter pagamentos<br/>(só no contexto da viagem / linha do passageiro)"]
-  t3["3. Monitorizar estados e agir<br/>(pendente / quitado / indisponível; agregados)"]
+  t2["2. Registrar e manter pagamentos<br/>(por viagem e por passageiro)"]
+  t3["3. Monitorar situação e agir<br/>(pendente / quitado / indisponível)"]
 
   t0 --> t1
   t0 --> t2
   t0 --> t3
 
-  t1a["1.1 Cadastrar ou atualizar escola<br/>(URL opcional → pré-preencher metadados)"]
-  t1b["1.2 Criar ou atualizar viagem<br/>(só a partir da lista de viagens da escola;<br/>valor esperado por defeito em BRL)"]
-  t1c["1.3 Gerir passageiros<br/>(CPF, duplicados, contactos, override de valor,<br/>remoção suave / restauração)"]
+  t1a["1.1 Cadastrar ou atualizar escola"]
+  t1b["1.2 Criar ou atualizar viagem<br/>(no contexto da escola)"]
+  t1c["1.3 Gerenciar passageiros<br/>(dados, duplicados, remoção ou restauração)"]
+  t1d["1.4 Gerar ou copiar link de acesso<br/>para o responsável da escola compartilhar"]
 
   t1 -->|Plano 1| t1a
   t1a --> t1b
   t1b --> t1c
+  t1c --> t1d
 
-  t2a["2.1 Abrir viagem e tabela de passageiros<br/>(filtro, ordenação, breadcrumbs)"]
-  t2b["2.2 Criar pagamento (linha / kebab)<br/>sem selector de passageiro"]
-  t2c["2.3 Histórico / editar / apagar pagamento<br/>(rotas dedicadas)"]
-  t2d["2.4 Marcar ou limpar «pago sem<br/>informação de pagamento»"]
+  t2a["2.1 Consultar passageiros da viagem"]
+  t2b["2.2 Registrar pagamento para um passageiro"]
+  t2c["2.3 Alterar ou remover pagamentos registrados"]
+  t2d["2.4 Marcar ou desmarcar «pago sem informação de pagamento»"]
 
   t2 -->|Plano 2| t2a
-  t2a -->|para cada passageiro| t2b
+  t2a -->|por passageiro<br/>conforme necessário| t2b
   t2a --> t2c
   t2a --> t2d
 
-  t3a["3.1 Ler estado e agregados<br/>(removidos excluídos por defeito)"]
-  t3b["3.2 Incluir removidos; restaurar;<br/>abrir histórico para auditoria"]
-  t3c["3.3 Ajustar valores ou registos;<br/>reverificar pendências"]
+  t3a["3.1 Ver estado de cada passageiro e visão geral"]
+  t3b["3.2 Tratar exceções<br/>(p.ex. removidos, histórico)"]
+  t3c["3.3 Corrigir valores ou registros e rever pendências"]
 
   t3 -->|Plano 3| t3a
   t3a -.->|se necessário| t3b
   t3a -.->|se necessário| t3c
 
-  %% Entre 2 e 3 o fluxo é iterativo (novos pagamentos → novo estado; revisão → novas ações).
+  %% O link de 1.4 leva à HTA «escola»; o canal (e-mail, WhatsApp etc.) é externo.
