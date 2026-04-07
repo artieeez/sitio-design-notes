@@ -109,8 +109,8 @@ Há **dois arquivos Mermaid** nesta pasta:
 
 | Arquivo | Papel | Conteúdo em síntese |
 |----------|--------|----------------------|
-| [`hta-school-trip-payments.mmd`](hta-school-trip-payments.mmd) | **Responsável pela agência** | Inclui **1.4** — gerar/copiar **link de acesso** para o responsável da escola **compartilhar** (o canal — e-mail, mensagem etc. — é externo ao sistema). |
-| [`hta-school-trip-payments-escola.mmd`](hta-school-trip-payments-escola.mmd) | **Responsável / monitor na escola** | **Acessar** via **link** recebido, **consultar** lista e estados, **agir** na cobrança com responsáveis. |
+| [`hta-school-trip-payments.mmd`](hta-school-trip-payments.mmd) | **Responsável pela agência** | **1:** escola/viagem/passageiros + **link** para a escola · **2:** pagamentos por passageiro · **3:** acompanhar e corrigir. |
+| [`hta-school-trip-payments-escola.mmd`](hta-school-trip-payments-escola.mmd) | **Responsável na escola** | **1:** abrir link e ver lista · **2:** cobrar responsáveis e falar com a agência se precisar. |
 
 **Por que duas árvores?** Em HTA, **cada papel** costuma ter **objetivo global (0)** e **planos** diferentes. Misturar agência e escola num só diagrama confunde **a tarefa de cada um** e deixa os planos difíceis de ler. Duas HTAs (ou duas raízes) são uma abordagem **comum** em IHC quando há **dois usuários** com trabalho distinto.
 
@@ -124,17 +124,17 @@ npx @mermaid-js/mermaid-cli -i hta-school-trip-payments-escola.mmd -o hta-school
 
 ### Resumo textual dos planos (para os slides)
 
-**Agência** — *Tarefa 0:* gerenciar o ciclo operacional dos pagamentos. *Plano 0:* preparar contexto **1** (inclui **compartilhar link** com a escola em **1.4**); **2** e **3** se repetem ao longo da operação.
+**Agência** — *Tarefa 0:* gerenciar os pagamentos da excursão. *Plano 0:* **1** monta base (escola, viagem, passageiros) e **link** para a escola; **2** e **3** voltam conforme a operação.
 
-**Escola** — *Tarefa 0:* apoiar cobrança com base na informação **compartilhada** pela agência. *Plano 1:* receber e abrir **link**; *Plano 2:* consultar lista e identificar pendentes; *Plano 3:* falar com responsáveis e alinhar com a agência se necessário.
+**Escola** — *Tarefa 0:* apoiar cobrança com dados da agência. *Plano 0:* **1** abrir link e ver lista · **2** cobrar responsáveis e alinhar com a agência se precisar.
 
 **Subtarefas agência (resumo):**
 
-1. **Preparar contexto** — Escola → viagem → passageiros; **gerar ou copiar link** para o responsável da escola.
-2. **Registrar e manter pagamentos** — Por viagem e por passageiro: registrar, alterar ou remover pagamentos; opcionalmente marcar “pago sem informação de pagamento”.
-3. **Monitorar e decidir** — Ler estado e visão geral; tratar exceções; corrigir dados e rever pendências.
+1. Cadastrar escola, viagem e passageiros; **gerar link** para o responsável da escola.
+2. **Atualizar pagamentos** por passageiro (inclui registrar, alterar e “pago sem informação”).
+3. **Acompanhar** status, tratar exceções e **corrigir** dados.
 
-**Subtarefas escola (resumo):** acessar via link → consultar estado → agir na cobrança (e falar com a agência em casos especiais).
+**Subtarefas escola (resumo):** link → lista → cobrança (e contato com a agência quando necessário).
 
 *(Detalhe e ligações entre nós: ver os dois `.mmd`.)*
 
@@ -190,7 +190,7 @@ npx @mermaid-js/mermaid-cli -i hta-school-trip-payments-escola.mmd -o hta-school
 | 3 | Suposições & escopo | Dois papéis (agência + escola); auth/integração de pagamentos fora do trabalho; resto alinhado à spec |
 | 4 | Estado da arte | Tabela resumo (incl. no-code + gateway vs. colaboração) |
 | 5–6 | Personas | Carla e Ricardo (agência), Mariana (escola) |
-| 7 | HTA | Dois diagramas: agência (com **1.4** link → escola) + escola; legenda dos planos |
+| 7 | HTA | Dois diagramas simplificados (agência: base + link + pagamentos + acompanhar; escola: link → cobrar) |
 | 8–9 | Cenários | Feliz caminho + 1 cenário de exceção (duplicados ou inativo) |
 | 10 | Síntese | Objetivos de IHC cumpridos; próximos passos (p.ex. protótipos, avaliação com usuários) |
 

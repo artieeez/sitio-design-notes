@@ -1,35 +1,14 @@
-%% HTA — Lado escola (responsável / monitor)
-%% Plano 0: fazer 1 (acessar via link); depois repetir 2 e 3 durante a campanha de cobrança
-%% Objetivo e planos ≠ agência → árvore separada (boa prática em IHC para dois papéis)
+%% HTA — Escola (versão resumida)
+%% Plano 0: abrir link → ver quem falta → cobrar (repetir 2–3 no tempo)
 %% Export: npx @mermaid-js/mermaid-cli -i hta-school-trip-payments-escola.mmd -o hta-school-trip-payments-escola.png
 
 flowchart TB
-  e0["0. Apoiar cobrança com responsáveis com base<br/>na informação compartilhada pela agência"]
+  e0["0. Apoiar cobrança com responsáveis<br/>(dados vindos da agência)"]
 
-  e1["1. Obter acesso à visão da viagem / escola"]
-  e2["2. Consultar situação de pagamentos"]
-  e3["3. Agir na escola frente aos pendentes"]
+  e1["1. Abrir link e ver lista com estados"]
+  e2["2. Cobrar responsáveis e alinhar com a agência se precisar"]
 
   e0 --> e1
   e1 --> e2
-  e2 --> e3
 
-  e1a["1.1 Receber o link (ou convite) enviado<br/>pelo responsável da agência"]
-  e1b["1.2 Abrir o link e acessar a informação<br/>(lista e estados)"]
-
-  e1 -->|Plano 1| e1a
-  e1a --> e1b
-
-  e2a["2.1 Ver passageiros e estado<br/>(pendente / quitado / …)"]
-  e2b["2.2 Identificar quem falta pagar<br/>e prioridades"]
-
-  e2 -->|Plano 2| e2a
-  e2a --> e2b
-
-  e3a["3.1 Falar com responsáveis<br/>(cobrança, lembretes)"]
-  e3b["3.2 Alinhar com a agência<br/>se houver dúvidas ou casos especiais"]
-
-  e3 -->|Plano 3| e3a
-  e3a -.->|se necessário| e3b
-
-  %% Autenticação avançada: fora do escopo do trabalho; fluxo assume «acesso via link».
+  %% Autenticação fora do escopo; fluxo assume acesso via link.
