@@ -19,8 +19,8 @@
 
 **Purpose**: Confirm scope and baseline quality before edits.
 
-- [ ] T001 Confirm implementation lives in `../sitio-dashboard` only and review [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md) and [research.md](./research.md) for trail rules
-- [ ] T002 [P] Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and record baseline (all green before feature edits)
+- [X] T001 Confirm implementation lives in `../sitio-dashboard` only and review [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md) and [research.md](./research.md) for trail rules
+- [X] T002 [P] Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and record baseline (all green before feature edits)
 
 ---
 
@@ -30,7 +30,7 @@
 
 **⚠️** Complete before user story implementation work.
 
-- [ ] T003 Add `../sitio-dashboard/src/lib/breadcrumb-trail.ts` exporting `BreadcrumbSegment` types and pure helpers (pathname parsing + segment list shape) aligned with [data-model.md](./data-model.md); keep React and `useQuery` out of this module
+- [X] T003 Add `../sitio-dashboard/src/lib/breadcrumb-trail.ts` exporting `BreadcrumbSegment` types and pure helpers (pathname parsing + segment list shape) aligned with [data-model.md](./data-model.md); keep React and `useQuery` out of this module
 
 **Checkpoint**: Foundation module exists — user story work can proceed.
 
@@ -44,13 +44,13 @@
 
 ### Tests for User Story 1 (required)
 
-- [ ] T004 [P] [US1] Add failing Vitest tests in `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts` for representative paths: `/schools/$schoolId/home`, `/schools/$schoolId/trips`, nested trip routes, and `/trips/$tripId/…` — assert **no** segment equals school title, **no** “Escolas” crumb inside scoped story, first segments align with `ptBR.nav.home` / `ptBR.entities.trips` per [research.md](./research.md)
+- [X] T004 [P] [US1] Add failing Vitest tests in `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts` for representative paths: `/schools/$schoolId/home`, `/schools/$schoolId/trips`, nested trip routes, and `/trips/$tripId/…` — assert **no** segment equals school title, **no** “Escolas” crumb inside scoped story, first segments align with `ptBR.nav.home` / `ptBR.entities.trips` per [research.md](./research.md)
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Implement `buildBreadcrumbTrail` (and helpers) in `../sitio-dashboard/src/lib/breadcrumb-trail.ts` to satisfy tests and [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md) (minimal honest trail for `/schools` and `/schools/new` per research §7)
-- [ ] T006 [US1] Refactor `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` to use the pure builder; keep TanStack Query lookups for trip/passenger/school **ids** only; use **neutral placeholders** for loading segment labels per [research.md](./research.md) §5
-- [ ] T007 [US1] Make `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts` pass; add `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` if component-level coverage is needed for queries + labels
+- [X] T005 [US1] Implement `buildBreadcrumbTrail` (and helpers) in `../sitio-dashboard/src/lib/breadcrumb-trail.ts` to satisfy tests and [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md) (minimal honest trail for `/schools` and `/schools/new` per research §7)
+- [X] T006 [US1] Refactor `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` to use the pure builder; keep TanStack Query lookups for trip/passenger/school **ids** only; use **neutral placeholders** for loading segment labels per [research.md](./research.md) §5
+- [X] T007 [US1] Make `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts` pass; add `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` if component-level coverage is needed for queries + labels
 
 **Checkpoint**: US1 acceptance scenarios hold; MVP demo possible.
 
@@ -64,12 +64,12 @@
 
 ### Tests for User Story 2 (required)
 
-- [ ] T008 [P] [US2] Add failing tests in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` (or extend `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts`) asserting parent segments include `to`/`params` where applicable and the last segment is not a link
+- [X] T008 [P] [US2] Add failing tests in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` (or extend `../sitio-dashboard/src/lib/breadcrumb-trail.test.ts`) asserting parent segments include `to`/`params` where applicable and the last segment is not a link
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Ensure `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` renders `BreadcrumbLink` + TanStack `Link` for parents and `BreadcrumbPage` for the current segment only; align with [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md)
-- [ ] T010 [US2] Stabilize current-segment styling using existing shadcn `BreadcrumbPage` / muted styles; fix US2 tests
+- [X] T009 [US2] Ensure `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` renders `BreadcrumbLink` + TanStack `Link` for parents and `BreadcrumbPage` for the current segment only; align with [contracts/breadcrumb-trail.md](./contracts/breadcrumb-trail.md)
+- [X] T010 [US2] Stabilize current-segment styling using existing shadcn `BreadcrumbPage` / muted styles; fix US2 tests
 
 **Checkpoint**: US2 acceptance scenarios pass.
 
@@ -83,12 +83,12 @@
 
 ### Tests for User Story 3 (required)
 
-- [ ] T011 [P] [US3] Add failing test in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` (or suitable DOM test) that overflow container’s initial `scrollLeft` shows the end of the trail for LTR after render
+- [X] T011 [P] [US3] Add failing test in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.test.tsx` (or suitable DOM test) that overflow container’s initial `scrollLeft` shows the end of the trail for LTR after render
 
 ### Implementation for User Story 3
 
-- [ ] T012 [US3] Add scroll container `ref` and `useLayoutEffect` (or equivalent) in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` to set initial horizontal scroll to **maximum** when `pathname` or trail labels change, per [research.md](./research.md) §3
-- [ ] T013 [US3] Re-verify `../sitio-dashboard/src/components/layout/dashboard-shell.tsx` header structure (`md:hidden` school row + `md:block` breadcrumb strip vs mobile second row); adjust classes only if US3 tests or manual check fail
+- [X] T012 [US3] Add scroll container `ref` and `useLayoutEffect` (or equivalent) in `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` to set initial horizontal scroll to **maximum** when `pathname` or trail labels change, per [research.md](./research.md) §3
+- [X] T013 [US3] Re-verify `../sitio-dashboard/src/components/layout/dashboard-shell.tsx` header structure (`md:hidden` school row + `md:block` breadcrumb strip vs mobile second row); adjust classes only if US3 tests or manual check fail
 
 **Checkpoint**: US3 acceptance scenarios pass.
 
@@ -98,10 +98,10 @@
 
 **Purpose**: Single breadcrumb landmark, no duplicate page nav, CI green.
 
-- [ ] T014 Remove duplicate page-level `<nav aria-label="Breadcrumb">` block from `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` once shell trail is complete; preserve non-breadcrumb content (headings, back links only if product still needs them)
-- [ ] T015 [P] Remove duplicate breadcrumb `<nav>` from `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for the same reason
-- [ ] T016 [P] Update mocks/stubs in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` and `../sitio-dashboard/src/test/school-scope-sidebar-nav.test.tsx` if imports or behavior of `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` changed
-- [ ] T017 Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and fix regressions
+- [X] T014 Remove duplicate page-level `<nav aria-label="Breadcrumb">` block from `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` once shell trail is complete; preserve non-breadcrumb content (headings, back links only if product still needs them)
+- [X] T015 [P] Remove duplicate breadcrumb `<nav>` from `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for the same reason
+- [X] T016 [P] Update mocks/stubs in `../sitio-dashboard/src/test/dashboard-shell-and-routing.test.tsx` and `../sitio-dashboard/src/test/school-scope-sidebar-nav.test.tsx` if imports or behavior of `../sitio-dashboard/src/components/layout/dashboard-breadcrumbs.tsx` changed
+- [X] T017 Run `pnpm lint` and `pnpm test` in `../sitio-dashboard` and fix regressions
 - [ ] T018 Execute manual validation steps in [quickstart.md](./quickstart.md)
 
 ---
