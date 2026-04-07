@@ -21,8 +21,8 @@ page 2
 # Controle de Pagamentos para Agências de Turismo Pedagógico
 
 A proposta inicial é um sistema onde uma agência de turismo possa:
-- Gerir Escolas, Viagens e listas de passageiros e pagamentos.
-- Compartilhar o acesso às informações da viagem e pagamentos com a organização da escola.
+- Gerir Escolas, Viagens e listas de passageiros; acompanhar pagamentos **sincronizados** com a plataforma de pagamentos em uso.
+- Compartilhar o acesso às informações da viagem e aos estados de pagamento com a organização da escola.
 
 ----
 page 3
@@ -34,9 +34,9 @@ page 3
 Responsável pela agência de turismo
 
 - 50 anos
-- Utiliza a plataforma multiplas vezes ao longo da semana
-- Experiência com contabilidade e gestão
-- Pouco tempo disponível
+- Utiliza a plataforma várias vezes ao longo da semana para cadastros, conferência e exceções — **não** para digitar cada pagamento a mão: os valores **entram automaticamente** via **integração** com a plataforma de pagamentos já usada na venda.
+- Experiência com contabilidade e gestão; espera **reconciliar** lista do sistema com o extrato quando precisar e tratar casos fora do fluxo online (dinheiro na loja, acertos manuais).
+- Pouco tempo disponível; prioriza visão consolidada por viagem e **menos retrabalho** entre a **plataforma de pagamentos** e as planilhas.
 
 ----
 page 4
@@ -86,4 +86,14 @@ page 8
 
 # Cenários
 
+## Caminho principal (agência + escola)
+
+1. **Marcos** cadastra a escola, cria a viagem e inclui os passageiros com valor esperado.
+2. Os **pagamentos confirmados na plataforma de pagamentos** são **importados automaticamente** (integração); a lista de cada aluno **atualiza** e, quando o total cobre o esperado, o status fica **quitado**. **Marcos** acompanha e, se precisar, **complementa** com lançamentos manuais (ex.: pagamento em dinheiro na agência).
+3. **Marcos** gera o **link** e envia para **Márcia** (e-mail, WhatsApp etc.).
+4. **Márcia** abre o link, vê a lista **alinhada** com o que a plataforma já registrou e cobra os responsáveis que ainda estão **pendentes**.
+
+## Variações e exceções (resumo)
+
+- **Fora do fluxo online:** pagamento só presencial ou exceção → **Marcos** registra manualmente ou usa marcação **“pago sem detalhe”**, conforme a interface, para não depender só do gateway.
 
