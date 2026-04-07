@@ -12,8 +12,8 @@
 
 | Key | Value type | Purpose |
 |-----|------------|---------|
-| `sitio.dashboard.scope.v1.lastSchoolId` | string (UUID) | **Last accessed** school id for **FR-001** step (1). Empty/absent means “none recorded”. |
-| `sitio.dashboard.scope.v1.recentSchools` | JSON string | **Recent schools** list for **FR-006** (max **10**). |
+| `sitio.dashboard.scope.v1.lastSchoolId` | string (UUID) | **Last accessed** school id for **INIT-1** step (1). Empty/absent means “none recorded”. |
+| `sitio.dashboard.scope.v1.recentSchools` | JSON string | **Recent schools** list for the selector (**SEL-6**, max **10**). |
 
 ## JSON: `recentSchools`
 
@@ -33,7 +33,7 @@ type RecentSchoolsPayload = RecentSchoolEntry[];
 
 - **Max length**: **10** — when inserting, **truncate** from the tail (oldest dropped).
 - **Dedupe**: If the user opens a school already in the list, **move** it to index `0` and refresh `lastOpenedAt`.
-- **Invalid entries**: On successful fetch of school list or detail, **remove** entries whose `schoolId` is not returned by the server for the current deployment (or is inactive if product filters them out).
+- **Invalid entries**: On successful fetch of school list or detail, **remove** entries whose `schoolId` is not returned by the server for the current deployment (or is filtered out by product rules).
 
 ## Migrations
 
