@@ -67,13 +67,13 @@
 - [x] T013 [US1] Add schools **parent layout** (TanStack Router layout + `Outlet`) co-located under `../sitio-dashboard/src/routes/schools/` wrapping `list-detail-layout`
 - [x] T014 [US1] Refactor `../sitio-dashboard/src/routes/schools/index.tsx` to render the **list pane** + empty/detail placeholder consistent with M3 list–detail; ensure **FR-005** empty/loading/error for list and detail regions
 - [x] T015 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` so school hub content renders in the **detail pane** without breaking school scope and breadcrumbs; ensure **FR-005** in both panes
-- [ ] T016 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/index.tsx` to M3 list–detail (trips collection + trip detail entry); ensure **FR-005** in both panes
-- [ ] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers); ensure **FR-005** in both panes
-- [ ] T018 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**; ensure **FR-005** in both panes
-- [ ] T019 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/index.tsx` and related payment child routes under `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/` for M3 list–detail; ensure **FR-005** in both panes
+- [x] T016 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/index.tsx` to M3 list–detail (trips collection + trip detail entry); ensure **FR-005** in both panes
+- [x] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers); ensure **FR-005** in both panes
+- [x] T018 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**; ensure **FR-005** in both panes
+- [x] T019 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/index.tsx` and related payment child routes under `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/` for M3 list–detail; ensure **FR-005** in both panes
 - [ ] T020 [US1] Integrate `../sitio-dashboard/src/components/trips/TripForm.tsx` with dirty tracking + unsaved dialog (FR-012)
 - [ ] T021 [US1] Integrate `../sitio-dashboard/src/components/schools/SchoolForm.tsx`, `../sitio-dashboard/src/components/trips/PassengerCreateForm.tsx`, and `../sitio-dashboard/src/components/trips/PaymentForm.tsx` with dirty tracking + dialog where fields are editable
-- [ ] T022 [US1] Align FR-014 **not-found** behavior on migrated deep-linked routes (reuse or extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx`) so **detail pane** shows `pt-BR` unavailable state and list remains usable when both panes are visible
+- [x] T022 [US1] Align FR-014 **not-found** behavior on migrated deep-linked routes (reuse or extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx`) so **detail pane** shows `pt-BR` unavailable state and list remains usable when both panes are visible
 
 **Checkpoint**: User Story 1 acceptance scenarios 1–6 are demonstrable on migrated flows; tests **T011–T012** green.
 
