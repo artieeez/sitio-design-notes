@@ -19,8 +19,16 @@
 
 **Purpose**: Confirm scope, baseline, and tooling before code changes.
 
-- [ ] T001 Confirm implementation is limited to `../sitio-dashboard` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` (no backend scope unless newly discovered gap)
-- [ ] T002 [P] Capture baseline: run `pnpm lint`, `pnpm typecheck`, and `pnpm test` in `../sitio-dashboard` and record pass state before feature edits
+### Phase 1 baseline (recorded 2026-04-08)
+
+| Check | Result |
+|-------|--------|
+| `pnpm lint` (`sitio-dashboard`) | Exit 0; Biome prints **info** that `$schema` is 2.1.2 while CLI is 2.4.10 (suggests `biome migrate`) |
+| `pnpm typecheck` | **Fail** — `School`-shaped mocks missing `description` and `imageUrl` in `src/lib/resolve-initial-school.test.ts`, `src/lib/scope-search.test.ts`, `src/test/school-scope-control.test.tsx` |
+| `pnpm test` | **Pass** — 23 tests in 10 files; Vitest notes optional `close timed out` / hanging-process warning on shutdown |
+
+- [x] T001 Confirm implementation is limited to `../sitio-dashboard` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` (no backend scope unless newly discovered gap)
+- [x] T002 [P] Capture baseline: run `pnpm lint`, `pnpm typecheck`, and `pnpm test` in `../sitio-dashboard` and record pass state before feature edits
 
 ---
 
