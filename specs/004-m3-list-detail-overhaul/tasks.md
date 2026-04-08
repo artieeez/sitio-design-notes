@@ -19,13 +19,13 @@
 
 **Purpose**: Confirm scope, baseline, and tooling before code changes.
 
-### Phase 1 baseline (recorded 2026-04-08)
+### Phase 1 baseline (recorded 2026-04-08; refreshed after Phase 2)
 
 | Check | Result |
 |-------|--------|
 | `pnpm lint` (`sitio-dashboard`) | Exit 0; Biome prints **info** that `$schema` is 2.1.2 while CLI is 2.4.10 (suggests `biome migrate`) |
-| `pnpm typecheck` | **Fail** — `School`-shaped mocks missing `description` and `imageUrl` in `src/lib/resolve-initial-school.test.ts`, `src/lib/scope-search.test.ts`, `src/test/school-scope-control.test.tsx` |
-| `pnpm test` | **Pass** — 23 tests in 10 files; Vitest notes optional `close timed out` / hanging-process warning on shutdown |
+| `pnpm typecheck` | **Pass** — `School` mocks include `description` / `imageUrl` where required |
+| `pnpm test` | **Pass** — 32 tests in 12 files; Vitest skips TanStack Start / Nitro / devtools plugins when `VITEST` is set (see `vite.config.ts`) to avoid duplicate React under the test runner |
 
 - [x] T001 Confirm implementation is limited to `../sitio-dashboard` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` (no backend scope unless newly discovered gap)
 - [x] T002 [P] Capture baseline: run `pnpm lint`, `pnpm typecheck`, and `pnpm test` in `../sitio-dashboard` and record pass state before feature edits
@@ -38,14 +38,14 @@
 
 **⚠️ CRITICAL**: Complete Phase 2 before Phase 3–5.
 
-- [ ] T003 [P] Add shadcn **Alert Dialog** primitive to `../sitio-dashboard/src/components/ui/alert-dialog.tsx` (see `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md`)
-- [ ] T004 [P] Add `pt-BR` copy keys for unsaved-changes dialog (title, description, continue, discard, optional save) in `../sitio-dashboard/src/messages/pt-BR.ts`
-- [ ] T005 [P] Add **failing-first** tests for `list-detail-layout` shell (list/detail regions, stable `data-testid` / roles contract) in `../sitio-dashboard/src/test/list-detail-layout-shell.test.tsx` — drive **T009** to green
-- [ ] T006 [P] Add **failing-first** tests for `unsaved-changes-dialog` (open, continue editing, discard) in `../sitio-dashboard/src/test/unsaved-changes-dialog-shell.test.tsx` — drive **T008** to green
-- [ ] T007 Implement dirty/pending-intent state API in `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/data-model.md`
-- [ ] T008 Implement `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` composing shadcn `alert-dialog` + `pt-BR` strings + actions per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/unsaved-changes-dialog.md`
-- [ ] T009 Implement `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (list pane, detail pane, expanded vs compact behavior, stable `data-testid` / roles for tests) per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/list-detail-layout.md`
-- [ ] T010 Wire list selection changes and detail “exit” intents to the guard + dialog from `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` via `../sitio-dashboard/src/components/layout/list-detail-layout.tsx`; follow **TanStack Router** strategy in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/research.md` §4 and record the **chosen** API (blocker vs wrapper) in an English comment at top of `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts`
+- [x] T003 [P] Add shadcn **Alert Dialog** primitive to `../sitio-dashboard/src/components/ui/alert-dialog.tsx` (see `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md`)
+- [x] T004 [P] Add `pt-BR` copy keys for unsaved-changes dialog (title, description, continue, discard, optional save) in `../sitio-dashboard/src/messages/pt-BR.ts`
+- [x] T005 [P] Add **failing-first** tests for `list-detail-layout` shell (list/detail regions, stable `data-testid` / roles contract) in `../sitio-dashboard/src/test/list-detail-layout-shell.test.tsx` — drive **T009** to green
+- [x] T006 [P] Add **failing-first** tests for `unsaved-changes-dialog` (open, continue editing, discard) in `../sitio-dashboard/src/test/unsaved-changes-dialog-shell.test.tsx` — drive **T008** to green
+- [x] T007 Implement dirty/pending-intent state API in `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/data-model.md`
+- [x] T008 Implement `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` composing shadcn `alert-dialog` + `pt-BR` strings + actions per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/unsaved-changes-dialog.md`
+- [x] T009 Implement `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (list pane, detail pane, expanded vs compact behavior, stable `data-testid` / roles for tests) per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/list-detail-layout.md`
+- [x] T010 Wire list selection changes and detail “exit” intents to the guard + dialog from `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` via `../sitio-dashboard/src/components/layout/list-detail-layout.tsx`; follow **TanStack Router** strategy in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/research.md` §4 and record the **chosen** API (blocker vs wrapper) in an English comment at top of `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts`
 
 **Checkpoint**: **T005–T006** tests green; layout + dialog + guard usable from route code; proceed to User Story 1.
 
