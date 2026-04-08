@@ -25,7 +25,7 @@
 |-------|--------|
 | `pnpm lint` (`sitio-dashboard`) | Exit 0; Biome prints **info** that `$schema` is 2.1.2 while CLI is 2.4.10 (suggests `biome migrate`) |
 | `pnpm typecheck` | **Pass** — `School` mocks include `description` / `imageUrl` where required |
-| `pnpm test` | **Pass** — 32 tests in 12 files; Vitest skips TanStack Start / Nitro / devtools plugins when `VITEST` is set (see `vite.config.ts`) to avoid duplicate React under the test runner |
+| `pnpm test` | **Pass** — 35 tests in 14 files; Vitest skips TanStack Start / Nitro / devtools plugins when `VITEST` is set (see `vite.config.ts`) to avoid duplicate React under the test runner |
 
 - [x] T001 Confirm implementation is limited to `../sitio-dashboard` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` (no backend scope unless newly discovered gap)
 - [x] T002 [P] Capture baseline: run `pnpm lint`, `pnpm typecheck`, and `pnpm test` in `../sitio-dashboard` and record pass state before feature edits
@@ -59,14 +59,14 @@
 
 ### Tests for User Story 1 (write first; expect red until implementation lands)
 
-- [ ] T011 [P] [US1] Add integration-level tests for list/detail regions and selection behavior with real or stubbed routes in `../sitio-dashboard/src/test/list-detail-layout.test.tsx`
-- [ ] T012 [P] [US1] Add integration-level tests for unsaved-changes **Alert Dialog** with route/navigation context in `../sitio-dashboard/src/test/unsaved-changes-dialog.test.tsx`
+- [x] T011 [P] [US1] Add integration-level tests for list/detail regions and selection behavior with real or stubbed routes in `../sitio-dashboard/src/test/list-detail-layout.test.tsx`
+- [x] T012 [P] [US1] Add integration-level tests for unsaved-changes **Alert Dialog** with route/navigation context in `../sitio-dashboard/src/test/unsaved-changes-dialog.test.tsx`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Add schools **parent layout** (TanStack Router layout + `Outlet`) co-located under `../sitio-dashboard/src/routes/schools/` wrapping `list-detail-layout`
-- [ ] T014 [US1] Refactor `../sitio-dashboard/src/routes/schools/index.tsx` to render the **list pane** + empty/detail placeholder consistent with M3 list–detail; ensure **FR-005** empty/loading/error for list and detail regions
-- [ ] T015 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` so school hub content renders in the **detail pane** without breaking school scope and breadcrumbs; ensure **FR-005** in both panes
+- [x] T013 [US1] Add schools **parent layout** (TanStack Router layout + `Outlet`) co-located under `../sitio-dashboard/src/routes/schools/` wrapping `list-detail-layout`
+- [x] T014 [US1] Refactor `../sitio-dashboard/src/routes/schools/index.tsx` to render the **list pane** + empty/detail placeholder consistent with M3 list–detail; ensure **FR-005** empty/loading/error for list and detail regions
+- [x] T015 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` so school hub content renders in the **detail pane** without breaking school scope and breadcrumbs; ensure **FR-005** in both panes
 - [ ] T016 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/index.tsx` to M3 list–detail (trips collection + trip detail entry); ensure **FR-005** in both panes
 - [ ] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers); ensure **FR-005** in both panes
 - [ ] T018 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**; ensure **FR-005** in both panes
