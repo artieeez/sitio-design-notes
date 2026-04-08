@@ -32,40 +32,42 @@
 
 - [ ] T003 [P] Add shadcn **Alert Dialog** primitive to `../sitio-dashboard/src/components/ui/alert-dialog.tsx` (see `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md`)
 - [ ] T004 [P] Add `pt-BR` copy keys for unsaved-changes dialog (title, description, continue, discard, optional save) in `../sitio-dashboard/src/messages/pt-BR.ts`
-- [ ] T005 Implement dirty/pending-intent state API in `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/data-model.md`
-- [ ] T006 Implement `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` composing shadcn `alert-dialog` + `pt-BR` strings + actions per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/unsaved-changes-dialog.md`
-- [ ] T007 Implement `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (list pane, detail pane, expanded vs compact behavior, stable `data-testid` / roles for tests) per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/list-detail-layout.md`
-- [ ] T008 Wire list selection changes and detail “exit” intents to the guard + dialog from `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` via `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (and document router interception approach in code comments in English)
+- [ ] T005 [P] Add **failing-first** tests for `list-detail-layout` shell (list/detail regions, stable `data-testid` / roles contract) in `../sitio-dashboard/src/test/list-detail-layout-shell.test.tsx` — drive **T009** to green
+- [ ] T006 [P] Add **failing-first** tests for `unsaved-changes-dialog` (open, continue editing, discard) in `../sitio-dashboard/src/test/unsaved-changes-dialog-shell.test.tsx` — drive **T008** to green
+- [ ] T007 Implement dirty/pending-intent state API in `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/data-model.md`
+- [ ] T008 Implement `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` composing shadcn `alert-dialog` + `pt-BR` strings + actions per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/unsaved-changes-dialog.md`
+- [ ] T009 Implement `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (list pane, detail pane, expanded vs compact behavior, stable `data-testid` / roles for tests) per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/contracts/list-detail-layout.md`
+- [ ] T010 Wire list selection changes and detail “exit” intents to the guard + dialog from `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts` via `../sitio-dashboard/src/components/layout/list-detail-layout.tsx`; follow **TanStack Router** strategy in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/research.md` §4 and record the **chosen** API (blocker vs wrapper) in an English comment at top of `../sitio-dashboard/src/hooks/use-unsaved-changes-guard.ts`
 
-**Checkpoint**: Layout + dialog + guard are usable from route code; proceed to User Story 1.
+**Checkpoint**: **T005–T006** tests green; layout + dialog + guard usable from route code; proceed to User Story 1.
 
 ---
 
 ## Phase 3: User Story 1 — Coordinated list + detail (Priority: P1) MVP
 
-**Goal**: Wide layouts show **coordinated list and detail**; **selection** drives detail; **keyboard** order is sane; **unsaved** edits block row change / navigation with **Alert Dialog**; **deep links** to missing entities show **detail-region** not-found where applicable (**FR-012**, **FR-013**, **FR-014**).
+**Goal**: Wide layouts show **coordinated list and detail**; **selection** drives detail; **keyboard** order is sane; **unsaved** edits block row change / navigation with **Alert Dialog**; **deep links** to missing entities show **detail-region** not-found where applicable (**FR-012**, **FR-013**, **FR-014**). Each migrated route must satisfy **FR-005** (empty, loading, error) in **both** panes without collapsing the pattern.
 
 **Independent test**: On migrated screens, select rows, use keyboard, trigger invalid deep link, dirty a form and attempt to switch selection — behaviors match [spec.md](./spec.md) User Story 1.
 
 ### Tests for User Story 1 (write first; expect red until implementation lands)
 
-- [ ] T009 [P] [US1] Add tests for list/detail regions and selection behavior in `../sitio-dashboard/src/test/list-detail-layout.test.tsx`
-- [ ] T010 [P] [US1] Add tests for unsaved-changes **Alert Dialog** open/continue/discard in `../sitio-dashboard/src/test/unsaved-changes-dialog.test.tsx`
+- [ ] T011 [P] [US1] Add integration-level tests for list/detail regions and selection behavior with real or stubbed routes in `../sitio-dashboard/src/test/list-detail-layout.test.tsx`
+- [ ] T012 [P] [US1] Add integration-level tests for unsaved-changes **Alert Dialog** with route/navigation context in `../sitio-dashboard/src/test/unsaved-changes-dialog.test.tsx`
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Add schools **parent layout** (TanStack Router layout + `Outlet`) co-located under `../sitio-dashboard/src/routes/schools/` wrapping `list-detail-layout`
-- [ ] T012 [US1] Refactor `../sitio-dashboard/src/routes/schools/index.tsx` to render the **list pane** + empty/detail placeholder consistent with M3 list–detail
-- [ ] T013 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` so school hub content renders in the **detail pane** without breaking school scope and breadcrumbs
-- [ ] T014 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/index.tsx` to M3 list–detail (trips collection + trip detail entry)
-- [ ] T015 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers)
-- [ ] T016 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**
-- [ ] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/index.tsx` and related payment child routes under `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/` for M3 list–detail
-- [ ] T018 [US1] Integrate `../sitio-dashboard/src/components/trips/TripForm.tsx` with dirty tracking + unsaved dialog (FR-012)
-- [ ] T019 [US1] Integrate `../sitio-dashboard/src/components/schools/SchoolForm.tsx`, `../sitio-dashboard/src/components/trips/PassengerCreateForm.tsx`, and `../sitio-dashboard/src/components/trips/PaymentForm.tsx` with dirty tracking + dialog where fields are editable
-- [ ] T020 [US1] Align FR-014 **not-found** behavior on migrated deep-linked routes (reuse or extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx`) so **detail pane** shows `pt-BR` unavailable state and list remains usable when both panes are visible
+- [ ] T013 [US1] Add schools **parent layout** (TanStack Router layout + `Outlet`) co-located under `../sitio-dashboard/src/routes/schools/` wrapping `list-detail-layout`
+- [ ] T014 [US1] Refactor `../sitio-dashboard/src/routes/schools/index.tsx` to render the **list pane** + empty/detail placeholder consistent with M3 list–detail; ensure **FR-005** empty/loading/error for list and detail regions
+- [ ] T015 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/index.tsx` so school hub content renders in the **detail pane** without breaking school scope and breadcrumbs; ensure **FR-005** in both panes
+- [ ] T016 [US1] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/index.tsx` to M3 list–detail (trips collection + trip detail entry); ensure **FR-005** in both panes
+- [ ] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers); ensure **FR-005** in both panes
+- [ ] T018 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**; ensure **FR-005** in both panes
+- [ ] T019 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/index.tsx` and related payment child routes under `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/` for M3 list–detail; ensure **FR-005** in both panes
+- [ ] T020 [US1] Integrate `../sitio-dashboard/src/components/trips/TripForm.tsx` with dirty tracking + unsaved dialog (FR-012)
+- [ ] T021 [US1] Integrate `../sitio-dashboard/src/components/schools/SchoolForm.tsx`, `../sitio-dashboard/src/components/trips/PassengerCreateForm.tsx`, and `../sitio-dashboard/src/components/trips/PaymentForm.tsx` with dirty tracking + dialog where fields are editable
+- [ ] T022 [US1] Align FR-014 **not-found** behavior on migrated deep-linked routes (reuse or extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx`) so **detail pane** shows `pt-BR` unavailable state and list remains usable when both panes are visible
 
-**Checkpoint**: User Story 1 acceptance scenarios 1–6 are demonstrable on migrated flows; tests T009–T010 green.
+**Checkpoint**: User Story 1 acceptance scenarios 1–6 are demonstrable on migrated flows; tests **T011–T012** green.
 
 ---
 
@@ -77,14 +79,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T021 [P] [US2] Add tests for compact list↔detail navigation (including back affordance) in `../sitio-dashboard/src/test/list-detail-compact.test.tsx`
+- [ ] T023 [P] [US2] Add tests for compact list↔detail navigation (including back affordance) in `../sitio-dashboard/src/test/list-detail-compact.test.tsx`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Finish compact/stacked behavior and visible **back** control in `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (integrate `../sitio-dashboard/src/hooks/use-mobile.ts` or existing breakpoint utilities)
-- [ ] T023 [US2] Ensure compact **back** from detail runs through the same unsaved guard + `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` path as row/navigation changes
+- [ ] T024 [US2] Finish compact/stacked behavior and visible **back** control in `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (integrate `../sitio-dashboard/src/hooks/use-mobile.ts` or existing breakpoint utilities)
+- [ ] T025 [US2] Ensure compact **back** from detail runs through the same unsaved guard + `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` path as row/navigation changes
 
-**Checkpoint**: SC-002 walkthrough passes on migrated screens; T021 green.
+**Checkpoint**: SC-002 walkthrough passes on migrated screens; **T023** green.
 
 ---
 
@@ -96,27 +98,28 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Add tests asserting create/edit surfaces render within the list–detail **detail** region (or approved equivalent) in `../sitio-dashboard/src/test/list-detail-create.test.tsx`
+- [ ] T026 [P] [US3] Add tests asserting create/edit surfaces render within the list–detail **detail** region (or approved equivalent) in `../sitio-dashboard/src/test/list-detail-create.test.tsx`
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Refactor `../sitio-dashboard/src/routes/schools/new.tsx` into **detail create** mode under the schools list–detail shell (or document exemption in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` with acceptance criteria)
-- [ ] T026 [US3] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/new.tsx` into **detail create** mode under the trips list–detail shell
-- [ ] T027 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/new.tsx` into **detail create** mode under passengers list–detail
-- [ ] T028 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/new.tsx` and `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/$paymentId/edit.tsx` into **detail** pattern under payments list–detail
+- [ ] T027 [US3] Refactor `../sitio-dashboard/src/routes/schools/new.tsx` into **detail create** mode under the schools list–detail shell (or document exemption in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` with acceptance criteria)
+- [ ] T028 [US3] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/new.tsx` into **detail create** mode under the trips list–detail shell
+- [ ] T029 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/new.tsx` into **detail create** mode under passengers list–detail
+- [ ] T030 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/new.tsx` and `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/$paymentId/edit.tsx` into **detail** pattern under payments list–detail
 
-**Checkpoint**: User Story 3 acceptance scenarios hold; T024 green.
+**Checkpoint**: User Story 3 acceptance scenarios hold; **T026** green.
 
 ---
 
 ## Phase 6: Polish & cross-cutting
 
-**Purpose**: Accessibility verification, documentation, exemptions, CI gates.
+**Purpose**: Accessibility verification, UX consistency documentation, concurrent-change minimum, exemptions, CI gates.
 
-- [ ] T029 [P] Append **FR-013** manual verification steps (keyboard, focus visibility, dialog focus trap) to `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md`
-- [ ] T030 Run the manual checklist in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` and fix issues in `../sitio-dashboard`
-- [ ] T031 [P] Record any **M3 exemptions** (e.g. `/`, `/schools/$schoolId/home`) with rationale + acceptance criteria in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
-- [ ] T032 [P] Final verification: `pnpm lint`, `pnpm typecheck`, `pnpm test` in `../sitio-dashboard`
+- [ ] T031 [P] Append **FR-013** manual verification steps **and** **FR-007** UX consistency bullets (terminology, selection affordances, motion/focus) to `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` (see [plan.md](./plan.md) §FR-013 verification and §FR-007)
+- [ ] T032 Run the manual checklist in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` and fix issues in `../sitio-dashboard`
+- [ ] T033 [P] Record any **M3 exemptions** (e.g. `/`, `/schools/$schoolId/home`) with rationale + acceptance criteria in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
+- [ ] T034 [P] Implement **plan** minimum for **concurrent data changes** (`../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` §Concurrent data changes): ensure mutations invalidate/refetch via React Query and **do not** silently overwrite **dirty** forms; optional banner deferred — if deferred, add one-line **deferral** note in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
+- [ ] T035 [P] Final verification: `pnpm lint`, `pnpm typecheck`, `pnpm test` in `../sitio-dashboard`
 
 ---
 
@@ -125,31 +128,31 @@
 ### Phase dependencies
 
 - **Phase 1** → **Phase 2** → **Phases 3–5** (user stories) → **Phase 6**
-- **Phase 3** depends on Phase 2 completion
-- **Phase 4** depends on Phase 3** layout + guard** being in place (can start layout tweaks after T007–T008 even if T011+ incomplete — in practice finish **Phase 3** list–detail shell usage first for one vertical to avoid thrash)
+- **Phase 3** depends on Phase 2 completion (**T005–T010** green)
+- **Phase 4** depends on Phase 3 **layout + guard** in use (complete **T013–T015** minimum before relying on compact tests against real routes)
 
 ### User story dependencies
 
 - **US1**: After Phase 2; no dependency on US2/US3
-- **US2**: After US1 **shared** `list-detail-layout` exists (T007+); compact tests assume at least one migrated route — complete **T011–T013** minimum before deep compact testing
+- **US2**: After US1 **shared** `list-detail-layout` exists (**T009+**); compact tests need migrated routes — finish **T013–T015** minimum first
 - **US3**: After US1 (create flows need stable list–detail shell)
 
 ### Parallel opportunities
 
-- **T003** + **T004** (different files)
-- **T009** + **T010** (different test files)
-- **T021** can be authored in parallel with late US1 tasks once `data-testid`/roles exist
-- **T024** in parallel prep with **T021** if file names differ
-- **T029**, **T031**, **T032** parallelizable with distinct artifacts (docs vs CI)
+- **T003** + **T004** + **T005** + **T006** (different files)
+- **T011** + **T012** (different test files)
+- **T023** can be drafted once `data-testid`/roles from **T009** are stable
+- **T026** parallel prep with **T023** if files differ
+- **T031**, **T033**, **T034**, **T035** parallelizable where artifacts do not conflict
 
 ---
 
-## Parallel example: User Story 1
+## Parallel example: Phase 2 (foundational)
 
 ```bash
-# After Phase 2, start tests in parallel:
-../sitio-dashboard/src/test/list-detail-layout.test.tsx
-../sitio-dashboard/src/test/unsaved-changes-dialog.test.tsx
+# After T004, start failing-first shell tests in parallel:
+../sitio-dashboard/src/test/list-detail-layout-shell.test.tsx
+../sitio-dashboard/src/test/unsaved-changes-dialog-shell.test.tsx
 ```
 
 ---
@@ -158,32 +161,32 @@
 
 ### MVP first (User Story 1 only)
 
-1. Complete Phase 1–2 (T001–T008)
-2. Complete Phase 3 through at least **schools** vertical (T011–T013) + tests T009–T010, then expand T014–T020
+1. Complete Phase 1–2 (**T001–T010**), including **T005–T006** red→green with **T008–T009**
+2. Complete Phase 3 through at least **schools** vertical (**T013–T015**) + **T011–T012**, then expand **T016–T022**
 3. **Stop and validate** against spec User Story 1 independent test
-4. Proceed to US2 (compact) and US3 (create/edit), then Phase 6
+4. Proceed to US2, US3, then Phase 6
 
 ### Incremental delivery
 
-- Merge **Phase 2** as a stack PR if routes are not yet migrated (feature flag or unused exports acceptable only if tree-shaken and lint-clean — prefer **first route** using the shell in the same PR as Phase 2 if policy requires no dead code)
+- Prefer **no** long-lived unused layout exports: land **T013** in the same slice as **T009–T010** when policy forbids dead code
 
 ### Task counts
 
 | Scope | Tasks |
 |-------|-------|
 | Phase 1 | 2 |
-| Phase 2 | 6 |
+| Phase 2 | 8 |
 | Phase 3 (US1) | 12 |
 | Phase 4 (US2) | 3 |
 | Phase 5 (US3) | 5 |
-| Phase 6 | 4 |
-| **Total** | **32** |
+| Phase 6 | 5 |
+| **Total** | **35** |
 
 | User story | Task IDs |
 |------------|----------|
-| US1 | T009–T020 |
-| US2 | T021–T023 |
-| US3 | T024–T028 |
+| US1 | T011–T022 |
+| US2 | T023–T025 |
+| US3 | T026–T030 |
 
 ---
 

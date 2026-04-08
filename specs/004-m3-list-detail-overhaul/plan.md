@@ -32,6 +32,31 @@ Refactor dashboard **collection + detail/form** experiences to follow **Material
 
 **Scale/Scope**: All **list–detail** areas enumerated below; full-page routes that are **create-only** may use detail-pane **mode** or documented equivalent (FR-004).
 
+## FR-013 verification (spec compliance)
+
+Per **FR-013**, this plan defines **how** accessibility is verified (normative detail is maintained in **[quickstart.md](./quickstart.md)** after task **T031** lands):
+
+1. **Manual checklist** (required before release): keyboard-only pass through **LIST** and **DETAIL** on expanded and compact layouts; **visible focus** on list items, primary actions, and form fields; **focus order** matches visual reading order; **Alert Dialog** traps focus and returns focus on close.
+2. **Automated coverage** (required where feasible): Vitest + Testing Library asserts for regions/`data-testid`, dialog open/close, and compact **back** (see `tasks.md` Phase 2–4 test tasks).
+3. **Exemptions**: Any screen exempt from full FR-013 must appear in the **Exemptions** table with acceptance criteria (same pass as SC-008).
+
+## FR-007 UX consistency (reviewer artifacts)
+
+Reviewers verify **FR-007** using:
+
+- [contracts/list-detail-layout.md](./contracts/list-detail-layout.md) (regions, selection, compact behavior)
+- [contracts/unsaved-changes-dialog.md](./contracts/unsaved-changes-dialog.md) (blocking dialog)
+- **quickstart.md** UX consistency bullets added under **T031** (shared terminology, selection affordances, motion/focus notes)
+
+## Concurrent data changes (spec edge case)
+
+**Spec**: If data changes while the user views an item, the UI recovers with clear messaging or refresh without breaking list–detail structure.
+
+**Plan for this feature**:
+
+- **Minimum**: Reuse **TanStack Query** invalidation/refetch after successful mutations; **never silently replace** a **dirty** form with server data without user acknowledgment (aligns with FR-012).
+- **Stretch** (optional in same epic): Non-blocking **banner** or “Dados atualizados” with refresh when stale — add during route migration if low effort; otherwise document **deferral** in this section and track as a follow-up.
+
 ## Constitution Check
 
 *GATE: Passed — aligns with [`.specify/memory/constitution.md`](../../.specify/memory/constitution.md). Re-checked after Phase 1 design.*
