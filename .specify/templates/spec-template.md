@@ -100,11 +100,16 @@
   English for implementation and maintenance consistency.
 - **FR-010**: Specification MUST identify target implementation repository or
   repositories in the shared parent folder and describe the scope split per repo.
+- **FR-011**: For dashboard features that combine a list (or collection) with
+  per-item detail or editing (including forms), the UI MUST follow Material Design
+  3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)
+  (structure, selection/navigation, responsive behavior) or document an explicit
+  exemption with acceptance criteria.
 
 *Example of marking unclear requirements:*
 
-- **FR-011**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-012**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-012**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-013**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 

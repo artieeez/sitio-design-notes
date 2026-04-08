@@ -38,6 +38,10 @@
   regression strategy for changed behavior.
 - **UX Consistency Gate**: List existing UX patterns this feature reuses and any
   justified deviations with acceptance criteria.
+- **List–Detail Layout Gate**: If the feature presents a list with per-item detail
+  or editing (including forms), confirm the dashboard follows Material Design 3
+  [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)
+  or document an explicit exemption with acceptance criteria.
 - **Language Gate**: Confirm code/spec artifacts are in English and all
   user-facing UI content is in Brazilian Portuguese (`pt-BR`).
 - **Repository Boundary Gate**: Confirm this repo is used for specs only and

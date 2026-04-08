@@ -162,6 +162,9 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Additional unit tests in tests/unit/
 - [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
+- [ ] TXXX [P] For list–detail flows: verify layout matches Material Design 3
+  [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)
+  or confirm documented exemption in spec/plan
 
 ---
 

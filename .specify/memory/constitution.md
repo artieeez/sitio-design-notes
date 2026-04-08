@@ -1,17 +1,17 @@
 <!--
 Sync Impact Report
-- Version change: 1.1.0 -> 1.2.0
+- Version change: 1.2.0 -> 1.3.0
 - Modified principles:
-  - V. Documentation Mirrors Behavior -> V. Specs Must Target Real Sibling Repositories
+  - None renamed
 - Added sections:
-  - Scope & Repository Boundaries
+  - VI. List–Detail Layout (Material Design 3) (new principle under Core Principles)
 - Removed sections:
   - None
 - Templates requiring updates:
   - ✅ updated: .specify/templates/plan-template.md
   - ✅ updated: .specify/templates/spec-template.md
   - ✅ updated: .specify/templates/tasks-template.md
-  - ⚠ pending: .specify/templates/commands/*.md (directory not present in repository)
+  - ✅ reviewed (no edit): .cursor/commands/speckit.constitution.md
 - Follow-up TODOs:
   - None
 -->
@@ -56,6 +56,19 @@ folder (for example `../sitio-dashboard` and `../sitio-backend`) and MUST use
 repository-relative paths for implementation tasks. Rationale: explicit targeting
 prevents ambiguity, broken handoffs, and implementation in the wrong repository.
 
+### VI. List–Detail Layout (Material Design 3)
+Features in the dashboard that combine a **list** (or collection) of items with a
+**detail** or **editing** surface for a selected item—including **forms**—MUST
+follow the Material Design 3 **List–detail** canonical layout: coordinated list
+and detail regions, clear selection and navigation that preserve context, and
+responsive behavior per the official guidance (including appropriate adaptation on
+compact viewports). The normative reference is [Material Design 3 — List–detail
+canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail).
+Deviations MUST be documented in the spec and plan with rationale and acceptance
+criteria that prove an equivalent or better user outcome. Rationale: one canonical
+pattern reduces layout drift, matches expectations for productivity UIs, and keeps
+specs and implementation aligned.
+
 ## Quality Standards
 
 - Requirements MUST be explicit, testable, and traceable to user stories.
@@ -64,6 +77,8 @@ prevents ambiguity, broken handoffs, and implementation in the wrong repository.
 - Any ambiguity MUST be marked and resolved before implementation starts.
 - Language rules MUST be explicit: code/spec content in English and user-facing
   interface content in Brazilian Portuguese (`pt-BR`).
+- List–detail flows MUST state how they comply with Principle VI or cite an
+  approved exemption with measurable acceptance criteria.
 
 ## Scope & Repository Boundaries
 
@@ -77,8 +92,9 @@ prevents ambiguity, broken handoffs, and implementation in the wrong repository.
 ## Delivery Workflow & Quality Gates
 
 - Constitution Check in planning MUST explicitly validate code quality approach,
-  test strategy, UX consistency expectations, language compliance, and target
-  repository mapping.
+  test strategy, UX consistency expectations, language compliance, list–detail
+  layout compliance (or exemption) for applicable flows, and target repository
+  mapping.
 - Task breakdowns MUST include test tasks for each user story and MUST identify
   verification points before cross-cutting polish work.
 - Pull requests MUST demonstrate passing quality gates (lint, tests, and
@@ -99,7 +115,7 @@ Versioning policy:
 Compliance review expectations:
 - Every plan MUST pass Constitution Check before research/design completion.
 - Every task list MUST map work to principles where relevant (quality, testing,
-  UX consistency).
+  UX consistency, list–detail layout where applicable).
 - Reviewers SHOULD block merges that violate non-negotiable principles.
 
-**Version**: 1.2.0 | **Ratified**: 2026-04-01 | **Last Amended**: 2026-04-01
+**Version**: 1.3.0 | **Ratified**: 2026-04-01 | **Last Amended**: 2026-04-08
