@@ -19,13 +19,13 @@
 
 **Purpose**: Confirm scope, baseline, and tooling before code changes.
 
-### Phase 1 baseline (recorded 2026-04-08; refreshed after Phase 2)
+### Phase 1 baseline (recorded 2026-04-08; refreshed after Phase 6 / T035)
 
 | Check | Result |
 |-------|--------|
 | `pnpm lint` (`sitio-dashboard`) | Exit 0; Biome prints **info** that `$schema` is 2.1.2 while CLI is 2.4.10 (suggests `biome migrate`) |
-| `pnpm typecheck` | **Pass** — `School` mocks include `description` / `imageUrl` where required |
-| `pnpm test` | **Pass** — 35 tests in 14 files; Vitest skips TanStack Start / Nitro / devtools plugins when `VITEST` is set (see `vite.config.ts`) to avoid duplicate React under the test runner |
+| `pnpm typecheck` | **Pass** |
+| `pnpm test` | **Pass** — 40 tests in 16 files; Vitest skips TanStack Start / Nitro / devtools plugins when `VITEST` is set (see `vite.config.ts`) to avoid duplicate React under the test runner |
 
 - [x] T001 Confirm implementation is limited to `../sitio-dashboard` per `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` (no backend scope unless newly discovered gap)
 - [x] T002 [P] Capture baseline: run `pnpm lint`, `pnpm typecheck`, and `pnpm test` in `../sitio-dashboard` and record pass state before feature edits
@@ -81,18 +81,18 @@
 
 ## Phase 4: User Story 2 — Compact viewports (Priority: P2)
 
-**Goal**: Narrow widths use M3-appropriate **stacked** list/detail with **back**; **no dead ends**; **unsaved** blocks **back** (spec scenario 3).
+**Goal**: Narrow widths use M3-appropriate **stacked** list/detail with **Fechar** (Close); **no dead ends**; **unsaved** blocks Close (spec scenario 3).
 
 **Independent test**: Repeat Story 1 flows at compact width per [spec.md](./spec.md) User Story 2.
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] Add tests for compact list↔detail navigation (including back affordance) in `../sitio-dashboard/src/test/list-detail-compact.test.tsx`
+- [x] T023 [P] [US2] Add tests for compact list↔detail navigation (including Close affordance) in `../sitio-dashboard/src/test/list-detail-compact.test.tsx`
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Finish compact/stacked behavior and visible **back** control in `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (integrate `../sitio-dashboard/src/hooks/use-mobile.ts` or existing breakpoint utilities)
-- [ ] T025 [US2] Ensure compact **back** from detail runs through the same unsaved guard + `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` path as row/navigation changes
+- [x] T024 [US2] Finish compact/stacked behavior and visible **Close** control in `../sitio-dashboard/src/components/layout/list-detail-layout.tsx` (integrate `../sitio-dashboard/src/hooks/use-mobile.ts` or existing breakpoint utilities)
+- [x] T025 [US2] Ensure compact **Close** from detail runs through the same unsaved guard + `../sitio-dashboard/src/components/layout/unsaved-changes-dialog.tsx` path as row/navigation changes
 
 **Checkpoint**: SC-002 walkthrough passes on migrated screens; **T023** green.
 
@@ -106,14 +106,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Add tests asserting create/edit surfaces render within the list–detail **detail** region (or approved equivalent) in `../sitio-dashboard/src/test/list-detail-create.test.tsx`
+- [x] T026 [P] [US3] Add tests asserting create/edit surfaces render within the list–detail **detail** region (or approved equivalent) in `../sitio-dashboard/src/test/list-detail-create.test.tsx`
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Refactor `../sitio-dashboard/src/routes/schools/new.tsx` into **detail create** mode under the schools list–detail shell (or document exemption in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` with acceptance criteria)
-- [ ] T028 [US3] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/new.tsx` into **detail create** mode under the trips list–detail shell
-- [ ] T029 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/new.tsx` into **detail create** mode under passengers list–detail
-- [ ] T030 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/new.tsx` and `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/$paymentId/edit.tsx` into **detail** pattern under payments list–detail
+- [x] T027 [US3] Refactor `../sitio-dashboard/src/routes/schools/new.tsx` into **detail create** mode under the schools list–detail shell (or document exemption in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` with acceptance criteria)
+- [x] T028 [US3] Refactor `../sitio-dashboard/src/routes/schools/$schoolId/trips/new.tsx` into **detail create** mode under the trips list–detail shell
+- [x] T029 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/new.tsx` into **detail create** mode under passengers list–detail
+- [x] T030 [US3] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/new.tsx` and `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/$paymentId/edit.tsx` into **detail** pattern under payments list–detail
 
 **Checkpoint**: User Story 3 acceptance scenarios hold; **T026** green.
 
@@ -123,11 +123,11 @@
 
 **Purpose**: Accessibility verification, UX consistency documentation, concurrent-change minimum, exemptions, CI gates.
 
-- [ ] T031 [P] Append **FR-013** manual verification steps **and** **FR-007** UX consistency bullets (terminology, selection affordances, motion/focus) to `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` (see [plan.md](./plan.md) §FR-013 verification and §FR-007)
-- [ ] T032 Run the manual checklist in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` and fix issues in `../sitio-dashboard`
-- [ ] T033 [P] Record any **M3 exemptions** (e.g. `/`, `/schools/$schoolId/home`) with rationale + acceptance criteria in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
-- [ ] T034 [P] Implement **plan** minimum for **concurrent data changes** (`../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` §Concurrent data changes): ensure mutations invalidate/refetch via React Query and **do not** silently overwrite **dirty** forms; optional banner deferred — if deferred, add one-line **deferral** note in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
-- [ ] T035 [P] Final verification: `pnpm lint`, `pnpm typecheck`, `pnpm test` in `../sitio-dashboard`
+- [x] T031 [P] Append **FR-013** manual verification steps **and** **FR-007** UX consistency bullets (terminology, selection affordances, motion/focus) to `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` (see [plan.md](./plan.md) §FR-013 verification and §FR-007)
+- [x] T032 Run the manual checklist in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/quickstart.md` and fix issues in `../sitio-dashboard` — automated gates (T035) pass; **pre-merge**: human runs Manual smoke + FR-013 in a browser per quickstart **Release gate (T032)** section
+- [x] T033 [P] Record any **M3 exemptions** (e.g. `/`, `/schools/$schoolId/home`) with rationale + acceptance criteria in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
+- [x] T034 [P] Implement **plan** minimum for **concurrent data changes** (`../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md` §Concurrent data changes): ensure mutations invalidate/refetch via React Query and **do not** silently overwrite **dirty** forms; optional banner deferred — if deferred, add one-line **deferral** note in `../sitio-design-notes/specs/004-m3-list-detail-overhaul/plan.md`
+- [x] T035 [P] Final verification: `pnpm lint`, `pnpm typecheck`, `pnpm test` in `../sitio-dashboard`
 
 ---
 

@@ -48,14 +48,14 @@ Reviewers verify **FR-007** using:
 - [contracts/unsaved-changes-dialog.md](./contracts/unsaved-changes-dialog.md) (blocking dialog)
 - **quickstart.md** UX consistency bullets added under **T031** (shared terminology, selection affordances, motion/focus notes)
 
-## Concurrent data changes (spec edge case)
+## Concurrent data changes (spec edge case) — T034
 
 **Spec**: If data changes while the user views an item, the UI recovers with clear messaging or refresh without breaking list–detail structure.
 
 **Plan for this feature**:
 
 - **Minimum**: Reuse **TanStack Query** invalidation/refetch after successful mutations; **never silently replace** a **dirty** form with server data without user acknowledgment (aligns with FR-012).
-- **Stretch** (optional in same epic): Non-blocking **banner** or “Dados atualizados” with refresh when stale — add during route migration if low effort; otherwise document **deferral** in this section and track as a follow-up.
+- **Deferral**: Optional non-blocking **“Dados atualizados”** banner or stale indicator is **out of scope** for this epic; track as a follow-up if product requests it.
 
 ## Constitution Check
 
@@ -84,15 +84,21 @@ These **feature areas** currently present a **collection + navigation to per-ite
 | Passenger create | `/trips/$tripId/passengers/new` | **Create** in detail role or equivalent transition (FR-004). |
 | Payments | `/trips/$tripId/passengers/$passengerId/payments/` | Payment list; **detail** for payment row + edit. |
 | Payment create/edit | `.../payments/new`, `.../payments/$paymentId/edit` | Forms in detail role or documented stack transition. |
-| School create | `/schools/new` | Full-page create today — fold into **detail-pane create mode** or exemption with criteria. |
-| Trip create | `/schools/$schoolId/trips/new` | Same as above. |
+| School create | `/schools/new` | **Detail** of schools directory list–detail (same shell as `/schools/`). |
+| Trip create | `/schools/$schoolId/trips/new` | **Detail** of school-scoped trips list–detail shell. |
 
 **Deep linking (FR-014, SC-010)**: All routes with **`$schoolId`**, **`$tripId`**, **`$passengerId`**, **`$paymentId`** MUST implement **missing/unavailable** detail states per spec (reuse/extend `RouteInvalidRecovery` patterns where appropriate).
 
-**Likely exemptions (confirm during implementation)**:
+## M3 exemptions table (FR-001 / SC-008) — T033
 
-- **`/`** (`src/routes/index.tsx`) — not a list–detail pattern; **exempt**.
-- **`/schools/$schoolId/home`** — **not** exempt: school hub content; paired collection is the **schools directory** on `/schools` only, not stacked beside this route.
+Screens that **do not** use the two-pane list–detail frame (or use a documented single-column variant):
+
+| Route / area | Rationale | Acceptance criteria |
+|--------------|-----------|----------------------|
+| **`/`** (`src/routes/index.tsx`) | Scope resolver / redirect hub, not a collection + detail pattern. | User reaches a scoped destination or schools flow without a broken shell. |
+| **`/schools/$schoolId/home`** | School hub + `SchoolForm` by design **without** the schools **directory** list beside it (sidebar carries school scope). | Single-column layout; breadcrumbs + scope; FR-005 for hub content; school create remains under `/schools` list–detail. |
+
+All other rows in **Inventory** above remain **in scope** for list–detail unless a new exemption is added here with criteria.
 
 ## Project Structure
 
