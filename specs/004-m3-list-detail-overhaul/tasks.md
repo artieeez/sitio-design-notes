@@ -71,8 +71,8 @@
 - [x] T017 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/index.tsx` into list–detail context (trip summary/edit as **detail**; preserve navigation to passengers); ensure **FR-005** in both panes
 - [x] T018 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/index.tsx` for M3 list–detail using `../sitio-dashboard/src/components/trips/PassengerTable.tsx` inside the **list pane**; ensure **FR-005** in both panes
 - [x] T019 [US1] Refactor `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/index.tsx` and related payment child routes under `../sitio-dashboard/src/routes/trips/$tripId/passengers/$passengerId/payments/` for M3 list–detail; ensure **FR-005** in both panes
-- [ ] T020 [US1] Integrate `../sitio-dashboard/src/components/trips/TripForm.tsx` with dirty tracking + unsaved dialog (FR-012)
-- [ ] T021 [US1] Integrate `../sitio-dashboard/src/components/schools/SchoolForm.tsx`, `../sitio-dashboard/src/components/trips/PassengerCreateForm.tsx`, and `../sitio-dashboard/src/components/trips/PaymentForm.tsx` with dirty tracking + dialog where fields are editable
+- [x] T020 [US1] Integrate `../sitio-dashboard/src/components/trips/TripForm.tsx` with dirty tracking + unsaved dialog (FR-012)
+- [x] T021 [US1] Integrate `../sitio-dashboard/src/components/schools/SchoolForm.tsx`, `../sitio-dashboard/src/components/trips/PassengerCreateForm.tsx`, and `../sitio-dashboard/src/components/trips/PaymentForm.tsx` with dirty tracking + dialog where fields are editable
 - [x] T022 [US1] Align FR-014 **not-found** behavior on migrated deep-linked routes (reuse or extend `../sitio-dashboard/src/components/layout/route-invalid-recovery.tsx`) so **detail pane** shows `pt-BR` unavailable state and list remains usable when both panes are visible
 
 **Checkpoint**: User Story 1 acceptance scenarios 1–6 are demonstrable on migrated flows; tests **T011–T012** green.

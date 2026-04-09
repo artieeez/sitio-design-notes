@@ -10,10 +10,11 @@
 - **LIST** and **DETAIL** are **simultaneously visible**.
 - Changing **selection** updates **DETAIL** without full-page replace.
 - **Selected** row is **visually distinct** and programmatically identifiable (e.g. `aria-current="true"` or `data-state="selected"`).
+- When a list item is selected (`selectedKey` set), the **DETAIL** region may show a **Close** affordance (same semantics as compact): clear selection for **this** shell; parent routes must handle `onSelectedKeyChange(null)`.
 
 ## Compact behavior
 
-- Only **one** primary region is shown at a time **or** M3-equivalent stacked pattern with explicit **back** to **LIST**.
+- Only **one** primary region is shown at a time **or** M3-equivalent stacked pattern with an explicit **Close** control on the detail surface (not “back” copy): **Close** clears the current list selection / returns to the **LIST** + placeholder pattern for **that** shell (trips list, passengers list, etc.—not by stacking unrelated entity lists).
 - User can **complete** primary task and return to **LIST** without dead end (SC-002).
 
 ## Exemptions

@@ -6,7 +6,7 @@
 
 ## Summary
 
-Refactor dashboard **collection + detail/form** experiences to follow **Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)**: coordinated **list** and **detail** regions, clear **selection**, **compact** behavior (stacked list/detail with back navigation), and **create/edit** in the **detail role** where applicable. **Unsaved changes** must block selection changes and detail exit until **save** or **explicit discard**, using a **shadcn Alert Dialog** (`pt-BR` copy). **No backend scope** by default; **pagination/virtualization** remain **out of spec** (per clarifications).
+Refactor dashboard **collection + detail/form** experiences to follow **Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)**: coordinated **list** and **detail** regions, clear **selection**, **compact** behavior (stacked list/detail with **Close** to deselect / return to list for **that** shell), and **create/edit** in the **detail role** where applicable. **Unsaved changes** must block selection changes and detail exit until **save** or **explicit discard**, using a **shadcn Alert Dialog** (`pt-BR` copy). **No backend scope** by default; **pagination/virtualization** remain **out of spec** (per clarifications).
 
 **Primary implementation**: `../sitio-dashboard` — introduce shared layout/shell building blocks (shadcn: `ScrollArea`, `Separator`, `Sheet` where useful, new **`alert-dialog`**), route-level composition, dirty-state guards, and tests. **shadcn** is the default source for new interactive primitives; align styling with existing `src/components/ui/*` (Base UI preset).
 
@@ -37,7 +37,7 @@ Refactor dashboard **collection + detail/form** experiences to follow **Material
 Per **FR-013**, this plan defines **how** accessibility is verified (normative detail is maintained in **[quickstart.md](./quickstart.md)** after task **T031** lands):
 
 1. **Manual checklist** (required before release): keyboard-only pass through **LIST** and **DETAIL** on expanded and compact layouts; **visible focus** on list items, primary actions, and form fields; **focus order** matches visual reading order; **Alert Dialog** traps focus and returns focus on close.
-2. **Automated coverage** (required where feasible): Vitest + Testing Library asserts for regions/`data-testid`, dialog open/close, and compact **back** (see `tasks.md` Phase 2–4 test tasks).
+2. **Automated coverage** (required where feasible): Vitest + Testing Library asserts for regions/`data-testid`, dialog open/close, and compact **Close** (see `tasks.md` Phase 2–4 test tasks).
 3. **Exemptions**: Any screen exempt from full FR-013 must appear in the **Exemptions** table with acceptance criteria (same pass as SC-008).
 
 ## FR-007 UX consistency (reviewer artifacts)
@@ -76,10 +76,10 @@ These **feature areas** currently present a **collection + navigation to per-ite
 
 | Area | Route patterns (file routes) | Notes |
 |------|------------------------------|--------|
-| Schools directory | `/schools/` | List of schools; detail may show school summary + actions or embed school hub context. |
-| School hub | `/schools/$schoolId/` | School landing; align with list–detail if combined with sub-lists (see trips). |
-| Trips (school-scoped) | `/schools/$schoolId/trips/` | Trip collection; **detail** targets trip summary/edit (`/trips/$tripId/`). |
-| Trip detail / edit | `/trips/$tripId/` | **Detail surface** for trip + `TripForm` / `TripStatusSummary`. |
+| Schools directory | `/schools/` | **Only here**: schools **LIST** + detail placeholder or child index route; scoped school hub does **not** repeat this list. |
+| School hub | `/schools/$schoolId/home` (index `.../` redirects) | Single-column hub + forms; **no** directory list beside it. |
+| Trips (school-scoped) | `/schools/$schoolId/trips/` | Trip **LIST** + detail in **this** shell; opening a trip navigates to `/trips/$tripId/...`. |
+| Trip detail / edit | `/trips/$tripId/summary` (bare `.../` redirects) | Trip workspace **LIST** + detail; `TripForm` / `TripStatusSummary`. |
 | Passengers | `/trips/$tripId/passengers/` | `PassengerTable` + links; **detail** for passenger context (row selection / nested payments). |
 | Passenger create | `/trips/$tripId/passengers/new` | **Create** in detail role or equivalent transition (FR-004). |
 | Payments | `/trips/$tripId/passengers/$passengerId/payments/` | Payment list; **detail** for payment row + edit. |
@@ -92,7 +92,7 @@ These **feature areas** currently present a **collection + navigation to per-ite
 **Likely exemptions (confirm during implementation)**:
 
 - **`/`** (`src/routes/index.tsx`) — not a list–detail pattern; **exempt**.
-- **`/schools/$schoolId/home`** — if single-panel dashboard tile view only; **exempt** unless it gains a paired collection list.
+- **`/schools/$schoolId/home`** — **not** exempt: school hub content; paired collection is the **schools directory** on `/schools` only, not stacked beside this route.
 
 ## Project Structure
 

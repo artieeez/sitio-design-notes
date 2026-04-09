@@ -11,6 +11,7 @@
 ### Session 2026-04-08
 
 - **Q**: If the user has unsaved changes in the detail/create/edit form and tries to select another list item or leave the detail context (including back on compact), what should happen? **→ A**: Block the navigation or selection change until the user saves or explicitly discards changes, with a clear prompt if needed (user choice: Option A).
+- **URL + list–detail (clarified)**: For any **in-scope list–detail shell** (schools directory, school-scoped trips, trip workspace, passengers, payments, etc.), the intended shape is: **collection base** shows **LIST** + **DETAIL** placeholder (“select an item”); **after** a stable segment under that scope (e.g. a non-index child path), **LIST** stays paired with **DETAIL** for **that** shell only. **Do not** stack an unrelated collection list (e.g. the **schools directory**) beside a scoped hub such as `/schools/$schoolId/...`. Where the product avoids a bare `/$entityId` index URL for content, **redirect** to an explicit subpath (e.g. `.../home`, `.../summary`). **Close** on the detail surface (compact or wide) **deselects** for **that** list–detail shell (parent handles routing), not a generic “back” metaphor.
 - **Q**: Should this feature spell out a minimum accessibility bar for list–detail screens? **→ A**: Yes—**WCAG 2.1 Level AA** for keyboard navigation, focus order, and visible focus in list and detail regions; the plan documents how reviewers verify (user choice: Option A).
 - **Q**: Should the spec require a default pattern for loading long collections in the list pane (pagination, load more, virtualization)? **→ A**: **Pagination and similar collection-loading patterns are out of scope** for this feature; how data is paged, windowed, or fetched stays as today or is owned by a separate specification (user: pagination is out of scope).
 - **Q**: When a deep link or bookmark points to a missing or inaccessible list item, what should happen? **→ A**: Show a clear **not found / unavailable** state in the **detail** region; keep the list usable where the layout allows; user can pick another item or return to list context (user choice: Option A).
@@ -48,7 +49,7 @@ The same user resizes the browser or uses a narrower window. The experience foll
 
 1. **Given** a narrow viewport, **When** the user needs to pick an item and see its detail or form, **Then** they can move between list and detail using patterns consistent with the canonical list–detail layout (no dead ends).
 2. **Given** a narrow viewport, **When** the user completes or cancels a detail task, **Then** they can return to the list context without unexplained loss of place where the guidance expects preservation of context.
-3. **Given** unsaved edits in the detail area on a narrow viewport, **When** the user uses back or another control that would leave the detail context, **Then** the same save-or-discard rule applies before the context changes.
+3. **Given** unsaved edits in the detail area on a narrow viewport, **When** the user uses **Close** (deselect) or another control that would leave the detail context, **Then** the same save-or-discard rule applies before the context changes.
 
 ---
 
@@ -73,7 +74,7 @@ When the user creates a new record or edits an existing one in a flow that belon
 - **Loading and errors**: List or detail loading and failure states do not collapse the pattern or trap the user; retry or back navigation remains clear.
 - **No selection yet**: First visit or cleared selection defines what appears in the detail region and how the user is invited to choose an item.
 - **Concurrent changes**: If data changes while the user is viewing an item (for example refresh or another actor), the UI recovers with clear messaging or refresh behavior without corrupting the list–detail structure.
-- **Unsaved edits**: If the detail surface has unsaved changes, selecting another list item or leaving the detail context (including compact back navigation) MUST NOT apply silently; the user MUST complete save or explicit discard first, with messaging in `pt-BR`.
+- **Unsaved edits**: If the detail surface has unsaved changes, selecting another list item or leaving the detail context (including compact **Close** / deselect) MUST NOT apply silently; the user MUST complete save or explicit discard first, with messaging in `pt-BR`.
 - **Very long labels or content**: List rows and detail content remain usable (readable truncation, wrapping, or scroll within regions) without breaking the two-pane intent.
 - **Screens that only look like lists**: Any screen that is in scope must be identified during planning; pure settings pages or single-panel tools without a collection+detail pattern remain out of scope.
 - **Keyboard and focus**: List and detail regions remain fully operable without a pointer where the UI offers controls; focus is not lost or hidden when selection or layout mode changes, within the WCAG 2.1 AA bar stated in FR-013.
