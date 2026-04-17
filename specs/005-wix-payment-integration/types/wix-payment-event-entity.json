@@ -1,0 +1,29 @@
+{
+    "id": "066622d7-df16-459c-bc77-870edf4cd164",
+    "dateCreated": "2026-04-17T13:24:52.379Z",
+
+    "buyerInfoId": "12b7dcc1-69b1-42b9-84e8-f3d37d995ec4",
+    "buyerIndoFirstname": "Nivea Shayane",
+    "buyerIndoLastname": "Costa Vargas",
+    "buyerIndoPhone": "53997085002",
+    "buyerIndoEmail": "nshaycosta@gmail.com",
+    "buyerIndoContactId": "12b7dcc1-69b1-42b9-84e8-f3d37d995ec4",
+    "orderId": "066622d7-df16-459c-bc77-870edf4cd164",
+    "orderTotal": "156.00",
+
+    "billingInfoPaymentMethod": "PagBank",
+    "billingInfoCountry": "BR",
+    "billingInfoSubdivision": "BR-RS",
+    "billingInfoCity": "Porto Alegre ",
+    "billingInfoZipCode": "91200000",
+    "billingInfoPhone": "53997085002",
+    "billingInfoEmail": "nshaycosta@gmail.com",
+    "billingInfoVatIdNumber": "01885371047",
+    "billingInfoVatIdType": "CPF",
+    "billingInfoStreetNumber": "1959",
+    "billingInfoStreetName": "Padre João Batista réus ",
+    "lineItemsName": "SFZS313233",
+    "lineItemsProductId": "SFZS313233",
+    "lineItemsOptions": "",
+    "lineItemsCustomTextFields": ""
+}
