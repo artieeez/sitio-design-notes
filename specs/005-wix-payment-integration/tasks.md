@@ -23,8 +23,8 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 **Purpose**: Confirm environment, boundaries, and baseline quality before feature edits.
 
-- [ ] T001 Confirm all implementation tasks target `../sitio-dashboard` only and `../sitio-backend` remains out of scope per [spec.md](./spec.md) FR-011 and [plan.md](./plan.md).
-- [ ] T002 Run `pnpm lint` and `pnpm typecheck` in `../sitio-dashboard/` and record a clean baseline before adding Wix files.
+- [x] T001 Confirm all implementation tasks target `../sitio-dashboard` only and `../sitio-backend` remains out of scope per [spec.md](./spec.md) FR-011 and [plan.md](./plan.md).
+- [x] T002 Run `pnpm lint` and `pnpm typecheck` in `../sitio-dashboard/` and record a clean baseline before adding Wix files.
 
 ---
 
@@ -34,8 +34,8 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 **⚠️ CRITICAL**: Complete this phase before starting User Story phases.
 
-- [ ] T003 Add Zod schemas and inferred TypeScript types for `WixPaymentEvent` and `WixPaymentEventListItem` matching [contracts/wix-payment-event.ui.schema.json](./contracts/wix-payment-event.ui.schema.json) and [contracts/wix-payment-event-list-item.ui.schema.json](./contracts/wix-payment-event-list-item.ui.schema.json) in `../sitio-dashboard/src/lib/wix-payment-event-schemas.ts`.
-- [ ] T004 Add exported mock fixture list (sufficient rows for multi-page pagination; mix of `isOrphan: true` and `false`) parsed through T003 in `../sitio-dashboard/src/lib/wix-payment-events.fixtures.ts`.
+- [x] T003 Add Zod schemas and inferred TypeScript types for `WixPaymentEvent` and `WixPaymentEventListItem` matching [contracts/wix-payment-event.ui.schema.json](./contracts/wix-payment-event.ui.schema.json) and [contracts/wix-payment-event-list-item.ui.schema.json](./contracts/wix-payment-event-list-item.ui.schema.json) in `../sitio-dashboard/src/lib/wix-payment-event-schemas.ts`.
+- [x] T004 Add exported mock fixture list (sufficient rows for multi-page pagination; mix of `isOrphan: true` and `false`) parsed through T003 in `../sitio-dashboard/src/lib/wix-payment-events.fixtures.ts`.
 
 **Checkpoint**: Schemas and fixtures compile; no runtime network calls.
 
@@ -51,16 +51,16 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 > Write these tests first; they MUST fail before route/UI wiring exists, then pass after implementation.
 
-- [ ] T005 [P] [US1] Add Vitest + RTL coverage for school-scoped Wix navigation and list–detail shell (sidebar link enabled with school, disabled without; route renders table + detail outlet/placeholder) in `../sitio-dashboard/src/test/wix-integration-route.test.tsx`.
+- [x] T005 [P] [US1] Add Vitest + RTL coverage for school-scoped Wix navigation and list–detail shell (sidebar link enabled with school, disabled without; route renders table + detail outlet/placeholder) in `../sitio-dashboard/src/test/wix-integration-route.test.tsx`.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Add Brazilian Portuguese UI strings for Wix integration (nav label, page title, empty prompts) in `../sitio-dashboard/src/messages/pt-BR.ts`.
-- [ ] T007 [US1] Register the Wix Integration `SidebarMenuButton` + `Link` (same school-gated pattern as Trips) in `../sitio-dashboard/src/components/layout/dashboard-shell.tsx`.
-- [ ] T008 [US1] Create TanStack Router file routes under `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/` (`route.tsx` using `ListDetailLayout` from `../sitio-dashboard/src/components/layout/list-detail-layout.tsx`, child routes for list-only vs selected event per existing trips pattern in `../sitio-dashboard/src/routes/schools/$schoolId/trips/route.tsx`).
-- [ ] T009 [P] [US1] Implement `WixPaymentEventsListPane` (table with Trip, Value, Buyer Name, Email, Date; loads rows from T004) in `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx`.
-- [ ] T010 [P] [US1] Implement `WixPaymentEventDetailPane` (read-only field list for every key in the payload contract) in `../sitio-dashboard/src/components/wix/wix-payment-event-detail-pane.tsx`.
-- [ ] T011 [US1] Wire list selection navigation and `<Outlet>` detail rendering so behaviour matches existing list–detail flows; update generated `../sitio-dashboard/src/routeTree.gen.ts` via the project’s router dev/codegen workflow.
+- [x] T006 [US1] Add Brazilian Portuguese UI strings for Wix integration (nav label, page title, empty prompts) in `../sitio-dashboard/src/messages/pt-BR.ts`.
+- [x] T007 [US1] Register the Wix Integration `SidebarMenuButton` + `Link` (same school-gated pattern as Trips) in `../sitio-dashboard/src/components/layout/dashboard-shell.tsx`.
+- [x] T008 [US1] Create TanStack Router file routes under `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/` (`route.tsx` using `ListDetailLayout` from `../sitio-dashboard/src/components/layout/list-detail-layout.tsx`, child routes for list-only vs selected event per existing trips pattern in `../sitio-dashboard/src/routes/schools/$schoolId/trips/route.tsx`).
+- [x] T009 [P] [US1] Implement `WixPaymentEventsListPane` (table with Trip, Value, Buyer Name, Email, Date; loads rows from T004) in `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx`.
+- [x] T010 [P] [US1] Implement `WixPaymentEventDetailPane` (read-only field list for every key in the payload contract) in `../sitio-dashboard/src/components/wix/wix-payment-event-detail-pane.tsx`.
+- [x] T011 [US1] Wire list selection navigation and `<Outlet>` detail rendering so behaviour matches existing list–detail flows; update generated `../sitio-dashboard/src/routeTree.gen.ts` via the project’s router dev/codegen workflow.
 
 **Checkpoint**: US1 acceptance scenarios pass; T005 green.
 
@@ -74,12 +74,12 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 ### Tests for User Story 2 (REQUIRED) ✅
 
-- [ ] T012 [P] [US2] Add Vitest + RTL tests asserting both inputs render above the table, private input is masked by default, and values remain after blur in `../sitio-dashboard/src/test/wix-integration-keys.test.tsx`.
+- [x] T012 [P] [US2] Add Vitest + RTL tests asserting both inputs render above the table, private input is masked by default, and values remain after blur in `../sitio-dashboard/src/test/wix-integration-keys.test.tsx`.
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Implement `WixIntegrationKeyFields` (controlled inputs, `type="password"` for private/API key, optional reveal toggle, `pt-BR` labels/placeholders) in `../sitio-dashboard/src/components/wix/wix-integration-key-fields.tsx`.
-- [ ] T014 [US2] Compose key fields above the events table inside the Wix list shell (`../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx` or the parent layout component used by `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/route.tsx`).
+- [x] T013 [US2] Implement `WixIntegrationKeyFields` (controlled inputs, `type="password"` for private/API key, optional reveal toggle, `pt-BR` labels/placeholders) in `../sitio-dashboard/src/components/wix/wix-integration-key-fields.tsx`.
+- [x] T014 [US2] Compose key fields above the events table inside the Wix list shell (`../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx` or the parent layout component used by `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/route.tsx`).
 
 **Checkpoint**: US2 acceptance scenarios pass; T012 green.
 
@@ -93,14 +93,14 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 ### Tests for User Story 3 (REQUIRED) ✅
 
-- [ ] T015 [P] [US3] Add Vitest + RTL tests for column sort direction, pagination boundaries, orphan chip filtering, and orphan-only empty state in `../sitio-dashboard/src/test/wix-payment-events-table.test.tsx`.
+- [x] T015 [P] [US3] Add Vitest + RTL tests for column sort direction, pagination boundaries, orphan chip filtering, and orphan-only empty state in `../sitio-dashboard/src/test/wix-payment-events-table.test.tsx`.
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Extend `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx` with client-side sort state for Trip, Value, Name, Email, and Date columns (toggle asc/desc per header).
-- [ ] T017 [P] [US3] Add toolbar UI for page size select (10 / 25 / 100) and pagination controls in `../sitio-dashboard/src/components/wix/wix-payment-events-table-toolbar.tsx` (or co-located section in `wix-payment-events-list-pane.tsx` if a separate file is unnecessary).
-- [ ] T018 [US3] Integrate `BooleanFilterChip` for orphan-only filtering and row-level orphan badges consistent with `../sitio-dashboard/src/components/schools/school-trips-list-pane.tsx` chip usage.
-- [ ] T019 [US3] Reset `pageIndex` when `pageSize`, sort, or orphan filter changes; align selected row / detail behaviour with spec edge cases (selection hidden after filter) in `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/route.tsx` and/or `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx`.
+- [x] T016 [US3] Extend `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx` with client-side sort state for Trip, Value, Name, Email, and Date columns (toggle asc/desc per header).
+- [x] T017 [P] [US3] Add toolbar UI for page size select (10 / 25 / 100) and pagination controls in `../sitio-dashboard/src/components/wix/wix-payment-events-table-toolbar.tsx` (or co-located section in `wix-payment-events-list-pane.tsx` if a separate file is unnecessary).
+- [x] T018 [US3] Integrate `BooleanFilterChip` for orphan-only filtering and row-level orphan badges consistent with `../sitio-dashboard/src/components/schools/school-trips-list-pane.tsx` chip usage.
+- [x] T019 [US3] Reset `pageIndex` when `pageSize`, sort, or orphan filter changes; align selected row / detail behaviour with spec edge cases (selection hidden after filter) in `../sitio-dashboard/src/routes/schools/$schoolId/integrations/wix/route.tsx` and/or `../sitio-dashboard/src/components/wix/wix-payment-events-list-pane.tsx`.
 
 **Checkpoint**: US3 acceptance scenarios pass; T015 green.
 
@@ -110,9 +110,9 @@ description: "Task list for Wix Payment Gateway Event Console (005)"
 
 **Purpose**: Quality gates, manual verification, documentation.
 
-- [ ] T020 Run `pnpm lint`, `pnpm test`, and `pnpm typecheck` in `../sitio-dashboard/` and fix any regressions introduced by this feature.
-- [ ] T021 [P] Execute manual verification steps from [quickstart.md](./quickstart.md) against a local `pnpm dev` session.
-- [ ] T022 [P] Confirm list–detail layout matches Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail) (narrow/detail behaviour vs trips) or document a justified exemption in `../sitio-dashboard/readme.MD` if product requires deviation.
+- [x] T020 Run `pnpm lint`, `pnpm test`, and `pnpm typecheck` in `../sitio-dashboard/` and fix any regressions introduced by this feature.
+- [x] T021 [P] Execute manual verification steps from [quickstart.md](./quickstart.md) against a local `pnpm dev` session.
+- [x] T022 [P] Confirm list–detail layout matches Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail) (narrow/detail behaviour vs trips) or document a justified exemption in `../sitio-dashboard/readme.MD` if product requires deviation.
 
 ---
 
