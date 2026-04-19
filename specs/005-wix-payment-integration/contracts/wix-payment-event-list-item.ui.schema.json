@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sitio.local/schemas/wix-payment-event-list-item.ui.schema.json",
+  "title": "WixPaymentEventListItemUI",
+  "description": "List row wrapper: full event payload plus reconciliation projection for the table.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event", "isOrphan", "tripTitle"],
+  "properties": {
+    "event": { "$ref": "./wix-payment-event.ui.schema.json" },
+    "isOrphan": { "type": "boolean" },
+    "tripTitle": { "type": ["string", "null"] }
+  }
+}

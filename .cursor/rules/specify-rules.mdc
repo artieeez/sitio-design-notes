@@ -6,7 +6,7 @@ alwaysApply: true
 
 # sitio-design-notes Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-07
+Auto-generated from all feature plans. Last updated: 2026-04-18
 
 ## Active Technologies
 - PostgreSQL 14+; local dev assumed at `localhost:5432`; schema and migrations via Prisma (001-school-trip-payments)
@@ -16,6 +16,10 @@ Auto-generated from all feature plans. Last updated: 2026-04-07
 - PostgreSQL 14+ via existing Prisma models (**School** entity per `001`); **browser** `localStorage` (or equivalent) for **last accessed** and **recent schools** until auth-backed preferences exist. (002-sidebar-school-scope)
 - TypeScript 5.x; Node.js LTS (align with TanStack Start / Vite toolchain in `sitio-dashboard`). + TanStack Router (file routes, `Link`, `useRouterState`), TanStack Query (entity labels for trips/passengers/school when needed), shadcn/ui **Breadcrumb** primitives (`@/components/ui/breadcrumb`), existing dashboard shell (`dashboard-shell.tsx`). (003-dashboard-breadcrumbs)
 - N/A (presentation + route-derived data). Entity titles continue to come from existing REST + React Query caches. (003-dashboard-breadcrumbs)
+- TypeScript 5.x; Node.js LTS (align with TanStack Start / Vite in `sitio-dashboard`). + React 19, TanStack Router (file routes, nested layouts, navigation APIs), TanStack Query (existing data fetching), **shadcn/ui** (add **`alert-dialog`**; reuse `button`, `scroll-area`, `separator`, `sheet`, `skeleton`, etc.), Tailwind CSS 4, Zod (schemas unchanged). (004-m3-list-detail-overhaul)
+- N/A for layout; entity data continues via existing REST + React Query. (004-m3-list-detail-overhaul)
+- TypeScript 5.x; React 19 (per sibling `../sitio-dashboard/package.json`) + TanStack Router, TanStack Query (if needed for future wiring; **not required** for mocks), shadcn/ui-style components, Tailwind CSS 4, Zod (recommended for fixture validation against contracts) (005-wix-payment-integration)
+- N/A for this slice (in-memory UI state only) (005-wix-payment-integration)
 
 - TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard: TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI preset), Zod, Zustand, Vite tooling as provided by the Start template. Backend: NestJS, @nestjs/cqrs, Prisma, class-validator/class-transformer or Zod at boundary as chosen per module, pg driver via Prisma (001-school-trip-payments)
 
@@ -38,9 +42,9 @@ Backend (`../sitio-backend`): `pnpm install`, `pnpm start:dev`, `pnpm test`, `pn
 TypeScript 5.x (dashboard and backend), Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time): Follow standard conventions
 
 ## Recent Changes
+- 005-wix-payment-integration: Added TypeScript 5.x; React 19 (per sibling `../sitio-dashboard/package.json`) + TanStack Router, TanStack Query (if needed for future wiring; **not required** for mocks), shadcn/ui-style components, Tailwind CSS 4, Zod (recommended for fixture validation against contracts)
+- 004-m3-list-detail-overhaul: Added TypeScript 5.x; Node.js LTS (align with TanStack Start / Vite in `sitio-dashboard`). + React 19, TanStack Router (file routes, nested layouts, navigation APIs), TanStack Query (existing data fetching), **shadcn/ui** (add **`alert-dialog`**; reuse `button`, `scroll-area`, `separator`, `sheet`, `skeleton`, etc.), Tailwind CSS 4, Zod (schemas unchanged).
 - 003-dashboard-breadcrumbs: Added TypeScript 5.x; Node.js LTS (align with TanStack Start / Vite toolchain in `sitio-dashboard`). + TanStack Router (file routes, `Link`, `useRouterState`), TanStack Query (entity labels for trips/passengers/school when needed), shadcn/ui **Breadcrumb** primitives (`@/components/ui/breadcrumb`), existing dashboard shell (`dashboard-shell.tsx`).
-- 002-sidebar-school-scope: Added TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges at implementation time) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend (when touched) — NestJS, `@nestjs/cqrs`, Prisma (unchanged stack).
-- 001-school-trip-payments: Added TypeScript 5.x; Node.js LTS (align with TanStack Start and NestJS supported ranges) + Dashboard — TanStack Start (SPA), TanStack Router, TanStack Query, TanStack Form, shadcn/ui (Base UI), Zod, Zustand, Vite. Backend — NestJS, `@nestjs/cqrs`, Prisma, class-validator/class-transformer or Zod at boundaries.
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
