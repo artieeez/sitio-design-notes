@@ -6,7 +6,7 @@
 
 ## Summary
 
-Refactor dashboard **collection + detail/form** experiences to follow **Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)**: coordinated **list** and **detail** regions, clear **selection**, **compact** behavior (stacked list/detail with **Close** to deselect / return to list for **that** shell), and **create/edit** in the **detail role** where applicable. **Unsaved changes** must block selection changes and detail exit until **save** or **explicit discard**, using a **shadcn Alert Dialog** (`pt-BR` copy). **No backend scope** by default; **pagination/virtualization** remain **out of spec** (per clarifications).
+Refactor dashboard **collection + detail/form** experiences to follow **Material Design 3 [List–detail canonical layout](https://m3.material.io/foundations/layout/canonical-layouts/list-detail)**: coordinated **list** and **detail** regions, clear **selection**, **compact** behavior (stacked list/detail with **Fechar** / **Close** to deselect / return to list for **that** shell), and **create/edit** in the **detail role** where applicable. The **shared list–detail shell** provides regions, selection wiring, and unsaved guard hooks only; **dismiss** controls live **inside** each screen’s **detail outlet** (typically beside the primary heading), per **FR-015**—not in a separate shell header row above the detail body. **Unsaved changes** must block selection changes and detail exit until **save** or **explicit discard**, using a **shadcn Alert Dialog** (`pt-BR` copy). **No backend scope** by default; **pagination/virtualization** remain **out of spec** (per clarifications).
 
 **Primary implementation**: `../sitio-dashboard` — introduce shared layout/shell building blocks (shadcn: `ScrollArea`, `Separator`, `Sheet` where useful, new **`alert-dialog`**), route-level composition, dirty-state guards, and tests. **shadcn** is the default source for new interactive primitives; align styling with existing `src/components/ui/*` (Base UI preset).
 
@@ -36,8 +36,8 @@ Refactor dashboard **collection + detail/form** experiences to follow **Material
 
 Per **FR-013**, this plan defines **how** accessibility is verified (normative detail is maintained in **[quickstart.md](./quickstart.md)** after task **T031** lands):
 
-1. **Manual checklist** (required before release): keyboard-only pass through **LIST** and **DETAIL** on expanded and compact layouts; **visible focus** on list items, primary actions, and form fields; **focus order** matches visual reading order; **Alert Dialog** traps focus and returns focus on close.
-2. **Automated coverage** (required where feasible): Vitest + Testing Library asserts for regions/`data-testid`, dialog open/close, and compact **Close** (see `tasks.md` Phase 2–4 test tasks).
+1. **Manual checklist** (required before release): keyboard-only pass through **LIST** and **DETAIL** on expanded and compact layouts; **visible focus** on list items, primary actions, and form fields; **focus order** matches visual reading order; **Fechar** where implemented appears **in the detail content** (heading row or equivalent), not isolated in an empty shell strip; **Alert Dialog** traps focus and returns focus on close.
+2. **Automated coverage** (required where feasible): Vitest + Testing Library asserts for regions/`data-testid`, dialog open/close, and compact **Close** invoked from **detail** content (see `tasks.md` Phase 2–4 test tasks).
 3. **Exemptions**: Any screen exempt from full FR-013 must appear in the **Exemptions** table with acceptance criteria (same pass as SC-008).
 
 ## FR-007 UX consistency (reviewer artifacts)
@@ -62,7 +62,7 @@ Reviewers verify **FR-007** using:
 *GATE: Passed — aligns with [`.specify/memory/constitution.md`](../../.specify/memory/constitution.md). Re-checked after Phase 1 design.*
 
 - **Code quality**: Centralize **list–detail frame** (shared component or layout route) to avoid copy-paste; keep route files thin; Biome lint + `tsc` clean; extract **dirty guard + alert dialog** into a reusable hook/component pair.
-- **Testing**: Per user story — **P1** selection + two-pane coordination; **P2** compact list↔detail; **P3** create/edit in detail role; **cross-cutting** FR-012 dialog + FR-013 keyboard/focus smoke; regression for FR-014 invalid deep links.
+- **Testing**: Per user story — **P1** selection + two-pane coordination; **P2** compact list↔detail (**Fechar** from detail content); **P3** create/edit in detail role; **cross-cutting** FR-012 dialog + FR-013 keyboard/focus smoke + **FR-015** dismiss placement; regression for FR-014 invalid deep links.
 - **UX consistency**: Reuse dashboard shell, breadcrumbs (003), school scope (002); **shadcn** patterns for dialogs/buttons; **pt-BR** for all new dialog copy.
 - **List–Detail layout gate**: **Comply** with M3 list–detail for all in-scope routes; any screen that **cannot** adopt the pattern must be listed under **Exemptions** with rationale + measurable acceptance criteria (none assumed at plan time).
 - **Language gate**: Code/comments **English**; UI **pt-BR**.
@@ -119,7 +119,7 @@ specs/004-m3-list-detail-overhaul/
 ```text
 src/components/
 ├── layout/
-│   ├── list-detail-layout.tsx      # NEW: M3-oriented split/stack shell (list pane + detail pane)
+│   ├── list-detail-layout.tsx      # M3 split/stack shell (list + detail regions); detail routes own dismiss UI (FR-015)
 │   └── unsaved-changes-dialog.tsx  # NEW: shadcn AlertDialog + pt-BR copy (FR-012)
 ├── ui/
 │   └── alert-dialog.tsx            # NEW via `pnpm dlx shadcn@latest add alert-dialog` (or project equivalent)

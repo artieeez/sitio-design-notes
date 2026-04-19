@@ -7,7 +7,7 @@ This feature does **not** change **domain** persistence. It introduces **UI stat
 | Concept | Description |
 |---------|-------------|
 | **List pane** | Region showing the **collection**; scrollable; hosts row selection and list-level actions (filters, create entry point). |
-| **Detail pane** | Region showing **selected item** content, **empty** state, **loading/error**, **create** mode, or **not found** (FR-014). |
+| **Detail pane** | Region showing **selected item** content, **empty** state, **loading/error**, **create** mode, or **not found** (FR-014); primary heading and **Fechar** (when offered) are composed **inside** this outlet, not by an extra shell-only header row (FR-015). |
 | **Layout mode** | `expanded` (both panes visible) vs `compact` (one pane visible; explicit back to list). Derived from viewport / breakpoint. |
 | **Selection key** | Stable id for the selected entity (`schoolId`, `tripId`, etc.) or **`null`** for empty selection; **`create`** sentinel optional for create-only detail mode. |
 
@@ -34,4 +34,4 @@ This feature does **not** change **domain** persistence. It introduces **UI stat
 
 1. `empty` → user selects row → `detail-loading` → `detail-readonly` or `detail-edit`.
 2. `detail-edit` + dirty + user selects other row → **blocked** → dialog → discard → apply new selection **or** cancel → stay.
-3. Compact: `list-visible` ↔ `detail-visible` via **back** / row tap; same dirty rules apply.
+3. Compact: `list-visible` ↔ `detail-visible` via **Fechar** / dismiss in detail content or row tap; same dirty rules apply.

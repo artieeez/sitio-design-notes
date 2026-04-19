@@ -2,6 +2,7 @@
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning  
 **Created**: 2026-04-08  
+**Last validated**: 2026-04-18  
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -38,3 +39,4 @@
 ## Notes
 
 - Re-run this checklist after material edits to `spec.md`.
+- **2026-04-18**: Spec/plan/contract updated for **FR-015** (dismiss **Fechar** inside detail content; shell does not own a standalone header row). Checklist re-reviewed: all items pass; no `[NEEDS CLARIFICATION]`.
