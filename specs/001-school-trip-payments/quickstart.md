@@ -56,7 +56,7 @@ Local development orientation for the two implementation repositories. Paths are
 
 - Use [contracts/openapi.yaml](./contracts/openapi.yaml) as the working REST contract; regenerate or diff when endpoints change.
 - Align Zod schemas on the client with DTOs on the server (manual sync or codegen in a later iteration).
-- **School** and **Trip** share the same landing-page pattern: optional persisted `url`, nullable **`title`** (and related metadata fields) from `/metadata/fetch-page`—there is no separate school `name` field.
+- **School** and **Trip** share the same landing-page pattern: optional persisted `url`, nullable **`title`**, **`description`**, and **`imageUrl`** from `/metadata/fetch-page`; **School** may also persist **`faviconUrl`**. There is no separate school `name` field.
 
 ## Sanity checklist
 

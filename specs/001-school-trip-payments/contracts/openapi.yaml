@@ -406,7 +406,6 @@ components:
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
-        faviconUrl: { type: string, nullable: true }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
 
@@ -422,7 +421,6 @@ components:
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
-        faviconUrl: { type: string, nullable: true }
         active: { type: boolean, default: true }
 
     PassengerStatusAggregates:
@@ -452,7 +450,6 @@ components:
         title: { type: string, nullable: true }
         description: { type: string, nullable: true }
         imageUrl: { type: string, nullable: true }
-        faviconUrl: { type: string, nullable: true }
 
     Passenger:
       type: object

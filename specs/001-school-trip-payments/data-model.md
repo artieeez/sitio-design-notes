@@ -20,7 +20,7 @@ English technical artifact. User-facing labels are specified in `spec.md` (pt-BR
 | `url` | string (URI), nullable | Optional landing page URL used for metadata prefill and staff “open landing page” (FR-043); validate format when non-null |
 | `title` | string, nullable | Primary display label for lists and breadcrumbs; typically autofilled from pasted landing URL metadata (same semantics as **Trip** `title`, FR-005–FR-007) |
 | `active` | boolean | `true` by default; deactivation blocks **new** trips (FR-029) |
-| Other marketing fields | strings, optional | `description`, `imageUrl`, `faviconUrl` from FR-005–FR-007 (same pattern as Trip) |
+| Other marketing fields | strings, optional | `description`, `imageUrl`, `faviconUrl` from FR-005–FR-007 |
 | `createdAt`, `updatedAt` | timestamptz | Standard audit |
 
 There is **no** separate `name` column: **`title` is the only** human-facing label field for School, aligned with Trip.
@@ -34,7 +34,7 @@ There is **no** separate `name` column: **`title` is the only** human-facing lab
 | `id` | UUID | PK |
 | `schoolId` | FK → School | Required |
 | `url` | string (URI), nullable | Optional landing page URL (FR-043); same semantics as school `url` |
-| `title`, `description`, `imageUrl`, `faviconUrl` | optional strings | From metadata or manual (FR-005–FR-007) |
+| `title`, `description`, `imageUrl` | optional strings | From metadata or manual (FR-005–FR-007) |
 | `defaultExpectedAmountMinor` | int (centavos) | Nullable if trip may have no default yet; BRL scale (FR-034) |
 | `active` | boolean | Deactivation blocks **new** passengers (FR-030) |
 | `createdAt`, `updatedAt` | timestamptz | |

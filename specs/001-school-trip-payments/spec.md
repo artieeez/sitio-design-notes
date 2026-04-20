@@ -75,7 +75,7 @@ As tourism company staff, I can register a school, create a trip under that scho
 1. **Given** no school exists yet, **When** staff registers a school with required information, **Then** the school is saved and staff can open that **school’s trip list** to add trips.
 2. **Given** a registered school and staff viewing that **school’s trip list**, **When** staff starts **trip creation** from that list, **Then** the trip is saved **linked to that school** without a school selector on the form, and the trip appears in that school’s list.
 3. **Given** a registered trip, **When** staff registers passengers for that trip, **Then** passengers are saved and displayed in that trip's passenger table.
-4. **Given** staff starts school or trip creation with a landing page URL, **When** the system reads that URL metadata, **Then** title, description, image, and favicon are auto-filled and remain editable before save.
+4. **Given** staff starts school or trip creation with a landing page URL, **When** the system reads that URL metadata, **Then** title, description, and image are auto-filled where those fields exist on the form, **and** favicon is auto-filled on **school** creation when present in metadata; all such fields remain editable before save.
 5. **Given** staff saves a school or trip after supplying a landing page URL for prefill, **When** they open that record later, **Then** the persisted **url** is present for reference and the dashboard can open the public landing page from it; **When** staff clears **url** on update, **Then** it is no longer stored (FR-043).
 6. **Given** a registered trip with a default expected payment amount, **When** staff adds a passenger without an individual override, **Then** that passenger's pending or settled status is evaluated against the trip default.
 7. **Given** a trip with a default expected payment amount, **When** staff sets a different expected amount on one passenger, **Then** that passenger's status is evaluated against the passenger-specific amount and other passengers keep using the trip default unless they also have overrides.
@@ -197,7 +197,7 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 - **FR-002**: System MUST allow staff to create, view, update, and deactivate trip records linked to exactly one school.
 - **FR-003**: System MUST allow school creation flow to optionally start with a landing page URL as the first input.
 - **FR-004**: System MUST allow trip creation only when staff opens it from a **school’s trip list** for a specific school. The trip creation form MUST **not** include a **school** selector or equivalent—the **current school** from that navigation context MUST bind the new trip. The flow MAY optionally start with a landing page URL as the first input (same metadata behavior as FR-005–FR-007).
-- **FR-005**: When a landing page URL is provided for school or trip creation, system MUST attempt to auto-fill title, description, image, and favicon fields.
+- **FR-005**: When a landing page URL is provided for school or trip creation, system MUST attempt to auto-fill **title**, **description**, and **image** from metadata on the corresponding create form. When the flow is **school** creation, system MUST also attempt to auto-fill **favicon** from metadata when available.
 - **FR-006**: Auto-filled school or trip metadata fields MUST remain editable by staff before saving.
 - **FR-007**: If URL metadata retrieval fails or returns incomplete data, system MUST inform staff and allow manual field completion without blocking save.
 - **FR-043**: School and trip records MUST support an optional persisted **landing page URL** (API field `url`): the URL staff used (or would use) for metadata prefill and for linking to the public landing page. On create or update, when staff supplies this URL, system MUST persist it with the school or trip; staff MUST be able to view, edit, or clear it. The dashboard SHOULD offer staff a way to open this URL (e.g. in a new browser tab) when present. Persisting `url` MUST NOT be required when metadata fetch fails—staff may save without a stored URL.
@@ -270,7 +270,7 @@ As tourism company staff, I use a stable sidebar-and-main layout with clear brea
 ### Measurable Outcomes
 
 - **SC-001**: Staff can register a new school, trip, and at least one passenger in under 6 minutes in usability testing.
-- **SC-002**: In 90% of tests with valid landing page URLs, school and trip forms auto-fill title, description, image, and favicon in under 5 seconds.
+- **SC-002**: In 90% of tests with valid landing page URLs, school and trip create forms receive title, description, and image from metadata autofill in under 5 seconds, and school create forms receive favicon when the source exposes it.
 - **SC-003**: 95% of payment records are successfully created on first attempt by staff during pilot usage when required fields are known.
 - **SC-004**: Staff can create a payment from a passenger row **kebab** menu in 3 clicks/actions or fewer after the trip passenger table is visible (open kebab → choose add payment → form ready).
 - **SC-005**: In usability testing, 90% of staff apply or clear the manual paid-without-info tag for a passenger in under 15 seconds.
