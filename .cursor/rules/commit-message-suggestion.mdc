@@ -1,5 +1,5 @@
 ---
-description: End responses that change or recommend code/docs with a suggested git commit message
+description: End responses that change or recommend code/docs with a semantic commit message in a copy-friendly code block
 alwaysApply: true
 ---
 
@@ -7,19 +7,48 @@ alwaysApply: true
 
 When the user’s request is satisfied and the work would reasonably be committed (code changes, spec/docs updates, config, or a coherent batch of edits), **always** end the reply with a **suggested commit message**.
 
-## Format
+## Semantic format (Conventional Commits)
 
-- One line, **imperative mood** (e.g. `Add`, `Fix`, `Update`, `Remove`), ~72 characters or less when possible.
-- Optionally add a **short body** (bullet or one sentence) only if the change needs extra context; keep the first line self-contained.
+Use a **single line** in the form:
+
+`type(optional-scope): imperative description`
+
+- **type** (pick the closest fit):
+  - `feat` — new user-facing behavior or capability
+  - `fix` — bug fix
+  - `docs` — documentation or specs only
+  - `style` — formatting, UI polish, no logic change
+  - `refactor` — internal change, same external behavior
+  - `perf` — performance
+  - `test` — tests only
+  - `chore` — tooling, deps, config, housekeeping
+  - `build` / `ci` — build system or CI only
+- **scope** (optional): short area, e.g. `dashboard`, `api`, `schools` (lowercase, no spaces).
+- **description**: imperative mood, lowercase after the colon (or treat as sentence case if the repo already does—**stay consistent with existing history**), **no trailing period**, ~72 characters for the full first line when practical.
+
+Optional **body**: only if context is needed; after a blank line below the subject, one short line or a single `- ` bullet. Keep the subject self-contained.
+
+## How to present (copy-friendly)
+
+Put **nothing else inside the fence** except the commit text (subject, then optional body). Use a **single** fenced block with language tag `text`:
+
+- In Cursor, code blocks get a **copy** control—this is the “one click” copy target; do **not** rely on the user selecting loose text.
+- Do **not** prefix the line with labels like `Suggested commit:` inside the fence.
 
 ## Examples
 
 ```text
-Update school-trip spec: trip and payment forms scoped to navigation context
+feat(dashboard): add pointer cursor to boolean filter chip
 ```
 
 ```text
-Fix passenger duplicate check to use CPF-only validation
+fix(dashboard): return school edit close to schools directory
+
+Avoid blank hub when closing edit from list–detail shell.
+```
+
+```text
+docs(spec): scope payment forms to navigation context
 ```
 
 ## When to skip
