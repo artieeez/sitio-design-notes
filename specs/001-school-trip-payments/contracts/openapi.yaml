@@ -106,6 +106,16 @@ paths:
         '409':
           description: Wix collection still has products
 
+  /schools/{schoolId}/activate:
+    parameters:
+      - $ref: '#/components/parameters/SchoolId'
+    post:
+      tags: [schools]
+      summary: Activate school (mark active; visible in default list)
+      responses:
+        '204': { description: No content }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /schools/{schoolId}/deactivate:
     parameters:
       - $ref: '#/components/parameters/SchoolId'
